@@ -1,19 +1,303 @@
-<!-- <div class="container-fluid box">
-        <div class="row justify-content-center text-center">
-                <div class="col-12">
-                        <h1>admin page</h1>
-                </div>
+<style>
+        .box{
+                /* height:700px; */
+                margin-top:10px;
+                background-color: #fff;
+                padding-top: 15px;
+                z-index: 1;
+                /* border: 1px solid red; */
+        }
+        .height{
+          height: 670px;
+        }
+        .glass{
+          border: 1px solid black;
+          background: rgba(0,0,0,.7);
+          box-shadow: 0px 10px 50px black;
+          height: 635px;
+          border-radius: 10px;
+          margin-bottom: 30px;
+        }
+        .left{
+          overflow-x: scroll;
+          overflow-y: scroll;
+          height: 450px;
+        }
+          .right{
+            overflow-y: scroll;
+            height: 450px;
+            /* background-color: #fff; */
+          }
+        h3{
+                border-radius: 25px;
+                /* background-color: #07b048; */
+                background-color: #fff;
+                padding: 0.1em;
+                color: #07b048;
+                border:1px solid white;
+                margin-top:10px;
+        }
+        .req_btn{
+          border-radius: 25px;
+          padding: 1em;
+          color: white;
+          font-size: 0.5em;
+          cursor: pointer;
+          margin-top: 5px;
+          margin-left: 5px;
+        }
+        .test{
+          border: 1px solid red;
+        }
+        .right p:hover{
+          background-color: green;
+          color: white;
+        }
+        .right p{
+          /* border: 1px solid red; */
+          padding: 1em;
+          background-color:#56ab2f;
+          margin: 5px;
+        }
+        .footer{
+          margin-top: 60px;
+          background-color: #56ab2f;
+          color: #fff;
+          padding: 0.5em;
+        }
+        .legend {
+          /* border: 1px solid red; */
+          width: 100px;
+          height: 70px;
+          background-color: #56ab2f;
+          color: #fff;
+          border-radius: 25px;
+          padding: 5px;
+          margin: 5px;
+        }
+        #add_legend{
+          cursor: pointer;
+        }
+        #request_box{
+          margin-top: 20px;
+          /* border: 1px solid red; */
+          height: 600px;
+          z-index: 100;
+          position: absolute;
+          /* background-color: #ffd000; */
+          background-color: #fff;
+          box-shadow: 0px 10px 50px black;
+        }
+        .req_sub_box{
+          height: 400px;
+          background-color: #fff;
+          overflow-y: scroll;
+          border: 1px solid #56ab2f;
+        }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item active">
+                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                          <!-- <button class="req_btn" onclick="open_requests()">Request (<span id="lift_request_count">..</span>)</button> -->
+                                <button class="req_btn" type="button" data-toggle="modal" data-target=".bd-example-modal-lg">Request (<span id="lift_request_count">..</span>)</button>
+                                <button class="btn btn-primary"id="add_req" onclick="getReq()">submit a request</button>
+                        </li>
+                </ul>
         </div>
-</div> -->
+</nav>
+<!-- <div class="container-fluid text-center" id="request_box">
+  <a href="javascript:void(0)" class="close" onclick="hideMe()">X</a>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h3>Requests</h3>
+      <div class="req_sub_box reqs">
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <h3>Details</h3>
+      <div class="req_sub_box req_details"></div>
+    </div>
+  </div>
+  </div> -->
+  <!-- show requests-->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content justify-content-center">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">PointLift Request(s)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-lg-4">
+              <h3>Requests</h3>
+              <div class="req_sub_box reqs justify-content-center"></div>
+            </div>
+            <div class="col-lg-5">
+              <h3>Details</h3>
+              <div class="req_sub_box req_details" style="padding-left:5px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- approve requests-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Driver/Vehicle Assignment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <p><select name="driver" id="driver">
+                <option value="" selected>select a driver</option>
+              </select>
+            </p>
+            <p><select name="vehicle" id="vehicle">
+                <option value="" selected>select a vehicle</option>
+              </select>
+          </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick='appr()'>Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid box">
-        <div class="row justify-content-center text-center">
-		<div class="col-9">
-			<h2>My Schedule</h2>
-			<div><p>Calendar will go here</p></div>
-		</div>
-		<div class="col-3">
-                        <h2>My Fleet</h2>
-			<div><p>availlable fleet will go here</p></div>
+        <div class="row justify-content-around text-center height">
+          <div class="col-lg-3 justify-content-center">
+                  <h3>Drivers</h3>
+                  <div class="right driver_box justify-content-center" style="border:1px solid green;">
+                  </div>
+                  <div>
+                    <button class="btn btn-primary" onclick="addDriver()" style="margin-top:10px;">Add to driver</button>
+                  </div>
+          </div>
+                <div class="col-lg-6">
+                        <h3>Schedule/Planner</h3>
+                        <div class="left" style="border:1px solid green;">
+                          <img src="img/cal.png">
+                        </div>
+                        <div class="legends">
+                          <br>
+                          <p style="color:white;">Legends:
+                            <span class="legend" style="background-color:green;">Athletic</span>
+                            <span class="legend" style="background-color:red;">Playhouse</span>
+                            <span class="legend" style="background-color:blue;">blablaa</span>
+                            <span id="add_legend"style="color:white;"> + </span>
+                          </p>
+                        </div>
+                </div>
+                <div class="col-lg-3 justify-content-center">
+                        <h3>Fleet</h3>
+                        <div class="right fleet_box justify-content-center" style="border:1px solid green;">
+                        </div>
+                        <div>
+                          <button class="btn btn-primary" onclick="addToFlee()" style="margin-top:10px;">Add to Fleet</button>
+                        </div>
+                </div>
+                <div class="col-12 text-center footer">
+                  <p>fousseini&copy;konate</p>
                 </div>
         </div>
 </div>
+<script>
+$(document).ready(function(){
+  $("#request_box").hide();
+  console.log("jquery ready!");
+  getReqcount();
+});
+var lift_request=[],avail_fleet=[], avail_drivers=[], reqs_details=[];
+  function getReqDetails(){
+    $(".req_details").empty();
+    $(".req_details").append("<p>Destination: CCAC</p><p>Date of Trip: 12/20/2018</p><p>Departure Time: 5:00 PM</p><p>Number of Passagers: 12</p><p>Time of Return: 9:00 PM</p><p>Looping: no</p>");
+    $(".req_details").append("<button class='btn btn-success approve' data-toggle='modal' data-target='#exampleModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>");
+  }
+  function decline(){
+    $(".reqBtn").remove();
+    $(".req_details").empty();
+    lift_request.shift();
+    getReqcount();
+  }
+   function appr(){
+    $(".reqBtn").remove();
+    $(".req_details").empty();
+    lift_request.shift();
+    getReqcount();
+  }
+function addDriver(){
+  var new_driver=prompt("Please enter a driver name");
+  avail_drivers.push(new_driver);
+  console.log(avail_drivers);
+  $(".driver_box").append("<p>" + new_driver + "</p>");
+  for(var i=0;i<avail_drivers.length;i++) {
+    $("#driver").append("<option value=''>"+avail_drivers[i]+"</option>");
+  }
+  console.log(avail_drivers);
+}
+function addToFlee(){
+  var new_vehicle=prompt("Please enter vehicle number")
+  console.log(new_vehicle);
+  avail_fleet.push(new_vehicle);
+  console.log(avail_fleet.length);
+  console.log(avail_fleet);
+  $(".fleet_box").append("<p>#" + new_vehicle + "</p>");
+  for(var i=0;i<avail_fleet.length;i++) {
+    $("#vehicle").append("<option value=''>"+avail_fleet[i]+"</option>");
+  }
+  }
+function getReqcount(){
+  $("#lift_request_count").html(lift_request.length);
+  if (lift_request.length !=0) {
+    $(".req_btn").css("background-color", "red")
+  } else {
+    $(".req_btn").css("background-color", "green")
+  }
+  console.log(lift_request);
+}
+function getReq(){
+  // $(".reqs").append("<button class='btn btn-success reqBtn' style='float:left;margin:5px;' onclick='getReqDetails()'><div><p>From:Konate</p><p>Department: Athletic</p></div></button>");
+  lift_request.push(1);
+  for (var i=0; i<lift_request.length; i++){
+    $(".reqs").append("<button class='btn btn-success reqBtn' style='float:left;margin:12px;' onclick='getReqDetails()'><div><p>From: Konate</p><p>Department: Athletic</p></div></button>");
+  }
+  console.log(lift_request);
+  getReqcount();
+}
+function open_requests(){
+  $("#request_box").show();
+}
+function hideMe() {
+  var closeParent = $(".close").parent();
+  console.log(closeParent);
+  $(".close").parent().hide();
+}
+
+</script>
