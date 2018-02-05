@@ -1,5 +1,9 @@
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
 <style>
-        .box{
+.box{
                 /* height:700px; */
                 margin-top:10px;
                 background-color: #fff;
@@ -26,7 +30,6 @@
           .right{
             overflow-y: scroll;
             height: 450px;
-            /* background-color: #fff; */
           }
         h3{
                 border-radius: 25px;
@@ -48,16 +51,6 @@
         }
         .test{
           border: 1px solid red;
-        }
-        .right p:hover{
-          background-color: green;
-          color: white;
-        }
-        .right p{
-          /* border: 1px solid red; */
-          padding: 1em;
-          background-color:#56ab2f;
-          margin: 5px;
         }
         .footer{
           margin-top: 60px;
@@ -94,6 +87,37 @@
           overflow-y: scroll;
           border: 1px solid #56ab2f;
         }
+        .car_box{
+          width: 150px;
+          height: 150px;
+          margin: auto;
+          margin-top: 10px;
+          padding: 5px;
+          box-shadow: 5px 10px 18px #888888;
+        }
+        .vehicle_number{
+          text-align: center;
+          font-size: 2.5em;
+        }
+        .driver_profile{
+          width: 200px;
+          height: 150px;
+          padding: 5px;
+          margin: auto;
+          margin-top: 15px;
+          box-shadow: 5px 10px 18px #888888;
+          cursor: pointer;
+        }
+        .driver_profile img {
+          background-position: center;
+          background-repeat:no-repeat;
+          background-size: cover;
+          height: 67px;
+        }
+        .driver_profile:hover{
+          background-color: green;
+          color: white;
+        }
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <a class="navbar-brand" href="#">PointLift</a>
@@ -111,25 +135,54 @@
                         <li class="nav-item">
                           <!-- <button class="req_btn" onclick="open_requests()">Request (<span id="lift_request_count">..</span>)</button> -->
                                 <button class="req_btn" type="button" data-toggle="modal" data-target=".bd-example-modal-lg">Request (<span id="lift_request_count">..</span>)</button>
-                                <button class="btn btn-primary"id="add_req" onclick="getReq()">submit a request</button>
                         </li>
                 </ul>
         </div>
 </nav>
-<!-- <div class="container-fluid text-center" id="request_box">
-  <a href="javascript:void(0)" class="close" onclick="hideMe()">X</a>
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <h3>Requests</h3>
-      <div class="req_sub_box reqs">
+
+<!-- add driver-->
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+      <form id="addDriverForm"  action="/add_driver" method="POST">
+    <div class="form-group">
+      <label for="validationServer01">First name</label>
+      <input type="text" class="form-control is-valid" id="validationServer01" placeholder="First name" name="driver_fname" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="validationServer02">Last name</label>
+      <input type="text" class="form-control is-valid" id="validationServer02" placeholder="Last name" name="driver_lname" value="" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
       </div>
     </div>
-    <div class="col-lg-4">
-      <h3>Details</h3>
-      <div class="req_sub_box req_details"></div>
+  </div>
+</div>
+
+
+<!-- add vehicle-->
+<div class="modal fade add-vehicle" tabindex="-1" role="dialog" aria-labelledby="add_vehicle" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+      <form id="addVehicleForm"  action="/add_vehicle" method="POST">
+    <div class="form-group">
+      <label for="validationServer01">First name</label>
+      <input type="number" class="form-control is-valid" id="validationServer01" placeholder="vehicle number" name="vehicle_number" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="validationServer02">Seats Available</label>
+      <input type="number" class="form-control is-valid" id="validationServer02" placeholder="Seats" name="seat_number" value="" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
     </div>
   </div>
-  </div> -->
+</div>
+
   <!-- show requests-->
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -197,7 +250,7 @@
                   <div class="right driver_box justify-content-center" style="border:1px solid green;">
                   </div>
                   <div>
-                    <button class="btn btn-primary" onclick="addDriver()" style="margin-top:10px;">Add to driver</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm"style="margin-top:10px;">Add to driver</button>
                   </div>
           </div>
                 <div class="col-lg-6">
@@ -220,7 +273,7 @@
                         <div class="right fleet_box justify-content-center" style="border:1px solid green;">
                         </div>
                         <div>
-                          <button class="btn btn-primary" onclick="addToFlee()" style="margin-top:10px;">Add to Fleet</button>
+                          <button class="btn btn-primary" data-toggle="modal" data-target=".add-vehicle"style="margin-top:10px;" style="margin-top:10px;">Add to Fleet</button>
                         </div>
                 </div>
                 <div class="col-12 text-center footer">
@@ -228,53 +281,76 @@
                 </div>
         </div>
 </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>
-$(document).ready(function(){
-  $("#request_box").hide();
-  console.log("jquery ready!");
-  getReqcount();
+ $(document).ready(function() {
+    console.log("jquery loaded!");
+    getReqcount();
+   $.ajax({
+     type: "POST",
+     url: "/get_drivers",
+     success: function(data) {
+       var results = data.success;
+	console.log(results);
+       for (var i = 0; i < results.length; i++) {
+         $(".driver_box").append("<div class='driver_profile'><img src='img/driver.png'><p class='name'>" + results[i].driver_fname+" "+ results[i].driver_lname + "</p><p class='licence_type'>CDL</p></div>");
+	 $("#driver").append("<option name='' value=''>"+results[i].driver_fname+" "+results[i].driver_lname+"</option>");
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+   $.ajax({
+     type: "POST",
+     url: "/get_vehicles",
+     success: function(data) {
+       var results = data.success;
+        console.log(results);
+       for (var i = 0; i < results.length; i++) {
+         $(".fleet_box").append("<div class='car_box'><p class='vehicle_number'>#" + results[i].vehicle_number + "</p><p class='seats_number'>Seats: "+ results[i].seat_number+"</p></div>");
+         $("#vehicle").append("<option value=''>"+results[i].vehicle_number+"</option>");
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+  
+      $.ajax({
+     type: "POST",
+     url: "/get_req_count",
+     success: function(data) {
+       var results = data.success;
+        console.log(results);
+	$("#lift_request_count").html(results.count);
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+
 });
+
+//$("#addDriverForm").on("submit",function(evt){
+//console.log("form submited!");
+	//$.ajax({
+	//type:"POST",
+	//url:"/add_driver",
+	//data:$(this).serialize(),
+	//success: function(data){
+          //if (data.success) {
+		//console.log("it worked!");
+            	//} else {
+                	//console.log("error");
+            	//}
+           // },
+           // error: function(){
+             //   console.log("There was a problem.");
+           // }
+	//});
+//});
 var lift_request=[],avail_fleet=[], avail_drivers=[], reqs_details=[];
-  function getReqDetails(){
-    $(".req_details").empty();
-    $(".req_details").append("<p>Destination: CCAC</p><p>Date of Trip: 12/20/2018</p><p>Departure Time: 5:00 PM</p><p>Number of Passagers: 12</p><p>Time of Return: 9:00 PM</p><p>Looping: no</p>");
-    $(".req_details").append("<button class='btn btn-success approve' data-toggle='modal' data-target='#exampleModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>");
-  }
-  function decline(){
-    $(".reqBtn").remove();
-    $(".req_details").empty();
-    lift_request.shift();
-    getReqcount();
-  }
-   function appr(){
-    $(".reqBtn").remove();
-    $(".req_details").empty();
-    lift_request.shift();
-    getReqcount();
-  }
-function addDriver(){
-  var new_driver=prompt("Please enter a driver name");
-  avail_drivers.push(new_driver);
-  console.log(avail_drivers);
-  $(".driver_box").append("<p>" + new_driver + "</p>");
-  for(var i=0;i<avail_drivers.length;i++) {
-    $("#driver").append("<option value=''>"+avail_drivers[i]+"</option>");
-  }
-  console.log(avail_drivers);
-}
-function addToFlee(){
-  var new_vehicle=prompt("Please enter vehicle number")
-  console.log(new_vehicle);
-  avail_fleet.push(new_vehicle);
-  console.log(avail_fleet.length);
-  console.log(avail_fleet);
-  $(".fleet_box").append("<p>#" + new_vehicle + "</p>");
-  for(var i=0;i<avail_fleet.length;i++) {
-    $("#vehicle").append("<option value=''>"+avail_fleet[i]+"</option>");
-  }
-  }
-function getReqcount(){
+ function getReqcount(){
   $("#lift_request_count").html(lift_request.length);
   if (lift_request.length !=0) {
     $(".req_btn").css("background-color", "red")
@@ -283,22 +359,4 @@ function getReqcount(){
   }
   console.log(lift_request);
 }
-function getReq(){
-  // $(".reqs").append("<button class='btn btn-success reqBtn' style='float:left;margin:5px;' onclick='getReqDetails()'><div><p>From:Konate</p><p>Department: Athletic</p></div></button>");
-  lift_request.push(1);
-  for (var i=0; i<lift_request.length; i++){
-    $(".reqs").append("<button class='btn btn-success reqBtn' style='float:left;margin:12px;' onclick='getReqDetails()'><div><p>From: Konate</p><p>Department: Athletic</p></div></button>");
-  }
-  console.log(lift_request);
-  getReqcount();
-}
-function open_requests(){
-  $("#request_box").show();
-}
-function hideMe() {
-  var closeParent = $(".close").parent();
-  console.log(closeParent);
-  $(".close").parent().hide();
-}
-
 </script>
