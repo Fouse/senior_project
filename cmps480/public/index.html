@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 480</title>
+<script src="jquery-3.3.1.min.js"></script>
+<script>
+ $(function() {
+   console.log("jquery loaded!");
+   $.ajax({
+     type: "GET",
+     url: "test.json",
+     success: function(data) {
+       console.log(JSON.stringify(data));
+       var results = data.data;
+       for (var i = 0; i < results.length; i++) {
+         var body = $(document.body);
+         body.append(results[i].ID + " " + results[i].NAME + "<br>");
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+ });
+</script>
+</head>
+<body>
+This is the homepage for CMPS 480!<br><br>
+</body>
+</html>
