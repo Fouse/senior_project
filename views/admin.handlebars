@@ -1,12 +1,362 @@
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+<style>
+.box{
+                /* height:700px; */
+                margin-top:10px;
+                background-color: #fff;
+                padding-top: 15px;
+                z-index: 1;
+                /* border: 1px solid red; */
+        }
+        .height{
+          height: 670px;
+        }
+        .glass{
+          border: 1px solid black;
+          background: rgba(0,0,0,.7);
+          box-shadow: 0px 10px 50px black;
+          height: 635px;
+          border-radius: 10px;
+          margin-bottom: 30px;
+        }
+        .left{
+          overflow-x: scroll;
+          overflow-y: scroll;
+          height: 450px;
+        }
+          .right{
+            overflow-y: scroll;
+            height: 450px;
+          }
+        h3{
+                border-radius: 25px;
+                /* background-color: #07b048; */
+                background-color: #fff;
+                padding: 0.1em;
+                color: #07b048;
+                border:1px solid white;
+                margin-top:10px;
+        }
+        .req_btn{
+          border-radius: 25px;
+          padding: 1em;
+          color: white;
+          font-size: 0.5em;
+          cursor: pointer;
+          margin-top: 5px;
+          margin-left: 5px;
+        }
+        .test{
+          border: 1px solid red;
+        }
+        .footer{
+          margin-top: 60px;
+          background-color: #56ab2f;
+          color: #fff;
+          padding: 0.5em;
+        }
+        .legend {
+          /* border: 1px solid red; */
+          width: 100px;
+          height: 70px;
+          background-color: #56ab2f;
+          color: #fff;
+          border-radius: 25px;
+          padding: 5px;
+          margin: 5px;
+        }
+        #add_legend{
+          cursor: pointer;
+        }
+        #request_box{
+          margin-top: 20px;
+          /* border: 1px solid red; */
+          height: 600px;
+          z-index: 100;
+          position: absolute;
+          /* background-color: #ffd000; */
+          background-color: #fff;
+          box-shadow: 0px 10px 50px black;
+        }
+        .req_sub_box{
+          height: 400px;
+          background-color: #fff;
+          overflow-y: scroll;
+          border: 1px solid #56ab2f;
+        }
+        .car_box{
+          width: 150px;
+          height: 150px;
+          margin: auto;
+          margin-top: 10px;
+          padding: 5px;
+          box-shadow: 5px 10px 18px #888888;
+        }
+        .vehicle_number{
+          text-align: center;
+          font-size: 2.5em;
+        }
+        .driver_profile{
+          width: 200px;
+          height: 150px;
+          padding: 5px;
+          margin: auto;
+          margin-top: 15px;
+          box-shadow: 5px 10px 18px #888888;
+          cursor: pointer;
+        }
+        .driver_profile img {
+          background-position: center;
+          background-repeat:no-repeat;
+          background-size: cover;
+          height: 67px;
+        }
+        .driver_profile:hover{
+          background-color: green;
+          color: white;
+        }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item active">
+                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                          <!-- <button class="req_btn" onclick="open_requests()">Request (<span id="lift_request_count">..</span>)</button> -->
+                                <button class="req_btn" type="button" data-toggle="modal" data-target=".bd-example-modal-lg">Request (<span id="lift_request_count">..</span>)</button>
+                        </li>
+                </ul>
+        </div>
+</nav>
+
+<!-- add driver-->
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+      <form id="addDriverForm"  action="/add_driver" method="POST">
+    <div class="form-group">
+      <label for="validationServer01">First name</label>
+      <input type="text" class="form-control is-valid" id="validationServer01" placeholder="First name" name="driver_fname" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="validationServer02">Last name</label>
+      <input type="text" class="form-control is-valid" id="validationServer02" placeholder="Last name" name="driver_lname" value="" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- add vehicle-->
+<div class="modal fade add-vehicle" tabindex="-1" role="dialog" aria-labelledby="add_vehicle" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+      <form id="addVehicleForm"  action="/add_vehicle" method="POST">
+    <div class="form-group">
+      <label for="validationServer01">First name</label>
+      <input type="number" class="form-control is-valid" id="validationServer01" placeholder="vehicle number" name="vehicle_number" value="" required>
+    </div>
+    <div class="form-group">
+      <label for="validationServer02">Seats Available</label>
+      <input type="number" class="form-control is-valid" id="validationServer02" placeholder="Seats" name="seat_number" value="" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- show requests-->
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content justify-content-center">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">PointLift Request(s)</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+          <div class="row justify-content-center">
+            <div class="col-lg-4">
+              <h3>Requests</h3>
+              <div class="req_sub_box reqs justify-content-center"></div>
+            </div>
+            <div class="col-lg-5">
+              <h3>Details</h3>
+              <div class="req_sub_box req_details" style="padding-left:5px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- approve requests-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Driver/Vehicle Assignment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <p><select name="driver" id="driver">
+                <option value="" selected>select a driver</option>
+              </select>
+            </p>
+            <p><select name="vehicle" id="vehicle">
+                <option value="" selected>select a vehicle</option>
+              </select>
+          </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal" onclick='appr()'>Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid box">
-        <div class="row justify-content-center text-center">
-		<div class="col-9">
-			<h2>My Schedule</h2>
-			<div><p>Calendar will go here</p></div>
-		</div>
-		<div class="col-3">
-                        <h2>My Fleet</h2>
-			<div><p>availlable fleet will go here</p></div>
+        <div class="row justify-content-around text-center height">
+          <div class="col-lg-3 justify-content-center">
+                  <h3>Drivers</h3>
+                  <div class="right driver_box justify-content-center" style="border:1px solid green;">
+                  </div>
+                  <div>
+                    <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm"style="margin-top:10px;">Add to driver</button>
+                  </div>
+          </div>
+                <div class="col-lg-6">
+                        <h3>Schedule/Planner</h3>
+                        <div class="left" style="border:1px solid green;">
+                          <img src="img/cal.png">
+                        </div>
+                        <div class="legends">
+                          <br>
+                          <p style="color:white;">Legends:
+                            <span class="legend" style="background-color:green;">Athletic</span>
+                            <span class="legend" style="background-color:red;">Playhouse</span>
+                            <span class="legend" style="background-color:blue;">blablaa</span>
+                            <span id="add_legend"style="color:white;"> + </span>
+                          </p>
+                        </div>
+                </div>
+                <div class="col-lg-3 justify-content-center">
+                        <h3>Fleet</h3>
+                        <div class="right fleet_box justify-content-center" style="border:1px solid green;">
+                        </div>
+                        <div>
+                          <button class="btn btn-primary" data-toggle="modal" data-target=".add-vehicle"style="margin-top:10px;" style="margin-top:10px;">Add to Fleet</button>
+                        </div>
+                </div>
+                <div class="col-12 text-center footer">
+                  <p>fousseini&copy;konate</p>
                 </div>
         </div>
 </div>
+<script>
+ $(document).ready(function() {
+    console.log("jquery loaded!");
+    getReqcount();
+   $.ajax({
+     type: "POST",
+     url: "/get_drivers",
+     success: function(data) {
+       var results = data.success;
+	console.log(results);
+       for (var i = 0; i < results.length; i++) {
+         $(".driver_box").append("<div class='driver_profile'><img src='img/driver.png'><p class='name'>" + results[i].driver_fname+" "+ results[i].driver_lname + "</p><p class='licence_type'>CDL</p></div>");
+	 $("#driver").append("<option name='' value=''>"+results[i].driver_fname+" "+results[i].driver_lname+"</option>");
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+   $.ajax({
+     type: "POST",
+     url: "/get_vehicles",
+     success: function(data) {
+       var results = data.success;
+        console.log(results);
+       for (var i = 0; i < results.length; i++) {
+         $(".fleet_box").append("<div class='car_box'><p class='vehicle_number'>#" + results[i].vehicle_number + "</p><p class='seats_number'>Seats: "+ results[i].seat_number+"</p></div>");
+         $("#vehicle").append("<option value=''>"+results[i].vehicle_number+"</option>");
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+  
+      $.ajax({
+     type: "POST",
+     url: "/get_req_count",
+     success: function(data) {
+       var results = data.success;
+        console.log(results);
+	$("#lift_request_count").html(results.count);
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+
+});
+
+//$("#addDriverForm").on("submit",function(evt){
+//console.log("form submited!");
+	//$.ajax({
+	//type:"POST",
+	//url:"/add_driver",
+	//data:$(this).serialize(),
+	//success: function(data){
+          //if (data.success) {
+		//console.log("it worked!");
+            	//} else {
+                	//console.log("error");
+            	//}
+           // },
+           // error: function(){
+             //   console.log("There was a problem.");
+           // }
+	//});
+//});
+var lift_request=[],avail_fleet=[], avail_drivers=[], reqs_details=[];
+ function getReqcount(){
+  $("#lift_request_count").html(lift_request.length);
+  if (lift_request.length !=0) {
+    $(".req_btn").css("background-color", "red")
+  } else {
+    $(".req_btn").css("background-color", "green")
+  }
+  console.log(lift_request);
+}
+</script>
