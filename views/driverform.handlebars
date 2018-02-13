@@ -8,14 +8,29 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-<link rel = "stylesheet"
-   type = "text/css"
-   href = "pointliftstyle.css"/>
+
 
 
 </head>
-<h1>PointLift</h1>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                        </li>
+                </ul>
+</div>
+</nav>
+
+<br>
+
 <div class="container">
+
 <h2>Van Driver Request Form</h2>
 <body>
   <p>Please complete the online request form below, or download and print the
@@ -39,11 +54,11 @@
   <div class="row">
     <div class="col">
       <label for="dateTrip">Date of Trip</label>
-      <input type="date" class="form-control" id="dateTrip">
+      <input type="date" class="form-control" name="dateTrip" id="dateTrip">
     </div>
     <div class="col">
       <label for="destination">Destination</label>
-      <input type="text" class="form-control" id="destination" placeholder="Destination">
+      <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
     </div>
   </div>
 
@@ -52,7 +67,7 @@
   <!-- Number of Expected Passengers: -->
   <div class="form-group">
     <label for="numPassengers">Number of Expected Passengers</label>
-    <input type="value" class="form-control" id="numPassengers">
+    <input type="value" class="form-control" name="numPassengers" id="numPassengers">
   </div>
 
 
@@ -63,11 +78,11 @@
   <div class="row">
     <div class="col">
       <label for="depLocation">Departure Location</label>
-      <input type="text" class="form-control" id="depLocation" placeholder="Departure Location">
+      <input type="text" class="form-control" name="depLocation" id="depLocation" placeholder="Departure Location">
     </div>
     <div class="col">
       <label for="arrLocation">Arrival Location</label>
-      <input type="text" class="form-control" id="arrLocation" placeholder="Arrival Location">
+      <input type="text" class="form-control" name="arrLocation" id="arrLocation" placeholder="Arrival Location">
     </div>
   </div>
 
@@ -77,11 +92,11 @@
         <div class="row">
           <div class="col">
             <label for="depTime">Departure Time</label>
-            <input type="time" class="form-control" id="depTime" placeholder="Departure Time">
+            <input type="time" class="form-control" name="depTime" id="depTime" placeholder="Departure Time">
           </div>
           <div class="col">
             <label for="arrTime">Arrival Time</label>
-            <input type="time" class="form-control" id="arrTime" placeholder="Arrival Time">
+            <input type="time" class="form-control" name="arrTime" id="arrTime" placeholder="Arrival Time">
           </div>
         </div>
 
@@ -90,7 +105,7 @@
 
       <div class="form-group">
         <label for="retTime">Time of Return</label>
-        <input type="time" class="form-control" id="retTime">
+        <input type="time" class="form-control" name="retTime" id="retTime">
       </div>
 
 <br>
@@ -100,7 +115,7 @@
 
   <div class="form-group">
   <label for="directions">Directions:</label>
-  <textarea class="form-control" rows="2" id="directions"></textarea>
+  <textarea class="form-control" rows="2" name="directions" id="directions"></textarea>
   </div>
 
   <br>
@@ -109,11 +124,11 @@
   Is looping Service Required?
 
   <div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" id="loopYes" name="customRadioInline1" class="custom-control-input">
+  <input type="radio" name="loopYes" id="loopYes" name="customRadioInline1" class="custom-control-input">
   <label class="custom-control-label" for="loopYes">Yes</label>
   </div>
   <div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" id="loopNo" name="customRadioInline1" class="custom-control-input">
+  <input type="radio" name="loopNo" id="loopNo" name="customRadioInline1" class="custom-control-input">
   <label class="custom-control-label" for="loopNo">No</label>
   </div>
 
@@ -124,7 +139,7 @@
 
   <div class="form-group">
   <label for="addComment">Additional Comments:</label>
-  <textarea class="form-control" rows="2" id="addComment"></textarea>
+  <textarea class="form-control" rows="2" name="addComment" id="addComment"></textarea>
   </div>
 
   <br>
@@ -133,7 +148,7 @@
 
   <div class="form-group">
   <label for="purpTrip">Purpose of Trip:</label>
-  <textarea class="form-control" rows="2" id="purpTrip"></textarea>
+  <textarea class="form-control" rows="2" name="purpTrip" id="purpTrip"></textarea>
   </div>
 
   <br>
@@ -142,7 +157,7 @@
 
   <div class="form-group">
 <label for="reqEmail">Requester's Email Address</label>
-<input type="email" class="form-control" id="reqEmail" placeholder="name@example.com">
+<input type="email" class="form-control" name="reqEmail" id="reqEmail" placeholder="name@example.com">
 </div>
 
 <br>
@@ -152,15 +167,17 @@
 <div class="row">
   <div class="col">
     <label for="authName">Authorized by:</label>
-    <input type="text" class="form-control" id="authName" placeholder="Name">
+    <input type="text" class="form-control" name="authName" id="authName" placeholder="Name">
   </div>
   <div class="col">
     <label for="depBudget">Department Budget to Charge</label>
-    <input type="text" class="form-control" id="depBudget" placeholder="Department">
+    <input type="text" class="form-control" name="depBudget" id="depBudget" placeholder="Department">
   </div>
 </div>
 
 <br>
+
+<button type="submit" class="btn btn-success">Submit<span class="fa fa-arrow-right"></span></button>
 
 </form>
 
@@ -170,10 +187,6 @@
         Transportation and Adminstrative services (jpekar@pointpark.edu)
         within 48 hours prior to the requested service otherwise the
         department may be billed accordingly. </p>
-
-        <br><br>
-
-        <input type="button" onclick="" value="Submit">
 
 </div>
 <script src ="jquery-3.3.1.min.js"></script>
