@@ -16,6 +16,13 @@ app.set('port', process.env.PORT || 3000);
 
 var con = mysql.createConnection(credentials.connection);
 
+app.get("/", function(req, res) {
+  res.render("home");
+});
+
+app.get("/admin", function(req, res) {
+  res.render("admin");
+});
 
 app.post("/get_drivers", function(req, res) {
   var sql="SELECT * FROM drivers WHERE availability=1";
