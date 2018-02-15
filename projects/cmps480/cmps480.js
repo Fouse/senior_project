@@ -84,6 +84,7 @@ function users(req, res) {
       var outjson = {};
       if (err) {
         // query failed
+
         outjson.success = false;
         outjson.message = "Query failed: " + err;
       }
