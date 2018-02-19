@@ -24,6 +24,18 @@ app.get("/admin", function(req, res) {
   res.render("admin");
 });
 
+app.get("/driverform", function(req, res) {
+        res.render("driverform");
+});
+
+app.get("/vanform", function(req, res) { 
+        res.render("vanform");
+});
+
+app.get("/busform", function(req, res) {
+        res.render("busform");
+});
+
 app.post("/get_drivers", function(req, res) {
   var sql="SELECT * FROM drivers WHERE availability=1";
         con.query(sql, function(err, results) {

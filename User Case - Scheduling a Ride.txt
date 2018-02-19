@@ -1,0 +1,27 @@
+Use Case: Requesting a ride 
+
+Primary Actor: 
+User
+
+Scope: 
+User
+
+Brief: 
+The user logs in and reserves a ride at specified time
+
+Stakeholders: 
+User, database, 
+
+Postconditions: 
+Database is updated and PointLift receives the request 
+
+Preconditions: 
+User must have a pointpark email and ID
+
+Triggers: 
+User needs ride, logs on to web app to schedule a PointLift 
+
+Basic flow: 
+1) User registers for an account with their point park email and ID.
+2) User can then view available times for PointLift.
+3) User can choose and schedule a ride from available times.

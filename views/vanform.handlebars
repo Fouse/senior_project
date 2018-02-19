@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+<title>Van Request Form</title>
+
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+crossorigin="anonymous">
+
+
+
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                        </li>
+                </ul>
+</div>
+</nav>
+
+<br>
+
+<div class="container">
+
+<h2>Van Request Form</h2>
+<body>
+  <p>Please complete the online request form below, or download and print the
+    form and return to the Physical Plant Office via interoffice mail. The
+    Point Park University Vehicles are not equipped with car sear anchors, car
+    seats or booster seats. If a passenger requires a car seat and/or booster
+    seat (under 4 foot and 9 inches) please notify the Physical Plant Department
+    at (412) 392-3490. If you have any questions or concerns, please do not
+    hesitate to contact the Physical Plant Department.</p>
+
+    <h3>Disclaimer</h3>
+
+    <p>This is only a request. Final Confirmation will be sent as a reply.
+      If you do not receive a confirmation, please contact the Physcial Plant
+      department at (412) 392-3490.</p>
+
+<form>
+
+
+      <!-- Date of Trip and Destination: -->
+      <div class="row">
+        <div class="col">
+          <label for="dateTrip">Date of Trip</label>
+          <input type="date" class="form-control" name="dateTrip"id="dateTrip">
+        </div>
+        <div class="col">
+          <label for="destination">Destination</label>
+          <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+        </div>
+      </div>
+
+      <br>
+
+      <!-- Number of Expected Passengers: -->
+      <div class="form-group">
+        <label for="numPassengers">Number of Expected Passengers</label>
+        <input type="value" class="form-control" name="numPassengers" id="numPassengers">
+      </div>
+
+<br>
+
+<!-- Departure Location/Arrival Location -->
+
+  <div class="row">
+    <div class="col">
+      <label for="depLocation">Departure Location</label>
+      <input type="text" class="form-control" name="depLocation" id="depLocation" placeholder="Departure Location">
+    </div>
+    <div class="col">
+      <label for="arrLocation">Arrival Location</label>
+      <input type="text" class="form-control" name ="arrLocation" id="arrLocation" placeholder="Arrival Location">
+    </div>
+  </div>
+
+<br>
+      <!-- Time of Departure/Time of Arrival: -->
+
+        <div class="row">
+          <div class="col">
+            <label for="depTime">Departure Time</label>
+            <input type="time" class="form-control" name="depTime" id="depTime" placeholder="Departure Time">
+          </div>
+          <div class="col">
+            <label for="arrTime">Arrival Time</label>
+            <input type="time" class="form-control" name="arrTime" id="arrTime" placeholder="Arrival Time">
+          </div>
+        </div>
+
+<br>
+      <!-- Time of Return: -->
+
+      <div class="form-group">
+        <label for="retTime">Time of Return</label>
+        <input type="time" class="form-control" name="retTime" id="retTime">
+      </div>
+
+      <!-- Drivers: -->
+
+  <div class="form-row align-items-center">
+    <div class="col-auto my-1">
+      <label class="mr-sm-2" for="driver">Driver</label>
+      <select class="custom-select mr-sm-2" name="driver" id="driver">
+        <option selected>Choose...</option>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+      </select>
+    </div>
+  </div>
+
+<br>
+
+      Is looping Service Required?
+
+      <div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" name="loopYes" id="loopYes" name="customRadioInline1" class="custom-control-input">
+  <label class="custom-control-label" for="loopYes">Yes</label>
+</div>
+<div class="custom-control custom-radio custom-control-inline">
+  <input type="radio" name="loopNo" id="loopNo" name="customRadioInline1" class="custom-control-input">
+  <label class="custom-control-label" for="loopNo">No</label>
+</div>
+
+<br>
+<br>
+
+      <!-- Additional Comments: -->
+
+<div class="form-group">
+  <label for="addComment">Additional Comments:</label>
+  <textarea class="form-control" rows="2" name="addComment" id="addComment"></textarea>
+</div>
+<br>
+
+      <!-- Department: -->
+
+      <div class="form-row align-items-center">
+        <div class="col-auto my-1">
+          <label class="mr-sm-2" for="department">Department</label>
+          <select class="custom-select mr-sm-2" name="department" id="department">
+            <option selected>Choose...</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </div>
+      </div>
+
+<br>
+      <!-- Requester's Email -->
+
+      <div class="form-group">
+    <label for="reqEmail">Requester's Email Address</label>
+    <input type="email" class="form-control" name="reqEmail" id="reqEmail" placeholder="name@example.com">
+  </div>
+
+<br>
+      <!-- Authorized by & Department Budget to Charge: -->
+
+      <div class="row">
+        <div class="col">
+          <label for="authName">Authorized by:</label>
+          <input type="text" class="form-control" name="authName" id="authName" placeholder="Name">
+        </div>
+        <div class="col">
+          <label for="depBudget">Department Budget to Charge</label>
+          <input type="text" class="form-control" name="depBudget" id="depBudget" placeholder="Department">
+        </div>
+      </div>
+
+<br>
+
+<button type="submit" class="btn btn-success">Submit<span class="fa fa-arrow-right"></span></button>
+
+</form>
+
+      <p>Note: This form must be received by the Physical Plant Department
+        at least 48 hours prior to the date of the service is needed.
+        Cancellations must be sent via email to Jan Pekar, Director of
+        Transportation and Adminstrative services (jpekar@pointpark.edu)
+        within 48 hours prior to the requested service otherwise the
+        department may be billed accordingly.
+
+</div>
+<script>
+
+</script>
+
+<script src ="jquery-3.3.1.min.js"></script>
+
+<script src ="popper.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
