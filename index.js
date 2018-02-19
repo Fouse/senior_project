@@ -20,6 +20,10 @@ app.get("/", function(req, res) {
   res.render("home");
 });
 
+app.get("/about", function(req, res) {
+  res.render("about");
+});
+
 app.get("/admin", function(req, res) {
   res.render("admin");
 });
@@ -41,61 +45,61 @@ app.get("/busform", function(req, res) {
 
 //post van form data to database
 app.post("/submit_request", function(req, res){
-//console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, driver, addComment, department, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
-	            req.body.depLocation,req.body.arrLocation,req.body.depTime,
-							req.body.arrTime,req.body.retTime,req.body.driver,req.body.driver,
-							req.body.addComment,req.body.department,req.body.reqEmail,
-							req.body.authName,req.body.depBudget];
-       con.query(sql, values, function(err, results) {
-         if (err) throw err;
-	 //console.log(results);
-           res.redirect("user");
-					 //con.end();
-					    });
-					 });
+  //console.log(req.body);
+  var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, driver, addComment, department, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+  var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
+	        req.body.depLocation,req.body.arrLocation,req.body.depTime,
+	        req.body.arrTime,req.body.retTime,req.body.driver,req.body.driver,
+	        req.body.addComment,req.body.department,req.body.reqEmail,
+	        req.body.authName,req.body.depBudget];
+  con.query(sql, values, function(err, results) {
+    if (err) throw err;
+    //console.log(results);
+    res.redirect("user");
+    //con.end();
+  });
+});
 
 //post driver form data to database
 app.post("/submit_request2", function(req, res){
-//console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, directions, purpTrip, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
-	            req.body.depLocation,req.body.arrLocation,req.body.depTime,
-							req.body.arrTime,req.body.retTime,req.body.directions,req.body.purpTrip,
-							req.body.reqEmail,req.body.authName,req.body.depBudget];
-       con.query(sql, values, function(err, results) {
-         if (err) throw err;
-	 //console.log(results);
-           res.redirect("user");
-					 //con.end();
-					    });
-					 });
+  //console.log(req.body);
+  var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, directions, purpTrip, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
+  var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
+	        req.body.depLocation,req.body.arrLocation,req.body.depTime,
+		req.body.arrTime,req.body.retTime,req.body.directions,req.body.purpTrip,
+	        req.body.reqEmail,req.body.authName,req.body.depBudget];
+  con.query(sql, values, function(err, results) {
+    if (err) throw err;
+    //console.log(results);
+    res.redirect("user");
+    //con.end();
+  });
+});
 
 //post driver form data to database
 app.post("/submit_request3", function(req, res){
-//console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, depLocation, arrLocation, depTime, arrTime, dateReturnTrip, returnLocation, addInstruct, numPassengers, eventName,eventNum, reqEmail, department, depBudget, authName, addComment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.depLocation,
-							req.body.arrLocation,req.body.depTime, req.body.arrTime,
-							req.body.dateReturnTrip,req.body.returnLocation,req.body.addInstruct,
-							req.body.numPassengers, req.body.eventName,req.body.eventNum,
-							req.body.reqEmail,req.body.department,req.body.depBudget,req.body.authName,
-						  req.body.addComment];
-      con.query(sql, values, function(err, results) {
-        if (err) throw err;
-	 //console.log(results);
-          res.redirect("user");
-					 //con.end();
-					    });
-					 });
+  //console.log(req.body);
+  var sql = "INSERT INTO requests (dateTrip, destination, depLocation, arrLocation, depTime, arrTime, dateReturnTrip, returnLocation, addInstruct, numPassengers, eventName,eventNum, reqEmail, department, depBudget, authName, addComment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+  var values = [req.body.dateTrip,req.body.destination,req.body.depLocation,
+		req.body.arrLocation,req.body.depTime, req.body.arrTime,
+		req.body.dateReturnTrip,req.body.returnLocation,req.body.addInstruct,
+	        req.body.numPassengers, req.body.eventName,req.body.eventNum,
+		req.body.reqEmail,req.body.department,req.body.depBudget,req.body.authName,
+		req.body.addComment];
+  con.query(sql, values, function(err, results) {
+    if (err) throw err;
+    //console.log(results);
+    res.redirect("user");
+    //con.end();
+  });
+});
 
 app.post("/get_drivers", function(req, res) {
   var sql="SELECT * FROM drivers WHERE availability=1";
         con.query(sql, function(err, results) {
          if (err) throw err;
            res.send({success: results});
-//con.end();
+      //con.end();
    });
 });
 
@@ -104,7 +108,7 @@ app.post("/get_req_count", function(req, res) {
         con.query(sql, function(err, results) {
          if (err) throw err;
            res.send({success: results});
-//con.end();
+      //con.end();
    });
 });
 
@@ -113,7 +117,7 @@ app.post("/get_vehicles", function(req, res) {
         con.query(sql, function(err, results) {
          if (err) throw err;
            res.send({success: results});
-//con.end();
+      //con.end();
    });
 });
 
@@ -125,25 +129,25 @@ var values = [req.body.driver_fname,req.body.driver_lname];
          if (err) throw err;
 	 //console.log(results);
            res.redirect("admin");
-//con.end();
+      //con.end();
    });
 });
 
 app.post("/add_vehicle", function(req, res){
 //console.log(req.body);
-var sql = "INSERT INTO vehicles (vehicle_number, seat_number) VALUES (?,?);";
-var values = [req.body.vehicle_number,req.body.seat_number];
+  var sql = "INSERT INTO vehicles (vehicle_number, seat_number) VALUES (?,?);";
+  var values = [req.body.vehicle_number,req.body.seat_number];
        con.query(sql, values, function(err, results) {
          if (err) throw err;
          //console.log(results);
            res.redirect("admin");
-//con.end();
+      //con.end();
    });
 });
 
 app.get("/user", function(req, res) {
   res.render("user", {
-  menu: getMenu(req)
+    menu: getMenu(req)
   });
 });
 
