@@ -2,6 +2,9 @@
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous"></script>
+  <script src='calendar/lib/moment.min.js'></script>
+  <script src='calendar/lib/jquery.min.js'></script>
+  <script src='calendar/fullcalendar.min.js'></script>
 <style>
 .box{
                 /* height:700px; */
@@ -23,13 +26,11 @@
           margin-bottom: 30px;
         }
         .left{
-          overflow-x: scroll;
-          overflow-y: scroll;
-          height: 450px;
+          height: 750px;
         }
           .right{
             overflow-y: scroll;
-            height: 450px;
+            height: 600px;
           }
         h3{
                 border-radius: 25px;
@@ -256,9 +257,10 @@
                 <div class="col-lg-6">
                         <h3>Schedule/Planner</h3>
                         <div class="left" style="border:1px solid green;">
-                          <img src="img/cal.png">
+                         <!-- <img src="img/cal.png"> -->
+			  <div id='calendar'></div>
                         </div>
-                        <div class="legends">
+<!--                        <div class="legends">
                           <br>
                           <p style="color:white;">Legends:
                             <span class="legend" style="background-color:green;">Athletic</span>
@@ -266,7 +268,7 @@
                             <span class="legend" style="background-color:blue;">blablaa</span>
                             <span id="add_legend"style="color:white;"> + </span>
                           </p>
-                        </div>
+                        </div> -->
                 </div>
                 <div class="col-lg-3 justify-content-center">
                         <h3>Fleet</h3>
@@ -276,9 +278,9 @@
                           <button class="btn btn-primary" data-toggle="modal" data-target=".add-vehicle"style="margin-top:10px;" style="margin-top:10px;">Add to Fleet</button>
                         </div>
                 </div>
-                <div class="col-12 text-center footer">
+        <!--        <div class="col-12 text-center footer">
                   <p>fousseini&copy;konate</p>
-                </div>
+                </div> -->
         </div>
 </div>
 <script>
@@ -322,33 +324,57 @@
      success: function(data) {
        var results = data.success;
         console.log(results);
-	$("#lift_request_count").html(results.count);
+console.log("===");
+console.log(results[0].count);
+	$("#lift_request_count").html(results[0].count);
+ function getReqcount(){
+  if (results[0].count !=0) {
+    $(".req_btn").css("background-color", "red");
+  } else {
+    $(".req_btn").css("background-color", "green");
+  }
+ }
      },
      error: function (textStatus, errorThrown) {
        alert("Request failed!");
      }
    });
 
+  $('#calendar').fullCalendar({
+    header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,basicWeek,basicDay'
+      },
+    defaultDate: '2018-02-18',
+    editable: true,
+    eventLimit: true, // allow "more" link when too many events
+    events: [
+       {
+         title: 'Senior project',
+         start: '2018-02-19'
+       },
+       {
+         title: 'World Religion',
+         start: '2018-02-07',
+         end: '2018-02-08'
+       },
+       {
+         id: 999,
+         title: 'Lunch with the guys',
+         start: '2018-02-09T16:00:00'
+       },
+       {
+         id: 999,
+         title: 'Mineapolis Trip',
+         start: '2018-02-16T16:00:00'
+       }
+    ]
+  });
+
+
 });
 
-//$("#addDriverForm").on("submit",function(evt){
-//console.log("form submited!");
-	//$.ajax({
-	//type:"POST",
-	//url:"/add_driver",
-	//data:$(this).serialize(),
-	//success: function(data){
-          //if (data.success) {
-		//console.log("it worked!");
-            	//} else {
-                	//console.log("error");
-            	//}
-           // },
-           // error: function(){
-             //   console.log("There was a problem.");
-           // }
-	//});
-//});
 var lift_request=[],avail_fleet=[], avail_drivers=[], reqs_details=[];
  function getReqcount(){
   $("#lift_request_count").html(lift_request.length);
