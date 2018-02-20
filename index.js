@@ -45,7 +45,7 @@ app.post("/submit_request", function(req, res){
 var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, driver, addComment, department, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
 var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
 	            req.body.depLocation,req.body.arrLocation,req.body.depTime,
-							req.body.arrTime,req.body.retTime,req.body.driver,req.body.driver,
+							req.body.arrTime,req.body.retTime,req.body.driver,
 							req.body.addComment,req.body.department,req.body.reqEmail,
 							req.body.authName,req.body.depBudget];
        con.query(sql, values, function(err, results) {
