@@ -33,11 +33,18 @@ app.post("/get_drivers", function(req, res) {
 });
 
 app.post("/get_req_count", function(req, res) {
-  var sql="SELECT COUNT(*) AS count FROM requests";
+  var sql="SELECT COUNT(*) AS count FROM requests WHERE isapproved=0";
         con.query(sql, function(err, results) {
          if (err) throw err;
            res.send({success: results});
-//con.end();
+   });
+});
+
+app.post("/get_reqs", function(req, res) {
+  var sql="SELECT * FROM requests WHERE isapproved='0'";
+        con.query(sql, function(err, results) {
+         if (err) throw err;
+           res.send({success: results});
    });
 });
 
@@ -50,6 +57,14 @@ app.post("/get_vehicles", function(req, res) {
    });
 });
 
+app.post("/get_events", function(req, res) {
+  var sql="SELECT * FROM requests WHERE isapproved='1'";
+        con.query(sql, function(err, results) {
+         if (err) throw err;
+           res.send({success: results});
+//con.end();
+   });
+});
 app.post("/add_driver", function(req, res){
 //console.log(req.body);
 var sql = "INSERT INTO drivers (driver_fname, driver_lname) VALUES (?,?);";
@@ -72,6 +87,15 @@ var values = [req.body.vehicle_number,req.body.seat_number];
            res.redirect("admin");
 //con.end();
    });
+});
+
+app.post("/assign_request", function(req, res){
+	var sql= "update requests join drivers on request_id = driver_id join vehicles on request_id = vehicle_id set  requests.isapproved = '1', drivers.availability='0', vehicles.availability='0' where requests.request_id=1";
+	con.query(sql,function(err, results) {
+		if (err) throw err;
+		//console.log(results);
+			res.redirect("admin");
+		});
 });
 
 app.get("/user", function(req, res) {

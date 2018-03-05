@@ -21,12 +21,13 @@
           border: 1px solid black;
           background: rgba(0,0,0,.7);
           box-shadow: 0px 10px 50px black;
-          height: 635px;
+          /* height: 635px; */
           border-radius: 10px;
           margin-bottom: 30px;
+          color: #07b048;
         }
-        .left{
-          height: 750px;
+        .m_box{
+          height: 770px;
         }
           .right{
             overflow-y: scroll;
@@ -95,6 +96,11 @@
           margin-top: 10px;
           padding: 5px;
           box-shadow: 5px 10px 18px #888888;
+          cursor: pointer;
+        }
+        .car_box:hover{
+          background-color: green;
+          color: white;
         }
         .vehicle_number{
           text-align: center;
@@ -118,6 +124,27 @@
         .driver_profile:hover{
           background-color: green;
           color: white;
+        }
+        .reqs button {
+          margin-left: 20px;
+          margin-top: 5px;
+        }
+        .req_list {
+          /* border: 1px solid black; */
+          cursor: pointer;
+          height: 70px;
+          padding: 5px;
+          margin: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .req_list p{
+          line-height: 50%;
+          color: green;
+        }
+        .req_list:hover{
+          background-color: #E8E8E8;
         }
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
@@ -143,7 +170,7 @@
 
 <!-- add driver-->
 <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content">
       <div class="modal-body">
       <form id="addDriverForm"  action="/add_driver" method="POST">
@@ -165,7 +192,7 @@
 
 <!-- add vehicle-->
 <div class="modal fade add-vehicle" tabindex="-1" role="dialog" aria-labelledby="add_vehicle" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content">
       <div class="modal-body">
       <form id="addVehicleForm"  action="/add_vehicle" method="POST">
@@ -186,7 +213,7 @@
 
   <!-- show requests-->
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content justify-content-center">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">PointLift Request(s)</h5>
@@ -226,20 +253,37 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-12">
-            <p><select name="driver" id="driver">
+            <form id="select_driver_van" action="/assign_request" method="POST">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="driver">select driver</label>
+                  <select class="form-control" id="driver" name="driver">
+                    <!-- <option>1</option> -->
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="vehicle">select van</label>
+                  <select class="form-control" name="vehicle" id="vehicle">
+                    <!-- <option>1</option> -->
+                  </select>
+                 </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            <!-- <p><select name="driver" id="driver">
                 <option value="" selected>select a driver</option>
               </select>
             </p>
             <p><select name="vehicle" id="vehicle">
                 <option value="" selected>select a vehicle</option>
               </select>
-          </p>
+          </p> -->
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <!-- <div class="modal-footer">
         <button type="button" class="btn btn-success" data-dismiss="modal" onclick='appr()'>Submit</button>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -248,18 +292,18 @@
         <div class="row justify-content-around text-center height">
           <div class="col-lg-3 justify-content-center">
                   <h3>Drivers</h3>
-                  <div class="right driver_box justify-content-center" style="border:1px solid green;">
+                  <div class="right driver_box justify-content-center glass">
                   </div>
                   <div>
                     <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm"style="margin-top:10px;">Add to driver</button>
                   </div>
           </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 glass m_box">
                         <h3>Schedule/Planner</h3>
-                        <div class="left" style="border:1px solid green;">
-                         <!-- <img src="img/cal.png"> -->
+                        <div id='calendar'></div>
+                        <!-- <div class="left" style="border:1px solid green;">
 			  <div id='calendar'></div>
-                        </div>
+                        </div> -->
 <!--                        <div class="legends">
                           <br>
                           <p style="color:white;">Legends:
@@ -272,7 +316,7 @@
                 </div>
                 <div class="col-lg-3 justify-content-center">
                         <h3>Fleet</h3>
-                        <div class="right fleet_box justify-content-center" style="border:1px solid green;">
+                        <div class="right fleet_box justify-content-center glass">
                         </div>
                         <div>
                           <button class="btn btn-primary" data-toggle="modal" data-target=".add-vehicle"style="margin-top:10px;" style="margin-top:10px;">Add to Fleet</button>
@@ -286,7 +330,7 @@
 <script>
  $(document).ready(function() {
     console.log("jquery loaded!");
-    getReqcount();
+    //get Available drivers
    $.ajax({
      type: "POST",
      url: "/get_drivers",
@@ -302,6 +346,7 @@
        alert("Request failed!");
      }
    });
+   //get Available vehicles
    $.ajax({
      type: "POST",
      url: "/get_vehicles",
@@ -317,72 +362,126 @@
        alert("Request failed!");
      }
    });
-  
+//count all the requests
       $.ajax({
      type: "POST",
      url: "/get_req_count",
      success: function(data) {
        var results = data.success;
         console.log(results);
-console.log("===");
-console.log(results[0].count);
 	$("#lift_request_count").html(results[0].count);
- function getReqcount(){
   if (results[0].count !=0) {
     $(".req_btn").css("background-color", "red");
   } else {
     $(".req_btn").css("background-color", "green");
   }
- }
      },
      error: function (textStatus, errorThrown) {
        alert("Request failed!");
      }
    });
+//get  all the requests
+   $.ajax({
+     type: "POST",
+     url: "/get_reqs",
+     success: function(data) {
+       var results = data.success;
+	console.log(results);
+       for (var i = 0; i < results.length; i++) {
+         var request_list = $("<div class='req_list' id='req"+i+"'><p>Department: "+ results[i].department+ "</p><p>Date: " +results[i].dateTrip+"</p></div>");
+         $(".reqs").append(request_list);
+         var request_detail = $("<div class='more_details' id='dtl"+i+"' style='display:none'><p>"
+         +results[i].department+"</p>"
+         +"<p>Destination: "+results[i].destination+"</p>"
+         +"<p>Passagers: "+results[i].numPassengers+"</p>"
+         +"<button class='btn btn-success approve' data-toggle='modal' data-target='#exampleModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>"
+         +"</div>");
+         $(".req_details").append(request_detail);
+         request_list.click({target:request_detail},function(e){
+            $(".more_details").hide();
+             $(e.data.target).show();
+             // console.log("e");
+             // console.log(e);
+         });
+       }
+     },
+     error: function (textStatus, errorThrown) {
+       alert("Request failed!");
+     }
+   });
+//calendar
 
   $('#calendar').fullCalendar({
+    showNonCurrentDates: false,
+    timezone: 'local',
+    timeFormat: 'h(:mm)t',
+    displayEventTime: true,
+    displayEventEnd: true,
     header: {
         left: 'prev,next today',
         center: 'title',
         right: 'month,basicWeek,basicDay'
       },
-    defaultDate: '2018-02-18',
-    editable: true,
+    // defaultDate: '2018-02-18',
+    // editable: true,
     eventLimit: true, // allow "more" link when too many events
-    events: [
-       {
-         title: 'Senior project',
-         start: '2018-02-19'
-       },
-       {
-         title: 'World Religion',
-         start: '2018-02-07',
-         end: '2018-02-08'
-       },
-       {
-         id: 999,
-         title: 'Lunch with the guys',
-         start: '2018-02-09T16:00:00'
-       },
-       {
-         id: 999,
-         title: 'Mineapolis Trip',
-         start: '2018-02-16T16:00:00'
-       }
-    ]
+    eventTextColor: "orange",
+    events: function(start, end, timezone, callback) {
+        jQuery.ajax({
+            // url: '/get_events',
+            url: '/get_events',
+            type: 'POST',
+            // dataType: 'json',
+            success: function(doc) {
+              var results= doc.success;
+              console.log(results);
+                var events = [];
+                for (var i=0;i<results.length;i++){
+                  events.push(results[i]);
+                  // console.log(results[i]);
+                }
+                console.log("events");
+                console.log(events);
+                 callback(events);
+            }
+        });
+    },
+    // [
+    //    {
+    //      title: 'Senior project',
+    //      start: '2018-02-19',
+    //      color: 'orange'
+    //    },
+    //    {
+    //      title: 'World Religion',
+    //      start: '2018-02-07',
+    //      end: '2018-02-08'
+    //    },
+    //    {
+    //      id: 999,
+    //      title: 'Lunch with the guys',
+    //      start: '2018-02-09T16:00:00'
+    //    },
+    //    {
+    //      id: 999,
+    //      title: 'Mineapolis Trip',
+    //      start: '2018-02-16T16:00:00'
+    //    }
+    // ],
+    eventClick: function(calEvent, jsEvent, view) {
+
+    alert('Event: ' + calEvent.title);
+    alert('View: ' + view.name);
+
+    // change the border color just for fun
+    $(this).css('border-color', 'red');
+
+}
   });
 
 
 });
 
 var lift_request=[],avail_fleet=[], avail_drivers=[], reqs_details=[];
- function getReqcount(){
-  $("#lift_request_count").html(lift_request.length);
-  if (lift_request.length !=0) {
-    $(".req_btn").css("background-color", "red")
-  } else {
-    $(".req_btn").css("background-color", "green")
-  }
-  console.log(lift_request);
-}
+
 </script>
