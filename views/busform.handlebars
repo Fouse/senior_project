@@ -1,0 +1,280 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+
+<title>Bus Rental Request Form</title>
+
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+crossorigin="anonymous">
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</head>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item">
+                                <a class="nav-link" href="#">About</a>
+                        </li>
+                </ul>
+</div>
+</nav>
+
+<br>
+
+<div class="container">
+<h2>Bus Rental Request Form</h2>
+
+<body>
+  <p>Please complete the online request form below, or download and print the
+    form and return to the Physical Plant Office via interoffice mail. The
+    Point Park University Vehicles are not equipped with car sear anchors, car
+    seats or booster seats. If a passenger requires a car seat and/or booster
+    seat (under 4 foot and 9 inches) please notify the Physical Plant Department
+    at (412) 392-3490. If you have any questions or concerns, please do not
+    hesitate to contact the Physical Plant Department.</p>
+
+    <h3>Disclaimer</h3>
+
+    <p>This is only a request. Final Confirmation will be sent as a reply.
+      If you do not receive a confirmation> please contact the Physcial Plant
+      department at (412) 392-3490.</p>
+
+  <form id="busform" action="submit_request3" method="POST">
+
+   <!-- Date of Trip and Destination: -->
+      <div class="row">
+        <div class="col">
+          <label for="dateTrip">Date of Trip</label>
+          <input type="date" class="form-control" name="dateTrip" id="dateTrip">
+        </div>
+        <div class="col">
+          <label for="destination">Destination</label>
+          <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+        </div>
+      </div>
+
+      <br>
+
+<!-- Departure Location/Arrival Location -->
+
+     <div class="row">
+      <div class="col">
+        <label for="depLocation">Departure Location</label>
+        <input type="text" class="form-control" name="depLocation" id="depLocation" placeholder="Departure Location">
+      </div>
+      <div class="col">
+        <label for="arrLocation">Arrival Location</label>
+        <input type="text" class="form-control" name="arrLocation" id="arrLocation" placeholder="Arrival Location">
+      </div>
+    </div>
+
+    <!-- Time of Departure/Time of Arrival: -->
+
+        <div class="row">
+          <div class="col">
+            <label for="depTime">Departure Time</label>
+            <input type="time" class="form-control" name="depTime" id="depTime" placeholder="Departure Time">
+          </div>
+          <div class="col">
+            <label for="arrTime">Arrival Time</label>
+            <input type="time" class="form-control" name="arrTime" id="arrTime" placeholder="Arrival Time">
+          </div>
+        </div>
+
+<br>
+
+    Will you be going to a hotel?:
+    Hotel Name:
+    Hotel Address:
+    Hotel Phone Number
+    Directions:
+
+    <!-- Date of Return Trip/Return Location: -->
+     <div class="row">
+        <div class="col">
+          <label for="dateReturnTrip">Date of Return Trip</label>
+          <input type="date" class="form-control" name="dateReturnTrip" id="dateReturnTrip">
+        </div>
+        <div class="col">
+          <label for="returnLocation">Return Location</label>
+          <input type="text" class="form-control" name="returnLocation" id="returnLocation" placeholder="Return Location">
+        </div>
+      </div>
+
+
+    <!-- Final Return Destination: -->
+<br>
+    Is looping Service Required?:
+    <div class="custom-control custom-radio custom-control-inline">
+<input type="radio" name="loopYes" id="loopYes" name="customRadioInline1" class="custom-control-input">
+<label class="custom-control-label" for="loopYes">Yes</label>
+</div>
+<div class="custom-control custom-radio custom-control-inline">
+<input type="radio" name="loopNo" id="loopNo" name="customRadioInline1" class="custom-control-input">
+<label class="custom-control-label" for="loopNo">No</label>
+</div>
+
+
+<br><br>
+    <!-- Special Instructions: -->
+
+
+    <div class="form-group">
+<label for="addInstruct">Special Instructions:</label>
+<textarea class="form-control" rows="2" name="addInstruct" id="addInstruct"></textarea>
+</div>
+
+<br>
+
+    <!-- Number of Expected Passengers: -->
+
+    <div class="form-group">
+      <label for="numPassengers">Number of Expected Passengers</label>
+      <input type="number" class="form-control" name="numPassengers" id="numPassengers">
+    </div>
+
+<br>
+
+    <!-- Event Contact Person Name/Event Contact Person Phone Number -->
+    <div class="row">
+      <div class="col">
+        <label for="eventName">Event Contact Person Name</label>
+        <input type="text" class="form-control" name="eventName" id="eventName">
+      </div>
+      <div class="col">
+        <label for="eventNum">Event Contact Person Phone Number</label>
+        <input type="tel" class="form-control" name="eventNum" id="eventNum" placeholder="(123)456-7890">
+      </div>
+    </div>
+
+<br>
+
+    <!-- Requester's Email -->
+
+    <div class="form-group">
+    <label for="reqEmail">Requester's Email Address</label>
+    <input type="email" class="form-control" name="reqEmail" id="reqEmail" placeholder="name@example.com">
+    </div>
+
+<br>
+
+    <!-- Department and Division to be Charged: -->
+    <div class="row">
+      <div class="col">
+        <label class="mr-sm-2" for="department">Department</label>
+        <select class="custom-select mr-sm-2" name="department" id="department">
+          <option selected>Choose...</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+        </div>
+        <div class="col">
+          <label for="depBudget">Department Budget to Charge</label>
+          <input type="text" class="form-control" name="depBudget" id="depBudget" placeholder="Department">
+
+      </div>
+    </div>
+
+<br>
+
+<!--Authorized by-->
+
+<div class="row">
+  <div class="col">
+    <label for="authName">Authorized by:</label>
+    <input type="text" class="form-control" name="authName" id="authName" placeholder="Name">
+  </div>
+</div>
+
+<br>
+
+    <!-- Additional Comments: -->
+
+<div class="form-group">
+  <label for="addComment">Additional Comments:</label>
+  <textarea class="form-control" rows="2" name="addComment" id="addComment"></textarea>
+</div>
+
+<br>
+
+<button type="submit" class="btn btn-success">Submit<span class="fa fa-arrow-right"></span></button>
+
+<br>
+
+</form>
+  <p>Note: This form must be received by the Physical Plant Department
+    at least 48 hours prior to the date of the service is needed.
+    Cancellations must be sent via email to Jan Pekar, Director of
+    Transportation and Adminstrative services (jpekar@pointpark.edu)
+    within 48 hours prior to the requested service otherwise the
+    department may be billed accordingly.
+
+
+
+</div>
+
+<script>
+$(document).ready(function() {
+
+    // process the form
+    $("busform").submit(function() {
+
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var formData = {
+            'dateTrip'         : $('input[name=dateTrip]').val(),
+            'destination'      : $('input[name=destination]').val(),
+            'depLocation'      : $('input[name=depLocation]').val(),
+						'arrLocation'      : $('input[name=arrLocation]').val(),
+						'depTime'          : $('input[name=depTime]').val(),
+						'arrTime'          : $('input[name=arrTime]').val(),
+						'dateReturnTrip'   : $('input[name=dateReturnTrip]').val(),
+						'returnLocation'   : $('input[name=returnLocation]').val(),
+						'addInstruct'      : $('input[name=addInstruct]').val(),
+						'numPassengers'    : $('input[name=numPassengers]').val(),
+						//'loop'             : $('input[name=loop]').val(),
+						'eventName'        : $('input[name=eventName]').val(),
+						'eventNum'         : $('input[name=eventNum]').val(),
+						'reqEmail'         : $('input[name=reqEmail]').val(),
+						'department'       : $('input[name=department]').val(),
+						'depBudget'        : $('input[name=depBudget]').val(),
+						'authName'         : $('input[name=authName]').val(),
+						'addComment'       : $('input[name=addComment]').val(),
+        };
+        console.log(JSON.stringify(formData));
+				$.ajax({
+					 type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+					 url         : '/submit_request3', // the url where we want to POST
+					 data        : formData, // our data object
+					 dataType    : 'JSON', // what type of data do we expect back from the server
+			 })
+     })
+   })
+</script>
+
+
+
+
+</body>
+</html>

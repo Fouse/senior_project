@@ -1,0 +1,7 @@
+Zayne AlKahtani
+Module 4 Documentation:
+
+1) handlebar forms linked to homepage in index.js
+2) add columns within requests table to receive information
+   from forms. 
+3) forms submission is now successful using ajax and posting    to database (app.post is in index.js)
