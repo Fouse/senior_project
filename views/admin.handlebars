@@ -227,7 +227,7 @@
               <h3>Requests</h3>
               <div class="req_sub_box reqs justify-content-center"></div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-8">
               <h3>Details</h3>
               <div class="req_sub_box req_details" style="padding-left:5px;"></div>
             </div>
@@ -267,6 +267,9 @@
                     <!-- <option>1</option> -->
                   </select>
                  </div>
+                 <div class="form-group col-md-6">
+                   <input  name="reqId">
+                  </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
@@ -337,7 +340,7 @@
      success: function(data) {
        var results = data.success;
 	console.log(results);
-       for (var i = 0; i < results.length; i++) {
+       for (var i = results.length-1; i >=0; i--) {
          $(".driver_box").append("<div class='driver_profile'><img src='img/driver.png'><p class='name'>" + results[i].driver_fname+" "+ results[i].driver_lname + "</p><p class='licence_type'>CDL</p></div>");
 	 $("#driver").append("<option name='' value=''>"+results[i].driver_fname+" "+results[i].driver_lname+"</option>");
        }
@@ -394,7 +397,11 @@
          +results[i].department+"</p>"
          +"<p>Destination: "+results[i].destination+"</p>"
          +"<p>Passagers: "+results[i].numPassengers+"</p>"
-         +"<button class='btn btn-success approve' data-toggle='modal' data-target='#exampleModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>"
+         +"<p>Date Of The Trip: "+results[i].dateTrip+"</p>"
+         +"<p>Departure Location: "+results[i].depLocation+"</p>"
+         +"<p>Arrival Location: "+results[i].arrLocation+"</p>"
+         +"<p>id: "+results[i].request_id+"</p>"
+         +"<button class='btn btn-success approve' data-toggle='modal' data.id='"+results[i].request_id+"' data-target='#exampleModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>"
          +"</div>");
          $(".req_details").append(request_detail);
          request_list.click({target:request_detail},function(e){
