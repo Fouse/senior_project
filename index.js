@@ -24,6 +24,10 @@ app.get("/admin", function(req, res) {
         res.render("admin");
 });
 
+app.get("/about", function(req, res) {
+        res.render("about");
+});
+
 //link driverform to homepage
 app.get("/driverform", function(req, res) {
         res.render("driverform");
@@ -171,4 +175,5 @@ app.get("/user", function(req, res) {
 
 app.listen(app.get('port'), function() {
         console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.' );
+
 });
