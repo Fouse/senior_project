@@ -18,7 +18,7 @@ app.set('port', process.env.PORT || 3000);
 var smtpTransport = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-		user: "fousseini.test@gmail.com",
+		user: "pointlift2018@gmail.com",
 		pass: "pointlift"
   }
 });
@@ -100,7 +100,7 @@ app.post("/get_reqs", function(req, res) {
 // });
 app.post("/get_vehicles", function(req, res) {
   //var sql="SELECT * FROM vehicles WHERE vehicle_id NOT IN ( SELECT vehicle_id FROM tmp_requests WHERE now() BETWEEN start AND end);";
-		var sql="SELECT * FROM vehicles WHERE vehicle_id NOT IN ( SELECT vehicle_id FROM tmp_requests WHERE (? <= end) AND (? >= start));";
+		var sql="SELECT vehicle_id FROM vehicles WHERE vehicle_id NOT IN ( SELECT vehicle_id FROM tmp_requests WHERE (? <= end) AND (? >= start));";
         con.query(sql, ['2018-03-16 17:00:00', '2018-03-16 19:00:00'], function(err, results) {
          if (err) throw err;
            res.send({success: results});
@@ -215,14 +215,14 @@ var values = [req.body.start, req.body.end, req.body.title, req.body.arrival_des
 					 to: to,
 					 subject: 'Pointlift Request',
 					 text: 'Thank you!',
-					 html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Thank You</td></tr><tr><td style="padding: 20px 0 30px 0;">Our team will procede with your request shortly. </td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
+					 html: '<p>Hello world</p>'
 					};
 
 						 smtpTransport.sendMail(mailOptions, function(error, response){
 							 if(error){
 									 console.log(error);
 								}else{
-									 console.log("Message sent");
+									 console.log("Message sent: " + mailOptions);
 							 }
 							smtpTransport.close();
 						});

@@ -150,12 +150,12 @@ body {
         }
         @media screen and (max-width: 700px) {
           .driver_box, .fleet_box {
-            height: 30vh;
+            height: 10vh;
           }
         }
         @media screen and (max-width: 700px) {
           .m_box {
-            height: 60vh;
+            height: 20vh;
           }
         }
         @media screen and (max-width: 992px) {
@@ -587,15 +587,15 @@ $.ajax({
     var results = data.success;
 console.log(results);
     for (var i = 0; i < results.length; i++) {
-      var request_list = $("<div class='req_list' id='req"+i+"'><p>Department: "+ results[i].title+ "</p><p>Date: " +results[i].start+"</p></div>");
+      var request_list = $("<div class='req_list' id='req"+i+"'><p>Department: "+ results[i].title+ "</p><p>Date: " +results[i].start.replace(/\..+/, '')+"</p></div>");
       $(".reqs").append(request_list);
       var request_detail = $("<div class='more_details' id='dtl"+i+"' style='display:none'><p>Title: "
       +results[i].title+"</p>"
       +"<p>Department: "+results[i].title+"</p>"
-      +"<p>Date Of The Trip: "+results[i].start+"</p>"
-      +"<p>Arrival Location: "+results[i].arrival_destination_dateTime+"</p>"
-      +"<p>Departure from Location: "+results[i].destination_dep_dateTime+"</p>"
-      +"<p>Arrival PPU: "+results[i].end+"</p>"
+      +"<p>Date Of The Trip: "+results[i].start.replace(/\..+/, '')+"</p>"
+      +"<p>Arrival Location: "+results[i].arrival_destination_dateTime.replace(/\..+/, '')+"</p>"
+      +"<p>Departure from Location: "+results[i].destination_dep_dateTime.replace(/\..+/, '')+"</p>"
+      +"<p>Arrival PPU: "+results[i].end.replace(/\..+/, '')+"</p>"
       +"<button class='btn btn-success approve' data-toggle='modal' data-id='"+results[i].reqs_id+"' data-target='#reqModal'>Approve</button> <button class='btn btn-danger decline' onclick='decline()'>Decline</button>"
       +"</div>");
       $(".req_details").append(request_detail);
