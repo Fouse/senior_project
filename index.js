@@ -24,68 +24,69 @@ app.get("/admin", function(req, res) {
         res.render("admin");
 });
 
-//link driverform to homepage
+//link to driverform
 app.get("/driverform", function(req, res) {
         res.render("driverform");
 });
 
-//link vanform to homepage
+//link to vanform
 app.get("/vanform", function(req, res) {
         res.render("vanform");
 });
 
-//link busform to homepage
+//link to busform
 app.get("/busform", function(req, res) {
         res.render("busform");
 });
 
 //post van form data to database
 app.post("/submit_request", function(req, res){
-//console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, driver, addComment, department, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
-	            req.body.depLocation,req.body.arrLocation,req.body.depTime,
-							req.body.arrTime,req.body.retTime,req.body.driver,
-							req.body.addComment,req.body.department,req.body.reqEmail,
-							req.body.authName,req.body.depBudget];
-       con.query(sql, values, function(err, results) {
-         if (err) throw err;
-	 //console.log(results);
-           res.redirect("user");
-					 //con.end();
-					    });
-					 });
+	var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, driver, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+	var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+		            req.body.destination,req.body.departure_location,req.body.arrival_location,
+								req.body.estimate_arrival,req.body.return_time,req.body.driver,
+								req.body.loop_service,req.body.request_department,req.body.budget_num,
+								req.body.auth_name,req.body.request_email,req.body.comment];
+								con.query(sql, values, function(err, results) {
+									if (err) throw err;
+									res.redirect("/");
+								});
+							});
 
 //post driver form data to database
 app.post("/submit_request2", function(req, res){
 //console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, numPassengers, depLocation, arrLocation, depTime, arrTime, retTime, directions, purpTrip, reqEmail, authName, depBudget) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.numPassengers,
-	            req.body.depLocation,req.body.arrLocation,req.body.depTime,
-							req.body.arrTime,req.body.retTime,req.body.directions,req.body.purpTrip,
-							req.body.reqEmail,req.body.authName,req.body.depBudget];
+var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+	            req.body.destination,req.body.departure_location,req.body.arrival_location,
+							req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+							req.body.directions,req.body.trip_purpose,req.body.auth_name,
+							req.body.budget_num,req.body.request_email,req.body.comment];
        con.query(sql, values, function(err, results) {
          if (err) throw err;
 	 //console.log(results);
-           res.redirect("user");
+           res.redirect("/");
 					 //con.end();
 					    });
 					 });
 
-//post driver form data to database
+//post bus form data to database
 app.post("/submit_request3", function(req, res){
 //console.log(req.body);
-var sql = "INSERT INTO requests (dateTrip, destination, depLocation, arrLocation, depTime, arrTime, dateReturnTrip, returnLocation, addInstruct, numPassengers, eventName,eventNum, reqEmail, department, depBudget, authName, addComment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.dateTrip,req.body.destination,req.body.depLocation,
-							req.body.arrLocation,req.body.depTime, req.body.arrTime,
-							req.body.dateReturnTrip,req.body.returnLocation,req.body.addInstruct,
-							req.body.numPassengers, req.body.eventName,req.body.eventNum,
-							req.body.reqEmail,req.body.department,req.body.depBudget,req.body.authName,
-						  req.body.addComment];
+var sql = "INSERT INTO requests (destination, trip_start, trip_end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment, bus_company, ref_num, bus_driver, bus_num, bus_driver_phone, bus_phone, emergency_contact) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.destination,req.body.trip_start,req.body.trip_end,
+							req.body.num_passengers,req.body.departure_location, req.body.arrival_location,
+							req.body.estimate_arrival,req.body.return_time,req.body.hotel_name,
+							req.body.hotel_address,req.body.hotel_num,req.body.hotel_directions,
+							req.body.return_location,req.body.event_person,req.body.event_person_num,
+							req.body.request_department,req.body.request_email,req.body.auth_name,
+						  req.body.budget_num,req.body.comment,req.body.bus_company,
+							req.body.ref_num,req.body.bus_driver,req.body.bus_num,
+							req.body.bus_driver_phone,req.body.bus_phone,req.body.emergency_contact];
       con.query(sql, values, function(err, results) {
         if (err) throw err;
 	 //console.log(results);
-          res.redirect("user");
+          res.redirect("/");
 					 //con.end();
 					    });
 					 });
