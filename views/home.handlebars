@@ -6,88 +6,149 @@
     background-size: cover;
   }
  .jumbotron {
-    background: rgba(13,13,13,.0);
-    background: transparant;
-    margin-top: 5%;
-    /* color: #07b048; */
-    color: #fff;
-    /* border: 1px solid black; */
+      background: rgba(13,13,13,.0);
+      background: transparant;
+      margin-top: 35%;
+      margin-right: -10px;
+      /* color: #07b048; */
+      color: #fff;
+      /* border: 1px solid red; */
   }
-  .box {
-    padding-top: 5%;
-    padding-bottom: 10px;
-    border: 1px solid black;
-    background: rgba(13,13,13,.7);
-    box-shadow: 0px 10px 50px black;
+.box {
+   padding-top: 5%;
+   padding-bottom: 10px;
+   border: 1px solid black;
+   background: rgba(13,13,13,.7);
+   box-shadow: 0px 10px 50px black;
   }
-  html {
-    position: relative;
-    min-height: 100%;
-  }
-
+  .box2 {
+     /* padding-top: 5%; */
+     padding-bottom: 10px;
+     border: 1px solid black;
+     background: rgba(13,13,13,.7);
+     box-shadow: 0px 10px 50px black;
+    }
 html {
    position: relative;
    min-height: 100%;
  }
  .schedules{
-   /* border: 1px solid white; */
-   margin-top: 5%;
+   /* border-right: 1px solid #249d3d; */
+   /* position: relative; */
+
  }
  .schedule_ctn{
-   height: 600px;
+   /* height: 600px; */
+   height: 90vh;
  }
  .schedule_head{
    color: #fff;
  }
  .schedule_body{
    color: #249d3d;
+   overflow-y: scroll;
+   height: 70vh;
  }
-
+ hr{
+   border-color: #249d3d;
+   border-style: solid none;
+ }
+ .black{
+   border: 2px solid #249d3d;
+ }
+  .daylist pre, p{
+   color:#fff;
+ }
+ pre {
+    white-space: pre-wrap;
+}
+ *{
+   list-style-type: none;
+   outline: none;
+ }
   </style>
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <a class="navbar-brand" href="/">PointLift</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                        <!-- <li class="nav-item">
-                                <a class="nav-link" href="#">About</a>
-                        </li> -->
+                        <li class="nav-item">
+                                <a class="nav-link" href="http://www.pointparkshuttle.com/" target="_blank">Track Me!</a>
+                        </li>
                 </ul>
         </div>
 </nav>
 <div class="container-fluid">
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-8">
+    <div class="jumbotron box jumbotron-fluid text-center">
+      <div class="container">
+        <h1 class="display-4">PointLift</h1>
+        <hr>
+        <p class="lead">Introducing a New Way To Make Van Request</p>
+        <a class="btn btn-outline-success btn-lg" href="/sampleform">Van</a>
+        <a class="btn btn-outline-success btn-lg" href="/sampleform">Bus Rental</a>
+        <a class="btn btn-outline-success btn-lg" href="/user">Van Driver</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 box2">
     <div class="schedules">
-      <div class="schedule_ctn box">
+      <div class="schedule_ctn">
         <div class="schedule_head text-center">
           <h1>Shuttle Schedules</h1>
         </div>
         <div class="schedule_body">
-          <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
+          <ul class="daylist text-left">
+            <li>SUNDAY</li>
+            <hr>
+            <p><pre id="sunday"></pre></p>
+            <li>MONDAY</li>
+            <hr>
+            <p><pre id="monday"></pre></p>
+            <li>TUESDAY</li>
+            <hr>
+            <p><pre id="tuesday"></pre></p>
+            <li>WEDNESDAY</li>
+            <hr>
+            <p><pre id="wednesday"></pre></p>
+            <li>THURSDAY</li>
+            <hr>
+            <p><pre id="thursday"></pre></p>
+            <li>FRIDAY</li>
+            <hr>
+            <p><pre id="friday"></pre></p>
+            <li>SATURDAY</li>
+            <hr>
+            <p><pre id="saturday"></pre></p>
           </ul>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-8">
-    <div class="jumbotron jumbotron-fluid text-center">
-      <div class="container box">
-        <h1 class="display-4">PointLift</h1>
-        <p class="lead">Introducing a New Way To Make Van Request</p>
-        <a class="btn btn-outline-success btn-lg" href="/user">Van</a>
-        <a class="btn btn-outline-success btn-lg" href="/user">Bus Rental</a>
-        <a class="btn btn-outline-success btn-lg" href="/user">Van Driver</a>
-      </div>
-    </div>
-  </div>
 </div>
 </div>
-
+<script>
+  $(document).ready(function(){
+    $.ajax({
+      type: "POST",
+      url: "/get_weekly_schedule",
+      success: function(data) {
+        var results = data.success;
+   console.log(results);
+   $("#sunday").html(results[0].sunday);
+   $("#monday").html(results[0].monday);
+   $("#tuesday").html(results[0].tuesday);
+   $("#wednesday").html(results[0].wednesday);
+   $("#thursday").html(results[0].thursday);
+   $("#friday").html(results[0].friday);
+   $("#saturday").html(results[0].saturday);
+      },
+      error: function (textStatus, errorThrown) {
+        alert("Request failed!");
+      }
+    });
+  });
+</script>
