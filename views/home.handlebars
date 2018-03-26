@@ -66,6 +66,12 @@ html {
    list-style-type: none;
    outline: none;
  }
+ @media screen and (max-width: 992px) {
+   .jumbotron{
+     margin-top: 0;
+     margin-right: 0;
+   }
+ }
   </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <a class="navbar-brand" href="/">PointLift</a>
@@ -88,9 +94,11 @@ html {
         <h1 class="display-4">PointLift</h1>
         <hr>
         <p class="lead">Introducing a New Way To Make Van Request</p>
-        <a class="btn btn-outline-success btn-lg" href="/sampleform">Van</a>
-        <a class="btn btn-outline-success btn-lg" href="/sampleform">Bus Rental</a>
-        <a class="btn btn-outline-success btn-lg" href="/user">Van Driver</a>
+        <div class="row justify-content-around">
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="/sampleform">Van</a>
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="/sampleform">Bus Rental</a>
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="/user">Van Driver</a>
+        </div>
       </div>
     </div>
   </div>
