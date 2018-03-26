@@ -20,8 +20,14 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
+<style>
+#form_container{
+	box-shadow: 0px 10px 50px black;
+	background: rgba(0, 0, 0, 0.45);
+	border-radius: 5px;
+}
 
-
+</style>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
@@ -38,152 +44,138 @@
 </div>
 </nav>
 
-<br>
+<br><br>
 
-<div class="container">
+<div class="container" id="form_container">
+<h2>Shuttle Driver Request Form</h2>
 
-<h2>Van Driver Request Form</h2>
 <body>
-  <p>Please complete the online request form below, or download and print the
-    form and return to the Physical Plant Office via interoffice mail. The
-    Point Park University Vehicles are not equipped with car sear anchors, car
-    seats or booster seats. If a passenger requires a car seat and/or booster
-    seat (under 4 foot and 9 inches) please notify the Physical Plant Department
-    at (412) 392-3490. If you have any questions or concerns, please do not
-    hesitate to contact the Physical Plant Department.</p>
 
-    <h3>Disclaimer</h3>
 
-    <p>This is only a request. Final Confirmation will be sent as a reply.
-      If you do not receive a confirmation, please contact the Physcial Plant
-      department at (412) 392-3490.</p>
+<p>Please complete the online request form below, or download and print the
+form and return to the Physical Plant Office via interoffice mail. The
+Point Park University Vehicles are not equipped with car sear anchors, car
+seats or booster seats. If a passenger requires a car seat and/or booster
+seat (under 4 foot and 9 inches) please notify the Physical Plant Department
+at (412) 392-3490. If you have any questions or concerns, please do not
+hesitate to contact the Physical Plant Department.</p>
+
+<h5>Disclaimer:</h5>
+
+<p>This is only a request. Final Confirmation will be sent as a reply.
+If you do not receive a confirmation, please contact the Physcial Plant
+department at (412) 392-3490.</p>
 
 
 <form id="driverform" action="/submit_request2" method="POST">
-  <!-- Date of Trip and Destination: -->
 
-  <div class="row">
-    <div class="col">
-      <label for="dateTrip">Date of Trip</label>
-      <input type="date" class="form-control" name="dateTrip" id="dateTrip">
-    </div>
-    <div class="col">
-      <label for="destination">Destination</label>
-      <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
-    </div>
-  </div>
 
-  <br>
+<!-- Start and End Times of Trip: -->
+<div class="row">
+	<div class="col">
+		<label for="trip_start">Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="trip_start"id="trip_start">
+	</div>
+	<div class="col">
+		<label for="trip_end">End Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="trip_end"id="trip_end">
+	</div>
+</div>
 
-  <!-- Number of Expected Passengers: -->
-  <div class="form-group">
-    <label for="numPassengers">Number of Expected Passengers</label>
-    <input type="value" class="form-control" name="numPassengers" id="numPassengers">
-  </div>
+<br>
 
+<!-- Number of Expected Passengers and the Destination: -->
+<div class="row">
+	<div class="col">
+		<label for="num_passengers">Number of Expected Passengers:</label>
+		<input type="number" class="form-control" name="num_passengers" id="num_passengers">
+	</div>
+	<div class="col">
+		<label for="destination">Destination:</label>
+		<input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+	</div>
+</div>
 
 <br>
 
 <!-- Departure Location/Arrival Location -->
-
-  <div class="row">
-    <div class="col">
-      <label for="depLocation">Departure Location</label>
-      <input type="text" class="form-control" name="depLocation" id="depLocation" placeholder="Departure Location">
-    </div>
-    <div class="col">
-      <label for="arrLocation">Arrival Location</label>
-      <input type="text" class="form-control" name="arrLocation" id="arrLocation" placeholder="Arrival Location">
-    </div>
-  </div>
-
-<br>
-      <!-- Time of Departure/Time of Arrival: -->
-
-        <div class="row">
-          <div class="col">
-            <label for="depTime">Departure Time</label>
-            <input type="time" class="form-control" name="depTime" id="depTime" placeholder="Departure Time">
-          </div>
-          <div class="col">
-            <label for="arrTime">Arrival Time</label>
-            <input type="time" class="form-control" name="arrTime" id="arrTime" placeholder="Arrival Time">
-          </div>
-        </div>
-
-<br>
-      <!-- Time of Return: -->
-
-      <div class="form-group">
-        <label for="retTime">Time of Return</label>
-        <input type="time" class="form-control" name="retTime" id="retTime">
-      </div>
+<div class="row">
+	<div class="col">
+		<label for="departure_location">Departure Location:</label>
+		<input type="text" class="form-control" name="departure_location" id="departure_location" placeholder="Departure Location">
+	</div>
+	<div class="col">
+		<label for="arrival_location">Arrival Location:</label>
+		<input type="text" class="form-control" name ="arrival_location" id="arrival_location" placeholder="Arrival Location">
+	</div>
+</div>
 
 <br>
 
+<!-- Estimated Arrival and Time of Return -->
+<div class="row">
+	<div class="col">
+		<label for="estimate_arrival">Estimated Time of Arrival:</label>
+		<input type="time" class="form-control" name="estimate_arrival" id="estimate_arrival" placeholder="Arrival Time">
+	</div>
+	<div class="col">
+		<label for="return_time">Time of Return:</label>
+		<input type="time" class="form-control" name="return_time" id="return_time">
+	</div>
+</div>
 
-  <!-- Directions: -->
+<br>
 
-  <div class="form-group">
-  <label for="directions">Directions:</label>
-  <textarea class="form-control" rows="2" name="directions" id="directions"></textarea>
-  </div>
+<!-- loop service  & directions-->
+<div class="row">
+	<div class="col">
+		<label for="loop_service">Is looping service required?</label>
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="false" aria-controls="loop_service" /> Yes
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="true" aria-controls="loop_service" checked/> No
+		<div class="collapse" id="loop_service">
+			<div class="form-group" id="loop_service">
+				<textarea class="form-control" rows="1" name="loop_service" id="loop_service"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<label for="directions">Directions:</label>
+		<textarea class="form-control" rows="1" name="directions" id="directions"></textarea>
+	</div>
+</div>
 
-  <br>
+<br>
 
-
-  Is looping Service Required?
-
-  <div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" name="loopYes" id="loopYes" name="customRadioInline1" class="custom-control-input">
-  <label class="custom-control-label" for="loopYes">Yes</label>
-  </div>
-  <div class="custom-control custom-radio custom-control-inline">
-  <input type="radio" name="loopNo" id="loopNo" name="customRadioInline1" class="custom-control-input">
-  <label class="custom-control-label" for="loopNo">No</label>
-  </div>
-
-  <br>
-  <br>
-
-  <!-- Additional Comments: -->
-
-  <div class="form-group">
-  <label for="addComment">Additional Comments:</label>
-  <textarea class="form-control" rows="2" name="addComment" id="addComment"></textarea>
-  </div>
-
-  <br>
-
-  <!-- Purpose of Trip: -->
-
-  <div class="form-group">
-  <label for="purpTrip">Purpose of Trip:</label>
-  <textarea class="form-control" rows="2" name="purpTrip" id="purpTrip"></textarea>
-  </div>
-
-  <br>
-
-  <!-- Requester's Email -->
-
-  <div class="form-group">
-<label for="reqEmail">Requester's Email Address</label>
-<input type="email" class="form-control" name="reqEmail" id="reqEmail" placeholder="name@example.com">
+<!--trip purpose-->
+<div class="form-group">
+	<label for="trip_purpose">What is the purpose of this trip?</label>
+	<textarea class="form-control" rows="1" name="trip_purpose" id="trip_purpose"></textarea>
 </div>
 
 <br>
 
 <!-- Authorized by & Department Budget to Charge: -->
-
 <div class="row">
-  <div class="col">
-    <label for="authName">Authorized by:</label>
-    <input type="text" class="form-control" name="authName" id="authName" placeholder="Name">
-  </div>
-  <div class="col">
-    <label for="depBudget">Department Budget to Charge</label>
-    <input type="text" class="form-control" name="depBudget" id="depBudget" placeholder="Department">
-  </div>
+	<div class="col">
+		<label for="auth_name">Authorized by:</label>
+		<input type="text" class="form-control" name="auth_name" id="auth_name" placeholder="Name">
+	</div>
+	<div class="col">
+		<label for="budget_num">Department Budget to Charge:</label>
+		<input type="text" class="form-control" name="budget_num" id="budget_num" placeholder="Budget Number">
+	</div>
+	<div class="col">
+		<label for="request_email">Requester's Email Address:</label>
+		<input type="email" class="form-control" name="request_email" id="request_email" placeholder="name@example.com">
+	</div>
+</div>
+
+<br>
+
+<!--Additional Comments-->
+<div class="form-group">
+	<label for="comment">Additional Comments or Concerns:</label>
+	<textarea class="form-control" rows="1" name="comment" id="comment"></textarea>
 </div>
 
 <br>
@@ -192,47 +184,51 @@
 
 </form>
 
-      <p>Note: This form must be received by the Physical Plant Department
-        at least 48 hours prior to the date of the service is needed.
-        Cancellations must be sent via email to Jan Pekar, Director of
-        Transportation and Adminstrative services (jpekar@pointpark.edu)
-        within 48 hours prior to the requested service otherwise the
-        department may be billed accordingly. </p>
+<br>
 
+<p>Note: This form must be received by the Physical Plant Department
+at least 5 business days prior to the date of the service is needed.
+Cancellations must be sent via email to Jan Pekar, Director of
+Transportation and Adminstrative services (jpekar@pointpark.edu)
+within 48 hours prior to the requested service otherwise the
+department may be billed accordingly. </p>
+
+<br>
 </div>
+<br><br>
+
 <script>
 $(document).ready(function() {
 
-    // process the form
-    $("driverform").submit(function() {
+	$("driverform").submit(function() {
 
-        // get the form data
-        // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = {
-            'dateTrip'         : $('input[name=dateTrip]').val(),
-            'destination'      : $('input[name=destination]').val(),
-            'numPassengers'    : $('input[name=numPassengers]').val(),
-            'depLocation'      : $('input[name=depLocation]').val(),
-						'arrLocation'      : $('input[name=arrLocation]').val(),
-						'depTime'          : $('input[name=depTime]').val(),
-						'arrTime'          : $('input[name=arrTime]').val(),
-						'retTime'          : $('input[name=retTime]').val(),
-						'directions'       : $('input[name=directions]').val(),
-						//'loop'             : $('input[name=loop]').val(),
-						'purpTrip'         : $('input[name=purpTrip]').val(),
-						'reqEmail'         : $('input[name=reqEmail]').val(),
-						'authName'         : $('input[name=authName]').val(),
-						'depBudget'        : $('input[name=depBudget]').val()
-        };
-        console.log(JSON.stringify(formData));
-				$.ajax({
-					 type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-					 url         : '/submit_request2', // the url where we want to POST
-					 data        : formData, // our data object
-					 dataType    : 'JSON', // what type of data do we expect back from the server
-			 })
-     })
-   })
+		var formData = {
+			'trip_start'           : $('input[name=trip_start]').val(),
+			'trip_end'             : $('input[name=trip_end]').val(),
+			'num_passengers'       : $('input[name=num_passengers]').val(),
+			'destination'      	   : $('input[name=destination]').val(),
+			'departure_location'   : $('input[name=departure_location]').val(),
+			'arrival_location'     : $('input[name=arrival_location]').val(),
+			'estimate_arrival'     : $('input[name=estimate_arrival]').val(),
+			'return_time'          : $('input[name=return_time]').val(),
+			'loop_service'         : $('input[name=loop_service]').val(),
+			'directions'           : $('input[name=directions]').val(),
+			'trip_purpose'         : $('input[name=trip_purpose]').val(),
+			'auth_name'            : $('input[name=auth_name]').val(),
+			'budget_num'           : $('input[name=budget_num]').val(),
+			'request_email'        : $('input[name=request_email]').val()
+			'comment'              : $('input[name=comment]').val()
+		};
+
+		$.ajax({
+			type        : 'POST',
+			url         : '/submit_request2',
+			data        : formData,
+			dataType    : 'JSON',
+		})
+	})
+})
+
 </script>
 </body>
 </html>
