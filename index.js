@@ -34,6 +34,9 @@ app.get("/vanform", function(req, res) {
         res.render("vanform");
 });
 
+app.get("/busform", function(req, res) {
+        res.render("busform");
+});
 // app.post("/get_drivers", function(req, res) {
 //   var sql="SELECT * FROM drivers WHERE driver_id NOT IN ( SELECT driver_id FROM tmp_requests WHERE now() BETWEEN start AND end);";
 //         con.query(sql, function(err, results) {
@@ -56,6 +59,36 @@ app.get("/vanform", function(req, res) {
    });
  });
 
+ //post van form data to database
+ app.post("/submit_request", function(req, res){
+ 	var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, driver, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ 	var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+ 		            req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 								req.body.estimate_arrival,req.body.return_time,req.body.driver,
+ 								req.body.loop_service,req.body.request_department,req.body.budget_num,
+ 								req.body.auth_name,req.body.request_email,req.body.comment];
+ 								con.query(sql, values, function(err, results) {
+ 									if (err) throw err;
+ 									res.redirect("/");
+ 								});
+ 							});
+
+ //post driver form data to database
+ app.post("/submit_request2", function(req, res){
+ //console.log(req.body);
+ var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+ 	            req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 							req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+ 							req.body.directions,req.body.trip_purpose,req.body.auth_name,
+ 							req.body.budget_num,req.body.request_email,req.body.comment];
+        con.query(sql, values, function(err, results) {
+          if (err) throw err;
+ 	 //console.log(results);
+            res.redirect("/");
+ 					 //con.end();
+ 					    });
+ 					 });
 
 //post bus form data to database
 app.post("/submit_request3", function(req, res){
