@@ -213,6 +213,7 @@ body {
                 </ul>
         </div>
 </nav>
+
 <!-- weekly schedule modal-->
 <div class="modal fade weekly_schedule" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -471,7 +472,7 @@ body {
                 </div>
         </div>
 </div>
-<!-- callendar modal -->
+<!-- calendar modal -->
 <div id="fullCalModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -529,18 +530,18 @@ var dtas=[], event_start, event_end;
     //weekly_schedule
     $.ajax({
       type: "POST",
-      url: "/get_weekly_schedule",
+      url: "get_weekly_schedule",
       success: function(data) {
         var results = data.success;
-   console.log(results);
-   $("#sunday").val(results[0].sunday);
-   // $("#app_name").val(result[0].app_name);
-   $("#monday").val(results[0].monday);
-   $("#tuesday").val(results[0].tuesday);
-   $("#wednesday").val(results[0].wednesday);
-   $("#thursday").val(results[0].thursday);
-   $("#friday").val(results[0].friday);
-   $("#saturday").val(results[0].saturday);
+        console.log(results);
+    $("#sunday").val(results[0].sunday);
+    // $("#app_name").val(result[0].app_name);
+    $("#monday").val(results[0].monday);
+    $("#tuesday").val(results[0].tuesday);
+    $("#wednesday").val(results[0].wednesday);
+    $("#thursday").val(results[0].thursday);
+    $("#friday").val(results[0].friday);
+    $("#saturday").val(results[0].saturday);
       },
       error: function (textStatus, errorThrown) {
         alert("Request failed!");
@@ -549,7 +550,7 @@ var dtas=[], event_start, event_end;
     setInterval(function(){
       $.ajax({
         type:"POST",
-        url:"/free_drivers"
+        url:"free_drivers"
       });
       console.log("freedrivers was called");
     }, 60*1000);
@@ -560,32 +561,33 @@ var dtas=[], event_start, event_end;
     //get Available drivers
   $.ajax({
     type: "POST",
-    url: "/get_drivers",
+    url: "get_drivers",
     success: function(data) {
       var results = data.success;
       $("#driver").empty();
- console.log(results);
+      console.log(results);
       for (var i = results.length-1; i >=0; i--) {
         $(".driver_box").append("<div class='driver_profile'><img src='img/driver4.png'><p class='name'>" + results[i].driver_fname+" "+ results[i].driver_lname + "</p><p class='licence_type'>CDL</p></div>");
-  $("#driver").append("<option value='"+results[i].driver_id+"'>"+results[i].driver_fname+" "+results[i].driver_lname+"</option>");
+        $("#driver").append("<option value='"+results[i].driver_id+"'>"+results[i].driver_fname+" "+results[i].driver_lname+"</option>");
       }
     },
     error: function (textStatus, errorThrown) {
       alert("Request failed!");
     }
   });
+
 // free vehicles once an assigned request is done
 // function freeVehicles(){
 //   $.ajax({
 //     type:"POST",
-//     url:"/free_vehicles"
+//     url:"free_vehicles"
 //   });
 //   console.log("freeVehicles was called");
 // }
 setInterval(function(){
   $.ajax({
     type:"POST",
-    url:"/free_vehicles"
+    url:"free_vehicles"
   });
   console.log("freeVehicles was called");
 }, 60*1000);
@@ -593,10 +595,10 @@ setInterval(function(){
    //get all vehicles
   $.ajax({
     type: "POST",
-    url: "/get_vehicles",
+    url: "get_vehicles",
     success: function(data) {
       var results = data.success;
-       console.log(results);
+      console.log(results);
       for (var i = results.length-1; i >=0; i--) {
         $(".fleet_box").append("<div class='car_box'><p class='vehicle_number'>#" + results[i].vehicle_number + "</p><p class='seats_number'>Seats: "+ results[i].seat_number+"</p></div>");
       }
@@ -606,27 +608,28 @@ setInterval(function(){
     }
   });
 //count all the requests
-      $.ajax({
-     type: "POST",
-     url: "/get_req_count",
-     success: function(data) {
-       var results = data.success;
-        console.log(results);
-	$("#lift_request_count").html(results[0].count);
-  if (results[0].count !=0) {
-    $(".req_btn").css("background-color", "red");
-  } else {
-    $(".req_btn").css("background-color", "green");
-  }
-     },
+  $.ajax({
+    type: "POST",
+    url: "get_req_count",
+    success: function(data) {
+      var results = data.success;
+      console.log(results);
+      $("#lift_request_count").html(results[0].count);
+      if (results[0].count !=0) {
+        $(".req_btn").css("background-color", "red");
+      } else {
+        $(".req_btn").css("background-color", "green");
+      }
+    },
      error: function (textStatus, errorThrown) {
        alert("Request failed!");
      }
-   });
+  });
+
 //get  all the requests
 //    $.ajax({
 //      type: "POST",
-//      url: "/get_reqs",
+//      url: "get_reqs",
 //      success: function(data) {
 //        var results = data.success;
 // 	console.log(results);
@@ -662,47 +665,47 @@ setInterval(function(){
 //      }
 //    });
 //tmp requests
-$.ajax({
-  type: "POST",
-  url: "/get_reqs",
-  success: function(data) {
-    var results = data.success;
-console.log(results);
-    for (var i = 0; i < results.length; i++) {
-      var request_list = $("<div class='req_list' id='req"+i+"'><p>Trip Purpose: "+ results[i].title+ "</p><p>Date: " +results[i].start.replace(/\..+/, '')+"</p></div>");
-      $(".reqs").append(request_list);
-      var request_detail = $("<div class='more_details' id='dtl"+i+"' style='display:none'><p>Trip Purpose: "
-      +results[i].title+"</p>"
-      +"<p>Department: "+results[i].department+"</p>"
-      +"<p>Date Of The Trip: "+results[i].start.replace(/\..+/, '')+"</p>"
-      +"<p>Arrival Location: "+results[i].arrival_destination_dateTime.replace(/\..+/, '')+"</p>"
-      +"<p>Destination: "+results[i].destination+"</p>"
-      +"<p>Departure from Location: "+results[i].destination_dep_dateTime.replace(/\..+/, '')+"</p>"
-      +"<p>Arrival PPU: "+results[i].end.replace(/\..+/, '')+"</p>"
-      +"<p>Number of Passagers: "+results[i].num_passengers+"</p>"
-      +"<p>Loop Service: "+results[i].loop_service+"</p>"
-      +"<p>Other's name: "+results[i].auth_name+"</p>"
-      +"<p>Budget Number: "+results[i].budget_num+"</p>"
-      +"<p>Hotel: "+results[i].hotel_name+"</p>"
-      +"<p>Hotel Address: "+results[i].hotel_address+"</p>"
-      +"<p>Hotel Direction: "+results[i].hotel_direction+"</p>"
-      +"<p>Direction: "+results[i].direction+"</p>"
-      +"<p>Number of Driver(s): "+results[i].driver_num+"</p>"
-      +"<p>Other Comment: "+results[i].comment+"</p>"
-      +"<p>Requester's Email: "+results[i].email+"</p>"
 
-      +"</div>");
-      var button_approved = $("<button class='btn btn-success approve' data-toggle='modal' data-id='"+results[i].reqs_id+"' data-target='#reqModal'>Approve</button> ");
-      var button_declined = $("<button class='btn btn-danger decline' onclick='decline()'>Decline</button>");
-      request_detail.append(button_approved,button_declined);
-      $(".req_details").append(request_detail);
-      request_list.click({target:request_detail},function(e){
-         $(".more_details").hide();
+  $.ajax({
+    type: "POST",
+    url: "get_reqs",
+    success: function(data) {
+      var results = data.success;
+      console.log(results);
+      for (var i = 0; i < results.length; i++) {
+        var request_list = $("<div class='req_list' id='req"+i+"'><p>Trip Purpose: "+ results[i].title+ "</p><p>Date: " +results[i].start.replace(/\..+/, '')+"</p></div>");
+        $(".reqs").append(request_list);
+        var request_detail = $("<div class='more_details' id='dtl"+i+"' style='display:none'><p>Trip Purpose: "
+        +results[i].title+"</p>"
+        +"<p>Department: "+results[i].department+"</p>"
+        +"<p>Date Of The Trip: "+results[i].start.replace(/\..+/, '')+"</p>"
+        +"<p>Arrival Location: "+results[i].arrival_destination_dateTime.replace(/\..+/, '')+"</p>"
+        +"<p>Destination: "+results[i].destination+"</p>"
+        +"<p>Departure from Location: "+results[i].destination_dep_dateTime.replace(/\..+/, '')+"</p>"
+        +"<p>Arrival PPU: "+results[i].end.replace(/\..+/, '')+"</p>"
+        +"<p>Number of Passagers: "+results[i].num_passengers+"</p>"
+        +"<p>Loop Service: "+results[i].loop_service+"</p>"
+        +"<p>Other's name: "+results[i].auth_name+"</p>"
+        +"<p>Budget Number: "+results[i].budget_num+"</p>"
+        +"<p>Hotel: "+results[i].hotel_name+"</p>"
+        +"<p>Hotel Address: "+results[i].hotel_address+"</p>"
+        +"<p>Hotel Direction: "+results[i].hotel_direction+"</p>"
+        +"<p>Direction: "+results[i].direction+"</p>"
+        +"<p>Number of Driver(s): "+results[i].driver_num+"</p>"
+        +"<p>Other Comment: "+results[i].comment+"</p>"
+        +"<p>Requester's Email: "+results[i].email+"</p>"
+        +"</div>");
+        var button_approved = $("<button class='btn btn-success approve' data-toggle='modal' data-id='"+results[i].reqs_id+"' data-target='#reqModal'>Approve</button> ");
+        var button_declined = $("<button class='btn btn-danger decline' onclick='decline()'>Decline</button>");
+        request_detail.append(button_approved,button_declined);
+        $(".req_details").append(request_detail);
+        request_list.click({target:request_detail},function(e){
+          $(".more_details").hide();
           $(e.data.target).show();
           // console.log("e");
           // console.log(e);
-      });
-      button_approved.click({ id: results[i].reqs_id, event_start: results[i].start, event_end: results[i].end  }, function(e) {
+        });
+        button_approved.click({ id: results[i].reqs_id, event_start: results[i].start, event_end: results[i].end  }, function(e) {
         var data = e.data;
         dtas=data.id;
         event_start=data.event_start;
@@ -748,7 +751,7 @@ console.log(results);
     events: function(start, end, timezone, callback) {
         jQuery.ajax({
             // url: '/get_events',
-            url: '/get_events',
+            url: 'get_events',
             type: 'POST',
             // dataType: 'json',
             success: function(doc) {
@@ -787,7 +790,7 @@ function getAvaillableDrivers(){
   //$('#get_availlable_drivers').submit();
   $.ajax({
     type: "POST",
-    url: "/get_availlable_drivers",
+    url: "get_availlable_drivers",
     data: {event_start: event_start, event_end:event_end},
     success: function(data) {
       var results = data.success;
@@ -809,7 +812,7 @@ function getAvaillableShuttles(){
   //$('#get_availlable_drivers').submit();
   $.ajax({
     type: "POST",
-    url: "/get_availlable_shuttles",
+    url: "get_availlable_shuttles",
     data: {event_start: event_start, event_end:event_end},
     success: function(data) {
       var results = data.success;
@@ -828,21 +831,21 @@ function getAvaillableShuttles(){
 //get all approved requests
 function getReqsStatus(){
   $.ajax({
- type: "POST",
- url: "/get_reqs_status",
- success: function(data) {
-   var results = data.success;
-    console.log(results);
-    $(".reqs_table").empty();
-    for (var i = results.length-1; i >=0; i--) {
-      // $(".req_inprogress").append("");
-      results[i].isapproved = "Approved";
-      var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
-      +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
-      +"</td><td class='shuttle'>"+results[i].vehicle_number
-      +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].isapproved+"</td></tr>");
-      $(".reqs_table").append(reqs_table_content);
-      reqs_table_content.click({ id: results[i].reqs_id, driver_fname: results[i].driver_fname, driver_lname: results[i].driver_lname, shuttle_num: results[i].vehicle_number  }, function(e) {
+    type: "POST",
+    url: "get_reqs_status",
+    success: function(data) {
+      var results = data.success;
+      console.log(results);
+      $(".reqs_table").empty();
+      for (var i = results.length-1; i >=0; i--) {
+        // $(".req_inprogress").append("");
+        results[i].isapproved = "Approved";
+        var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
+        +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
+        +"</td><td class='shuttle'>"+results[i].vehicle_number
+        +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].isapproved+"</td></tr>");
+        $(".reqs_table").append(reqs_table_content);
+        reqs_table_content.click({ id: results[i].reqs_id, driver_fname: results[i].driver_fname, driver_lname: results[i].driver_lname, shuttle_num: results[i].vehicle_number  }, function(e) {
         var data = e.data;
         //alert("requests id: "+data.id +" driver: "+ data.driver_fname +","+ data.driver_lname+" shuttle number: "+ data.shuttle_num);
         $("#driver_at_reasign").val(data.driver_lname+","+data.driver_fname);
@@ -857,25 +860,26 @@ function getReqsStatus(){
  }
 });
 }
+
 $(".approved").click(function(){getReqsStatus()})
 //reqs ongoing
 $(".ongoing").click(function(){
   $.ajax({
- type: "POST",
- url: "/get_reqs_ongoing",
- success: function(data) {
-   var results = data.success;
-    console.log(results);
-    $(".reqs_table").empty();
-    for (var i = results.length-1; i >=0; i--) {
-      // $(".req_inprogress").append("");
-      results[i].ongoing = "Approved";
-      var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
-      +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
-      +"</td><td class='shuttle'>"+results[i].vehicle_number
-      +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].ongoing+"</td></tr>");
-      $(".reqs_table").append(reqs_table_content);
-    }
+    type: "POST",
+    url: "get_reqs_ongoing",
+    success: function(data) {
+      var results = data.success;
+      console.log(results);
+      $(".reqs_table").empty();
+      for (var i = results.length-1; i >=0; i--) {
+        // $(".req_inprogress").append("");
+        results[i].ongoing = "Approved";
+        var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
+        +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
+        +"</td><td class='shuttle'>"+results[i].vehicle_number
+        +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].ongoing+"</td></tr>");
+        $(".reqs_table").append(reqs_table_content);
+      }
  },
  error: function (textStatus, errorThrown) {
    alert("Request failed!");
@@ -885,26 +889,26 @@ $(".ongoing").click(function(){
 //reqs completed
 $(".completed").click(function(){
   $.ajax({
- type: "POST",
- url: "/get_reqs_completed",
- success: function(data) {
-   var results = data.success;
-    console.log(results);
-    $(".reqs_table").empty();
-    for (var i = results.length-1; i >=0; i--) {
-      // $(".req_inprogress").append("");
-      results[i].completed = "Completed";
-      var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
-      +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
-      +"</td><td class='shuttle'>"+results[i].vehicle_number
-      +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].completed+"</td></tr>");
-      $(".reqs_table").append(reqs_table_content);
-    }
- },
- error: function (textStatus, errorThrown) {
-   alert("Request failed!");
- }
-});
+    type: "POST",
+    url: "get_reqs_completed",
+    success: function(data) {
+      var results = data.success;
+      console.log(results);
+      $(".reqs_table").empty();
+      for (var i = results.length-1; i >=0; i--) {
+        // $(".req_inprogress").append("");
+        results[i].completed = "Completed";
+        var reqs_table_content = $("<tr><th scope='row' class='title'>"+results[i].title
+        +"</th><td class='diver'>"+results[i].driver_fname+", "+results[i].driver_lname
+        +"</td><td class='shuttle'>"+results[i].vehicle_number
+        +"</td><td class='destination'>"+results[i].destination+"</td><td class='status'>"+results[i].completed+"</td></tr>");
+        $(".reqs_table").append(reqs_table_content);
+      }
+    },
+    error: function (textStatus, errorThrown) {
+    alert("Request failed!");
+     }
+  });
 });
 
 </script>

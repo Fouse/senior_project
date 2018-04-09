@@ -24,8 +24,8 @@ app.get("/admin", function(req, res) {
         res.render("admin");
 });
 
-app.get("/about", function(req, res) {
-        res.render("about");
+app.get("/contact", function(req, res) {
+        res.render("contact");
 });
 
 //link driverform to homepage
@@ -298,34 +298,34 @@ var values = [req.body.vehicle_number,req.body.seat_number];
 });
 
 app.post("/lift_request", (req, res)=>{
-//console.log(req.body);
-var sql = "INSERT INTO tmp_requests (start, end, title, arrival_destination_dateTime, destination_dep_dateTime, arrival_PPU_dateTime, email, department, destination, num_passengers, loop_service, auth_name, hotel_name, hotel_address, direction, budget_num) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-var values = [req.body.start,req.body.end,req.body.title,req.body.arrival_destination_dateTime,req.body.destination_dep_dateTime,req.body.arrival_PPU_dateTime,req.body.email,req.body.department,req.body.destination,req.body.num_passengers,req.body.loop_service,req.body.auth_name,req.body.hotel_name,req.body.hotel_address,req.body.hotel_direction,req.body.budget_num];
-       con.query(sql, values, (err, results) => {
-         if (err) throw err;
-         //console.log(results);
-				 var to = req.body.email;
-         var auth_name = req.body.auth_name
+  //console.log(req.body);
+  var sql = "INSERT INTO tmp_requests (start, end, title, arrival_destination_dateTime, destination_dep_dateTime, arrival_PPU_dateTime, email, department, destination, num_passengers, loop_service, auth_name, hotel_name, hotel_address, direction, budget_num) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+  var values = [req.body.start,req.body.end,req.body.title,req.body.arrival_destination_dateTime,req.body.destination_dep_dateTime,req.body.arrival_PPU_dateTime,req.body.email,req.body.department,req.body.destination,req.body.num_passengers,req.body.loop_service,req.body.auth_name,req.body.hotel_name,req.body.hotel_address,req.body.hotel_direction,req.body.budget_num];
+    con.query(sql, values, (err, results) => {
+      if (err) throw err;
+      //console.log(results);
+      var to = req.body.email;
+      var auth_name = req.body.auth_name
 
-				 let mailOptions = {
-					 from: 'fousseini',
-					 to: to,
-					 subject: 'Pointlift Request',
-					 text: 'Thank you, '+auth_name,
-					 html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Thank you '+auth_name+',</td></tr><tr><td style="padding: 20px 0 30px 0;">Our team will procede with your request shortly. </td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
-					};
+      let mailOptions = {
+        from: 'fousseini',
+	to: to,
+	subject: 'Pointlift Request',
+	text: 'Thank you, '+auth_name,
+	html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Thank you '+auth_name+',</td></tr><tr><td style="padding: 20px 0 30px 0;">Our team will procede with your request shortly. </td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
+      };
 
-						 smtpTransport.sendMail(mailOptions, (error, response)=>{
-							 if(error){
-									 console.log(error);
-								}else{
-									 console.log("Message sent");
-							 }
-							smtpTransport.close();
-						});
+      smtpTransport.sendMail(mailOptions, (error, response)=>{
+        if(error){
+	  console.log(error);
+	}else{
+	  console.log("Message sent");
+	}
+      smtpTransport.close();
+      });
 
-           res.redirect("/");
-//con.end();
+     res.redirect("/");
+     //con.end();
    });
 });
 // function test(){
