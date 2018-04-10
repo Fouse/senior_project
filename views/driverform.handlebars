@@ -21,9 +21,18 @@
         crossorigin="anonymous"></script>
 
 <style>
+html, body {
+	background: rgba(142, 142, 142, 1);
+}
 #form_container{
 	box-shadow: 0px 10px 50px black;
-	background: rgba(0, 0, 0, 0.45);
+	background: white;
+	border-radius: 5px;
+}
+
+
+input:not([type=file]) {
+	border: 2px solid #28a745;
 	border-radius: 5px;
 }
 
@@ -65,7 +74,14 @@ hesitate to contact the Physical Plant Department.</p>
 <p>This is only a request. Final Confirmation will be sent as a reply.
 If you do not receive a confirmation, please contact the Physcial Plant
 department at (412) 392-3490.</p>
-
+<form id="populate_form" method="POST">
+	<div style="float: right">
+		<label for="mod_form">Request ID</label>
+		<input type="number" class="form-control" name="mod_form" id="mod_form">
+		<button type="submit" class="btn btn-success">Retrieve Form<span class="fa fa-arrow-right"></span></button>
+	</div>
+</form>
+<br><br><br><br><br>
 
 <form id="driverform" action="/submit_request2" method="POST">
 
@@ -129,18 +145,18 @@ department at (412) 392-3490.</p>
 <!-- loop service  & directions-->
 <div class="row">
 	<div class="col">
-		<label for="loop_service">Is looping service required?</label>
-		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="false" aria-controls="loop_service" /> Yes
-		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="true" aria-controls="loop_service" checked/> No
-		<div class="collapse" id="loop_service">
-			<div class="form-group" id="loop_service">
-				<textarea class="form-control" rows="1" name="loop_service" id="loop_service"></textarea>
+		<label for="looplapse">Is looping service required?</label>
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="false" aria-controls="looplapse" /> Yes
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="true" aria-controls="looplapse" checked/> No
+		<div class="collapse" id="looplapse">
+			<div class="form-group" id="looplapse">
+				<textarea class="form-control" rows="1" name="loop_service" id="loop_service" style="	border: 2px solid #28a745"></textarea>
 			</div>
 		</div>
 	</div>
 	<div class="col">
 		<label for="directions">Directions:</label>
-		<textarea class="form-control" rows="1" name="directions" id="directions"></textarea>
+		<textarea class="form-control" rows="1" name="directions" id="directions" style="	border: 2px solid #28a745"></textarea>
 	</div>
 </div>
 
@@ -149,7 +165,7 @@ department at (412) 392-3490.</p>
 <!--trip purpose-->
 <div class="form-group">
 	<label for="trip_purpose">What is the purpose of this trip?</label>
-	<textarea class="form-control" rows="1" name="trip_purpose" id="trip_purpose"></textarea>
+	<textarea class="form-control" rows="1" name="trip_purpose" id="trip_purpose" style="	border: 2px solid #28a745"></textarea>
 </div>
 
 <br>
@@ -175,7 +191,7 @@ department at (412) 392-3490.</p>
 <!--Additional Comments-->
 <div class="form-group">
 	<label for="comment">Additional Comments or Concerns:</label>
-	<textarea class="form-control" rows="1" name="comment" id="comment"></textarea>
+	<textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
 </div>
 
 <br>
@@ -216,7 +232,7 @@ $(document).ready(function() {
 			'trip_purpose'         : $('input[name=trip_purpose]').val(),
 			'auth_name'            : $('input[name=auth_name]').val(),
 			'budget_num'           : $('input[name=budget_num]').val(),
-			'request_email'        : $('input[name=request_email]').val()
+			'request_email'        : $('input[name=request_email]').val(),
 			'comment'              : $('input[name=comment]').val()
 		};
 
@@ -229,6 +245,61 @@ $(document).ready(function() {
 	})
 })
 
+$(document).ready(function() {
+	$("#populate_form").submit(function(event) {
+		console.log("submitform");
+
+		$.ajax({
+			type        : 'POST',
+			url         : 'get_form_fields?mod_form='+$("#mod_form").val(),
+			contentType: "application/json; charset=utf-8",
+		}).done(function(data){
+			console.log(JSON.stringify(data));
+			//$("#trip_start").val(data.success[0].trip_start);
+		  $("#trip_start").val(adjustDateFormat(data.success[0].trip_start));
+			$("#trip_end").val(adjustDateFormat(data.success[0].trip_end));
+			$("#num_passengers").val(data.success[0].num_passengers);
+			$("#destination").val(data.success[0].destination);
+			$("#departure_location").val(data.success[0].departure_location);
+			$("#arrival_location").val(data.success[0].arrival_location);
+			$("#estimate_arrival").val(adjustTimeFormat(data.success[0].estimate_arrival));
+			$("#return_time").val(adjustTimeFormat(data.success[0].return_time));
+			$("#loop_service").val(data.success[0].loop_service);
+			$("#directions").val(data.success[0].directions);
+			$("#trip_purpose").val(data.success[0].trip_purpose);
+			$("#auth_name").val(data.success[0].auth_name);
+			$("#budget_num").val(data.success[0].budget_num);
+			$("#request_email").val(data.success[0].request_email);
+			$("#comment").val(data.success[0].comment);
+		}).fail(function(){
+			console.log("fail");
+		})
+		return false;
+	})
+})
+
+function adjustDateFormat(date_string){
+  var date = new Date(date_string);
+  var y = date.getFullYear();
+  var m = date.getMonth();
+  var day = date.getDate();
+  var h = date.getHours();
+  var min = date.getMinutes();
+  var str = y+"-"+
+  ((m+1)<10?"0"+(m+1):(m+1))
+  +"-"+
+  (day<10?"0"+day:day)+
+  "T"+
+  (h<10?"0"+h:h)+
+  ":"+
+  (min<10?"0"+min:min);
+  return str;
+}
+
+function adjustTimeFormat(time_string) {
+	console.log(time_string);
+	return time_string.split(".")[0];
+}
 </script>
 </body>
 </html>

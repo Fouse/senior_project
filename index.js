@@ -111,6 +111,27 @@ var values = [req.body.destination,req.body.trip_start,req.body.trip_end,
 					    });
 					 });
 
+app.post("/get_form_fields", function(req, res){
+	let sql="SELECT * FROM requests where request_id=" + parseInt(req.query.mod_form);
+	con.query(sql, function(err, results){
+		if (err){
+			res.send({success: false});
+}
+	else if (results) {
+		var Something = JSON.parse(JSON.stringify(results))[0]
+		res.send({success: results});}
+	});
+});
+ /*app.post("/get_form_fields", (req, res)=> {
+		var sql="SELECT * FROM requests WHERE request_id =" + Number(req.body.mod_form);
+		con.query(sql, (err, results)=> {
+			if (err){res.send({success: false});} else {
+				console.log("hello");
+				res.send({success: results});}
+ //con.end();
+    });
+ });*/
+
 app.post("/get_drivers", (req, res) => {
   var sql="SELECT * FROM drivers WHERE availability=1";
         con.query(sql, (err, results) => {
