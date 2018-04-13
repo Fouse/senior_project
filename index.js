@@ -61,12 +61,12 @@ app.get("/busform", function(req, res) {
 
  //post van form data to database
  app.post("/submit_request", function(req, res){
- 	var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, driver, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
- 	var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+ 	var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ 	var values = [req.body.start,req.body.end,req.body.num_passengers,
  		            req.body.destination,req.body.departure_location,req.body.arrival_location,
- 								req.body.estimate_arrival,req.body.return_time,req.body.driver,
- 								req.body.loop_service,req.body.request_department,req.body.budget_num,
- 								req.body.auth_name,req.body.request_email,req.body.comment];
+ 								req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+								req.body.request_department,req.body.budget_num,req.body.auth_name,
+								req.body.request_email,req.body.comment];
  								con.query(sql, values, function(err, results) {
  									if (err) throw err;
  									res.redirect("/");
@@ -76,8 +76,8 @@ app.get("/busform", function(req, res) {
  //post driver form data to database
  app.post("/submit_request2", function(req, res){
  //console.log(req.body);
- var sql = "INSERT INTO requests (trip_start, trip_end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
- var values = [req.body.trip_start,req.body.trip_end,req.body.num_passengers,
+ var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ var values = [req.body.start,req.body.end,req.body.num_passengers,
  	            req.body.destination,req.body.departure_location,req.body.arrival_location,
  							req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
  							req.body.directions,req.body.trip_purpose,req.body.auth_name,
@@ -93,8 +93,8 @@ app.get("/busform", function(req, res) {
 //post bus form data to database
 app.post("/submit_request3", function(req, res){
 //console.log(req.body);
-var sql = "INSERT INTO requests (destination, trip_start, trip_end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment, bus_company, ref_num, bus_driver, bus_num, bus_driver_phone, bus_phone, emergency_contact) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.destination,req.body.trip_start,req.body.trip_end,
+var sql = "INSERT INTO requests (destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment, bus_company, ref_num, bus_driver, bus_num, bus_driver_phone, bus_phone, emergency_contact) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.destination,req.body.start,req.body.end,
 							req.body.num_passengers,req.body.departure_location, req.body.arrival_location,
 							req.body.estimate_arrival,req.body.return_time,req.body.hotel_name,
 							req.body.hotel_address,req.body.hotel_num,req.body.hotel_directions,
