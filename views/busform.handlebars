@@ -93,12 +93,12 @@ department at (412) 392-3490.</p>
 		<!-- Start and End Times of Trip: -->
 <div class="row">
 	<div class="col">
-		<label for="trip_start">Date and Time of Trip:</label>
-		<input type="datetime-local" class="form-control" name="trip_start"id="trip_start">
+		<label for="start">Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="start"id="start">
 	</div>
 	<div class="col">
-		<label for="trip_end">End Date and Time of Trip:</label>
-		<input type="datetime-local" class="form-control" name="trip_end"id="trip_end">
+		<label for="end">End Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="end"id="end">
 	</div>
 </div>
 
@@ -318,8 +318,8 @@ $(document).ready(function() {
 	$("busform").submit(function() {
 		var formData = {
 			'destination'             : $('input[name=destination]').val(),
-      'trip_start'              : $('input[name=trip_start]').val(),
-      'trip_end'                : $('input[name=trip_end]').val(),
+      'start'                   : $('input[name=start]').val(),
+      'end'                     : $('input[name=end]').val(),
 			'num_passengers'          : $('input[name=num_passengers]').val(),
 			'departure_location'      : $('input[name=departure_location]').val(),
 			'arrival_location'        : $('input[name=arrival_location]').val(),
@@ -367,10 +367,10 @@ $(document).ready(function() {
 			contentType: "application/json; charset=utf-8",
 		}).done(function(data){
 			console.log(JSON.stringify(data));
-			//$("#trip_start").val(data.success[0].trip_start);
+			//$("#start").val(data.success[0].start);
 			$("#destination").val(data.success[0].destination);
-		  $("#trip_start").val(adjustDateFormat(data.success[0].trip_start));
-			$("#trip_end").val(adjustDateFormat(data.success[0].trip_end));
+		  $("#start").val(adjustDateFormat(data.success[0].start));
+			$("#end").val(adjustDateFormat(data.success[0].end));
 			$("#num_passengers").val(data.success[0].num_passengers);
 			$("#departure_location").val(data.success[0].departure_location);
 			$("#arrival_location").val(data.success[0].arrival_location);
