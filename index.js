@@ -1,7 +1,5 @@
 var express = require('express');
 var formidable = require('formidable');
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
 var app = express();
 var fs = require("fs");
 var mysql = require("mysql");
@@ -30,27 +28,22 @@ app.engine("handlebars",handlebars.engine);
 app.set("view engine","handlebars");
 app.set('port', process.env.PORT || 3000);
 
-var smtpTransport = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-		user: "fousseini.test@gmail.com",
-		pass: "pointlift"
-  }
-});
-
 
 var con = mysql.createConnection(credentials.connection);
 
 app.get("/", function(req, res) {
 	res.render("home");
 });
-app.get("/sampleform", function(req, res) {
-	res.render("sampleform");
+
+app.get("/admin", function(req, res) {
+        res.render("admin");
 });
 
-app.get("/week_schedule", function(req, res) {
-	res.render("week_schedule");
+//link to driverform
+app.get("/driverform", function(req, res) {
+        res.render("driverform");
 });
+
 
 app.get("/admin", function(req, res) {
   if(req.session.role){res.render("admin");}
@@ -102,8 +95,13 @@ app.get("/bus_rental_request", function(req, res) {
       comment:results[0].comment
     });
   });
+
+
 });
 
+app.get("/busform", function(req, res) {
+        res.render("busform");
+});
 // app.post("/get_drivers", function(req, res) {
 //   var sql="SELECT * FROM drivers WHERE driver_id NOT IN ( SELECT driver_id FROM tmp_requests WHERE now() BETWEEN start AND end);";
 //         con.query(sql, function(err, results) {
@@ -401,6 +399,78 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
    //}
  });
 
+ //post van form data to database
+ app.post("/submit_request", function(req, res){
+ 	var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ 	var values = [req.body.start,req.body.end,req.body.num_passengers,
+ 		            req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 								req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+								req.body.request_department,req.body.budget_num,req.body.auth_name,
+								req.body.request_email,req.body.comment];
+ 								con.query(sql, values, function(err, results) {
+ 									if (err) throw err;
+ 									res.redirect("/");
+ 								});
+ 							});
+
+ //post driver form data to database
+ app.post("/submit_request2", function(req, res){
+ //console.log(req.body);
+ var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ var values = [req.body.start,req.body.end,req.body.num_passengers,
+ 	            req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 							req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+ 							req.body.directions,req.body.trip_purpose,req.body.auth_name,
+ 							req.body.budget_num,req.body.request_email,req.body.comment];
+        con.query(sql, values, function(err, results) {
+          if (err) throw err;
+ 	 //console.log(results);
+            res.redirect("/");
+ 					 //con.end();
+ 					    });
+ 					 });
+
+//post bus form data to database
+app.post("/submit_request3", function(req, res){
+//console.log(req.body);
+var sql = "INSERT INTO requests (destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment, bus_company, ref_num, bus_driver, bus_num, bus_driver_phone, bus_phone, emergency_contact) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.destination,req.body.start,req.body.end,
+							req.body.num_passengers,req.body.departure_location, req.body.arrival_location,
+							req.body.estimate_arrival,req.body.return_time,req.body.hotel_name,
+							req.body.hotel_address,req.body.hotel_num,req.body.hotel_directions,
+							req.body.return_location,req.body.event_person,req.body.event_person_num,
+							req.body.request_department,req.body.request_email,req.body.auth_name,
+						  req.body.budget_num,req.body.comment,req.body.bus_company,
+							req.body.ref_num,req.body.bus_driver,req.body.bus_num,
+							req.body.bus_driver_phone,req.body.bus_phone,req.body.emergency_contact];
+      con.query(sql, values, function(err, results) {
+        if (err) throw err;
+	 //console.log(results);
+          res.redirect("/");
+					 //con.end();
+					    });
+					 });
+
+app.post("/get_form_fields", function(req, res){
+	let sql="SELECT * FROM requests where request_id=" + parseInt(req.query.mod_form);
+	con.query(sql, function(err, results){
+		if (err){
+			res.send({success: false});
+}
+	else if (results) {
+		var Something = JSON.parse(JSON.stringify(results))[0]
+		res.send({success: results});}
+	});
+});
+ /*app.post("/get_form_fields", (req, res)=> {
+		var sql="SELECT * FROM requests WHERE request_id =" + Number(req.body.mod_form);
+		con.query(sql, (err, results)=> {
+			if (err){res.send({success: false});} else {
+				console.log("hello");
+				res.send({success: results});}
+ //con.end();
+    });
+ });*/
 
 app.post("/get_drivers", (req, res) => {
   var sql="SELECT users.*, drivers.* FROM users LEFT OUTER JOIN drivers ON drivers.driver_id = users.user_id WHERE (users.role='driver' OR users.role='maintenance') AND drivers.availability=1;";
@@ -595,6 +665,7 @@ app.post("/get_events", (req, res) => {
 //con.end();
    });
 });
+
 //weekly_schedule
 app.post("/myweekly_schedule", (req, res) =>{
 //console.log(req.body);
@@ -648,6 +719,7 @@ var values = [req.body.vehicle_number,req.body.seat_number];
 //con.end();
    });
 });
+
 
 app.post("/lift_request", (req, res)=>{
 //console.log(req.body);
@@ -731,8 +803,10 @@ sql1+=";";
 	con.query(sql1, (err, results)=> {
 		if (err){throw err; res.send({success: false});} else {res.send({success: true});}
 				// console.log("reqid "+req.body.request_id);
+
 		});
 });
+
 //get driver info when signed
 app.post("/get_driver_info", (req, res)=> {
   console.log(req.session.user_id);
@@ -740,6 +814,7 @@ app.post("/get_driver_info", (req, res)=> {
         con.query(sql,[req.session.user_id], (err, results)=> {
           if (err){res.send({success: false});} else {res.send({success: results});}
    });
+
 });
 //get driver request if any when signed
 app.post("/get_driver_request", (req, res)=> {
