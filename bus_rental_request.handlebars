@@ -1,0 +1,121 @@
+<style>
+span {color: red;}
+</style>
+<body>
+  <div class="">
+    {{link}}
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+          <a class="navbar-brand" href="#">PointLift</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+      </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" id="request_details">
+        <table class="table table-bordered table-secondary">
+          <tbody>
+            <tr>
+              <th scope="row">Event Start Date</th>
+              <td>{{start}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Event End Date</th>
+              <td>{{end}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Destination</th>
+              <td>{{destination}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Number of Expected Passengers</th>
+              <td>{{num_passengers}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Departure From Location</th>
+              <td>{{departure_location}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Arrival Location</th>
+              <td>{{arrival_location}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Estimated Time of Arrival</th>
+              <td>{{estimate_arrival}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Estimated Time of Return</th>
+              <td>{{return_time}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Hotel Name</th>
+              <td>{{hotel_name}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Hotel Address</th>
+              <td>{{hotel_address}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Hotel Phone Number</th>
+              <td>{{hotel_num}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Hotel Direction</th>
+              <td>{{hotel_direction}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Return Location</th>
+              <td>{{return_location}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Event Person</th>
+              <td>{{event_person}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Additional Comment</th>
+              <td>{{comment}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <p>Request ID: <span id="id">{{id}}</span></p> -->
+        <!-- <p>Start Date: <span id="start">{{start}}</span></p>
+        <p>End Date: <span id="end"></span>{{end}}</p>
+        <p>Destination: <span id="destination">{{destination}}</span></p> -->
+        <!-- <p><a href="https://fkonat.it.pointpark.edu/pointlift/bus_rental_request?link=24">link</a></p> -->
+        <button type="button" class="btn btn-primary getForm">Approve</button>
+      </div>
+      <div class="col-md-12" id="busCompany_form"></div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function(){
+      //getBusRentalRequest();
+    });
+
+    function getBusRentalRequest(){
+      $.ajax({
+        type: "POST",
+        url: "get_bus_rental_request",
+        success: function(data){
+          var results = data.success;
+          console.log(results);
+            $("#id").html(results[0].request_id);
+             $("#start").html(results[0].start);
+            $("#end").html(results[0].end);
+            $("#destination").html(results[0].destination);
+        },
+        error: function (textStatus, errorThrown) {
+          alert("Request failed!");
+        }
+      });
+    }
+    $(".getForm").click(function(){
+      createForm();
+    });
+    function createForm(){
+      var form = $("<form><div class='form-row'><div class='form-group col-md-6'><label>name</label><input  class='form-control' name='' value=''></div><div class='form-group col-md-6'><label>destination</label><input class='form-control'  name='' value=''></div></div></form>");
+      $("#busCompany_form").append(form);
+    }
+  </script>
+</body>
