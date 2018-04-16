@@ -28,6 +28,10 @@ app.get("/contact", function(req, res) {
         res.render("contact");
 });
 
+app.get("/about", function(req, res) {
+        res.render("about");
+});
+
 //link driverform to homepage
 //link to driverform
 app.get("/driverform", function(req, res) {
