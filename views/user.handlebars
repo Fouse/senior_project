@@ -1,7 +1,312 @@
-<div class="container">
-        <div class="row justify-content-center text-center">
-                <div class="col-12">
-                        <h1>Request Successfully Submitted</h1>
-                </div>
+
+<style>
+hr{
+  border-color: #249d3d;
+  border-style: solid none;
+}
+.ctn{
+  color: #fff;
+}
+body{
+  background-color: #000;
+}
+.box{
+  color: #fff;
+}
+* {
+  outline-style: none!important;
+}
+.info_body{
+  background-color: #000;
+  color: #fff;
+}
+.req_box_height{
+  height: 50vh;
+}
+</style>
+<body>
+{{#if login}}
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">Welcome, {{first_name}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarNavDropdown" class="navbar-collapse collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a href="#my_schedule" class="nav-link my_req_bgc" data-toggle="modal" data-target=".my_request">My Requests</a>
+                </li>
+                <li class="nav-item active">
+                    <a href="#my_profile" class="nav-link" data-toggle="modal" data-target=".my_profile">My Info</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                  <a class="nav-link" href="logout">Log Out</a>
+              </li>
+            </ul>
         </div>
-</div>
+    </nav>
+    <!-- profile infos -->
+    <div class="modal fade my_profile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+      <div class="modal-content justify-content-center">
+        <div class="modal-header" style="background-color:#56ab2f">
+          <h5 class="modal-title" id="exampleModalLabel">My Profile</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body req_status_heigh info_body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="reqs_status_options">
+                  <div class="btn-group float-right btn-group-sm" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary edit_user_profile" data-toggle="modal" data-target=".edit_my_profile">Edit Profile</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="profile_box justify-content-start">
+                  <div class="text-center">
+                    <img src="img/driver4.png" class="rounded" width="304" height="236">
+                  </div>
+                  <div class="picture"></div>
+                  <p class="ctn"></p>
+                  <hr>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                  <table class="table table-sm table-striped table-dark">
+                    <thead>
+                      <tr>
+                      </tr>
+                    </thead>
+                    <tbody class="users_table_content"></tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- edit user profile -->
+    <div class="modal fade edit_my_profile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+      <div class="modal-content justify-content-center">
+        <div class="modal-header" style="background-color:#56ab2f">
+          <h5 class="modal-title" id="exampleModalLabel">My Profile</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body req_status_heigh info_body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="reqs_status_options">
+                  <div class="btn-group float-right btn-group-sm" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary edit_user_profile">Edit Profile</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="profile_box justify-content-start">
+                  <div class="text-center">
+                    <img src="img/driver4.png" class="rounded" width="304" height="236">
+                  </div>
+                  <div class="picture"></div>
+                  <p class="ctn"></p>
+                  <hr>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <form id="edit_user_profile"  action="update_driver_infos" method="POST">
+                  <div class="form-group">
+                    <label>License Expiration Date</label>
+                    <input type="date" data-format="dd/MM/yyyy" class="form-control is-valid" id="license_expiration_date" name="license_expiration_date">
+                  </div>
+                  <div class="form-group">
+                    <label>License Type</label>
+                    <input type="text" class="form-control is-valid" id="type_of_license" name="type_of_license">
+                  </div>
+                  <div class="form-group">
+                    <label>Pin</label>
+                    <input type="text" class="form-control is-valid" id="pin" name="pin_number">
+                  </div>
+                  <div class="form-group">
+                    <label>Physical</label>
+                    <input type="text" class="form-control is-valid" id="physical" name="physical">
+                  </div>
+                  <div class="form-group">
+                    <label>Contact</label>
+                    <input type="text" class="form-control is-valid" id="contact" name="contact">
+                  </div>
+                  <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" class="form-control is-valid" id="address" name="address">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+    <!-- my request -->
+    <div class="modal fade my_request" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 100%;">
+      <div class="modal-content justify-content-center">
+        <div class="modal-header" style="background-color:#56ab2f">
+          <h5 class="modal-title" id="exampleModalLabel">My Schedule</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body req_box_height">
+            <div class="row req_body">
+              <div class="col-lg-4">
+                <center><h1 style="color:#000">REQUESTS</h1></center>
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                    </tr>
+                  </thead>
+                  <tbody class="users_request"></tbody>
+                </table>
+              </div>
+              <div class="col-lg-8">
+                <center><h1 style="color:#000">DETAIL</h1></center>
+                <div class="users_request_detail"></div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+
+
+
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-12 box">
+          <form>
+            <div class="form-group col-md-4">
+              <label >Destination</label>
+              <input type="text" class="form-control"  placeholder="destination" name="destination" required >
+            </div>
+            <div class="form-group col-md-4">
+              <label >Number of Passengers</label>
+              <input type="number" class="form-control"  placeholder="Number of Passengers" name="number_of_passengers" required >
+            </div>
+            <div class="form-group col-md-4">
+              <button type="submit" class="btn btn-success btn-block">submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+{{/if}}
+</body>
+<script>
+  $(document).ready(function(){
+    get_user_info();
+    my_request();
+  });
+  function get_user_info(){
+    $.ajax({
+      url: 'get_users',
+      type: 'POST',
+      success: function(data){
+        var results = data.success;
+        console.log(JSON.stringify(results));
+        console.log('nulls');
+        var dob = moment(results[0].dob).format("L");
+        var license_expiration_date = moment(results[0].license_expiration_date).format("MMM Do YY");
+          $(".ctn").append("<span>"+results[0].last_name+", "+results[0].first_name+"</span>");
+          var user_info = $("<tbody><tr><td>Name: "+(results[0].first_name=== null?" ":results[0].first_name)+" "+results[0].last_name+"</td></tr>"
+          +"<tr><td>D.O.B: "+(results[0].dob === null ? " ":dob)+"</td></tr>"
+          +"<tr><td>Licence Expiration Date: "+(results[0].license_expiration_date=== null?" ":license_expiration_date)+"</td></tr>"
+          +"<tr><td>Licenece Type: "+(results[0].type_of_license === null ? " ":results[0].type_of_license)+"</td></tr>"
+          +"<tr><td>Physical: "+(results[0].physical===null?" ":results[0].physical)+"</td></tr>"
+          +"<tr><td>PIN: "+(results[0].pin_number===null?" ":results[0].pin_number)+"</td></tr>"
+          +"<tr><td>Telephone: "+(results[0].contact===null?" ":results[0].contact)+"</td></tr>"
+          +"<tr><td>Address: "+(results[0].address===null?" ":results[0].address)+"</td></tr>"
+          +"</tbody>");
+          $(".users_table_content").append(user_info);
+      }
+    });
+  }
+  $(".edit_user_profile").click(function(){
+    $.ajax({
+      url: "get_driver_info",
+      type: "POST",
+      success: function(data) {
+        var results = data.success;
+        console.log("user");
+        console.log(results);
+        var license_expiration_date = moment(results[0].license_expiration_date).format("MMM Do YY");
+        $("#license_expiration_date").val(license_expiration_date);
+        $("#type_of_license").val(results[0].type_of_license);
+        $("#contact").val(results[0].contact);
+        $("#address").val(results[0].address);
+        $("#pin").val(results[0].pin_number);
+        $("#physical").val(results[0].physical);
+      },
+      error: function (textStatus, errorThrown) {
+        alert("Request failed!");
+      }
+    });
+    //get_user_info();
+  });
+  //get driver request
+  function my_request(){
+    $.ajax({
+      url: "get_driver_request",
+      type: "POST",
+      success: function(data) {
+        var results = data.success;
+        console.log("requests");
+        console.log(results);
+        if(results.length<1){
+          $(".req_box_height").empty();
+          $(".req_box_height").append("<center><h1>You have no request</h1></center>");
+        } else{
+          for(var i=0;i<results.length;i++){
+            var start_date = moment(results[i].trip_start).format('MMM Do h:mm A');
+            var end_date = moment(results[i].trip_end).format('MMM Do h:mm A');
+            var my_request_list = $("<tbody><tr class='table-secondary'><td><p>Destination: "+(results[i].destination=== null?" ":results[i].destination)+"</p>"+"<p>Start: "+(results[i].trip_start=== null?" ":start_date)+" End: "+(results[i].trip_end=== null?" ":end_date)+"</p></td></tr></tbody>");
+            $(".users_request").append(my_request_list);
+            var details = $("<div class='more_details' id='dtl"+i+"' style='display:none'><table class='table'><tbody><tr class='table-secondary'><td>Destination: "
+            +(results[i].destination=== null?' ':results[i].destination)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Start Date: "+(results[i].start_date=== null?' ':start_date)+"</td></tr>"
+            +"<tr class='table-secondary'><td>End Date: "+(results[i].end_date=== null?' ':end_date)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Number of Passenger: "+(results[i].num_passengers=== null?' ':results[i].num_passengers)+"</td></tr>"
+            +"</tbody></table>");
+            $(".users_request_detail").append(details);
+            my_request_list.click({target:details},function(e){
+               $(".more_details").hide();
+                $(e.data.target).show();
+            });
+          }
+          $(".my_req_bgc").css('backgroundColor', 'red');
+        }
+      },
+      error: function (textStatus, errorThrown) {
+        alert("Request failed!");
+      }
+    });
+    //get_user_info();
+  }
+</script>
+

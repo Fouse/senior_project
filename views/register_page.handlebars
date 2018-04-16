@@ -1,0 +1,123 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+<style>
+body {
+  background: url("img/p5.jpg");
+  /* background-position: center; */
+  background-repeat:no-repeat;
+  background-size: cover;
+  /* background-size: 100%; */
+}
+.glass{
+  border: 1px solid black;
+  background: rgba(0,0,0,.7);
+  box-shadow: 0px 10px 50px black;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  color: #fff;
+  margin-top: 20%;
+}
+
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+          <a class="navbar-brand" href="https://fkonat.it.pointpark.edu/pointlift/">Pointlift</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="navbarNavDropdown" class="navbar-collapse collapse">
+              <ul class="navbar-nav mr-auto">
+                  <!-- <li class="nav-item active">
+                      <a class="nav-link" href="http://www.pointparkshuttle.com/" target="_blank">Track Me!</a>
+                  </li> -->
+              </ul>
+              <ul class="navbar-nav">
+                <!-- <li class="nav-item">
+                    <a class="nav-link" href="register_page" target="_blank">Sign Up</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="login">Log In</a>
+                </li>
+              </ul>
+          </div>
+      </nav>
+  <div class="container">
+    {{#if errors}}
+    {{#each errors}}
+      <div class="alert alert-danger">
+        <center>{{this.msg}}</center>
+      </div>
+    {{/each}}
+    {{/if}}
+    <div class="row justify-content-center">
+      <div class="col-lg-4">
+        <div class="glass">
+        <center><h5>Sign Up</h5></center>
+          <form id="create_user" method="POST" action="create_user">
+
+            <div class="form-group">
+              <label class="cols-sm-2 control-label">First Name</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="first_name"  placeholder="Enter your First Name"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="cols-sm-2 control-label">Last Name</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="last_name"  placeholder="Enter your Last Name"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="cols-sm-2 control-label">D.O.B</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="date" class="form-control" name="dob"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="cols-sm-2 control-label">Your Email</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="cols-sm-2 control-label">Your Position</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <select class="form-control" name="position">
+                    <option value="driver">DRIVER</option>
+                    <option value="viewer">SCHEDULE VIEWER</option>
+                    <option value="maintenance">MAINTENANCE</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="cols-sm-2 control-label">Password</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group ">
+              <button type="submit" class="btn btn-success btn-lg btn-block login-button">Register</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

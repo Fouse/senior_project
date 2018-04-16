@@ -1,0 +1,49 @@
+<body>
+  <canvas id="myChart"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+var chart = new Chart(ctx, {
+// The type of chart we want to create
+type: 'line',
+
+// The data for our dataset
+data: {
+  labels: ["7am","8am","9am", "10am","11am","12pm", "1pm", "2pm", "3pm", "4pm", "5pm", "6pm", "7pm", "8pm","9pm","10pm","11pm","12am"],
+  datasets: [{
+      label: "Playhouse",
+      backgroundColor: 'rgb(255, 99, 132)',
+      borderColor: 'rgb(255, 99, 132)',
+      data: [0, 10, 5, 2, 20, 20, 14, 10,5,10,15,21,9, 3,0,5,10,0],
+  },{
+      label: "Waterfront",
+      backgroundColor: 'rgb(25, 99, 13)',
+      borderColor: 'rgb(25, 99, 13)',
+      data: [0,0,0,0,0,0,0,0,0,0,0, 24, 24, 24, 20, 10, 5,0],
+  },{
+      label: "East Liberty",
+      backgroundColor: 'rgb(25, 9, 132)',
+      borderColor: 'rgb(25, 9, 132)',
+      data: [0,0,0,10,24,17,20,20,0,0,0,0, 0, 0, 0, 0, 0, 0],
+  }
+],
+
+},
+
+// Configuration options go here
+options: {
+scales: {
+    xAxes: [{
+        time: {
+            unit: 'month',
+            distribution: 'series',
+            displayFormats: {
+                    hour: 'hA'
+                }
+        }
+    }]
+}
+}
+});
+  </script>
+</body>

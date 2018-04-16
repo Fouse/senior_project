@@ -1,0 +1,56 @@
+<link href="https://fonts.googleapis.com/css?family=Marcellus+SC" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Oranienbaum" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
+<style>
+body {
+  background: rgba(13,13,13,.8);
+  background: url("img/p5.jpg");
+  background-position: center;
+  background-repeat:no-repeat;
+  background-size: cover;
+}
+.jumbotron {
+     background: rgba(13,13,13,.0);
+     background: transparant;
+     margin-top: 15%;
+     /* margin-right: -10px; */
+     /* color: #07b048; */
+     color: #fff;
+     height: 70vh;
+     /* font-family: 'Marcellus SC', serif; */
+     font-family: 'Oranienbaum', serif;
+     /* border: 1px solid red; */
+ }
+ i{
+   color: #07b048;
+   font-family: 'Oranienbaum', serif;
+ }
+ .text{
+   font-family: 'Libre Baskerville', serif;
+   /* color: #07b048; */
+ }
+ a{
+   color: #07b048;
+ }
+ /* #first_name {
+  display: inline-block;
+   vertical-align: top;
+} */
+</style>
+<body>
+  {{#if login}}
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-2">WELCOME <i>{{first_name}}!</i></h1>
+      <p class="lead text">You will receive an email shortly once your account has been approved <a href="https://fkonat.it.pointpark.edu/pointlift/">Go Home</a></p>
+    </div>
+  </div>
+</body>
+{{else}}
+<div class="alert alert-danger" role="alert">
+  <center>
+    <h1>sorry, you are not allowed to view this page.</h1>
+    <p>Please click <a href="https://fkonat.it.pointpark.edu/pointlift/">here</a></p>
+  </center>
+</div>
+{{/if}}
