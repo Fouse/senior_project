@@ -44,6 +44,10 @@ app.get("/driverform", function(req, res) {
         res.render("driverform");
 });
 
+//link to vanform
+app.get("/vanform", function(req, res) {
+        res.render("vanform");
+});
 
 app.get("/admin", function(req, res) {
   if(req.session.role){res.render("admin");}
