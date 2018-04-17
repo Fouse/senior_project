@@ -1,6 +1,7 @@
 <style>
   body {
-    background: url("img/p5.jpeg");
+    background: rgba(13,13,13,.8);
+    background: url("img/p5.jpg");
     background-position: center;
     background-repeat:no-repeat;
     background-size: cover;
@@ -8,23 +9,24 @@
  .jumbotron {
       background: rgba(13,13,13,.0);
       background: transparant;
-      margin-top: 5%;
-      margin-right: -10px;
+      margin-left: 5%;
+      margin-top: 15%;
+      margin-right: -15px;
       /* color: #07b048; */
       color: #fff;
       /* border: 1px solid red; */
   }
 .box {
-   padding-top: 15%;
-   padding-bottom: 10px;
-   border: 1px solid black;
-   background: rgba(13,13,13,.7);
+   /* padding-top: 15%;
+    padding-bottom: 10px;*/ 
+   /* border: 1px solid black; */
+   background: rgba(13,13,13,.8);
    box-shadow: 0px 10px 50px black;
   }
 .box2 {
      /* padding-top: 5%; */
      padding-bottom: 10px;
-     border: 1px solid black;
+     /* border: 1px solid black; */
      background: rgba(13,13,13,.7);
      box-shadow: 0px 10px 50px black;
     }
@@ -47,7 +49,7 @@ html {
  .schedule_body{
    color: #249d3d;
    overflow-y: scroll;
-   height: 70vh;
+   height: 80vh;
  }
  hr{
    border-color: #249d3d;
@@ -78,37 +80,69 @@ html {
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
+      <div id="navbarNavDropdown" class="navbar-collapse collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
             <a class="nav-link" href="http://www.pointparkshuttle.com/" target="_blank">Track Me!</a>
           </li>
-          <li class"nav-item">
+          <li class="nav-item active">
+            <a class="nav-link" href="my_graph" target="_blank">Graph</a>
+          </li>
+          <li class"nav-item active">
             <a class="nav-link" href="/contact">Contact Us</a>
           </li>
-          <li class"nav-item">
+          <li class"nav-item active">
             <a class="nav-link" href="/about">About</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="register_page">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login">Log In</a>
           </li>
         </ul>
       </div>
   </nav>
+
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="#">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item">
+                                <a class="nav-link" href="http://www.pointparkshuttle.com/" target="_blank">Track Me!</a>
+                        </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="create_user" target="_blank">Sign In</a>
+                    </li>
+                </ul>
+        </div>
+</nav> -->
+
 <div class="container-fluid">
 <div class="row">
   <div class="col-md-8">
-    <div class="jumbotron box jumbotron-fluid text-center">
+    <div class="jumbotron jumbotron-fluid text-center">
       <div class="container">
         <h1 class="display-4">PointLift</h1>
         <hr>
-        <p class="lead">Introducing a New Way To Make Van Request</p>
+        <p class="lead">Introducing a New Way To Make Point Park University Shuttle Requests</p>
         <div class="row justify-content-around">
-          <a class="btn btn-outline-success btn-lg col-sm-4" href="/sampleform">Van</a>
-          <a class="btn btn-outline-success btn-lg col-sm-4" href="/sampleform">Bus Rental</a>
-          <a class="btn btn-outline-success btn-lg col-sm-4" href="/user">Van Driver</a>
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="sampleform">Shuttle</a>
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="bus_rental_form">Bus Rental</a>
+          <a class="btn btn-outline-success btn-lg col-sm-4" href="sampleform">Shuttle Driver</a>
+
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-4 box2">
+  <div class="col-md-4">
     <div class="schedules">
       <div class="schedule_ctn">
         <div class="schedule_head text-center">
@@ -148,7 +182,7 @@ html {
   $(document).ready(function(){
     $.ajax({
       type: "POST",
-      url: "/get_weekly_schedule",
+      url: "get_weekly_schedule",
       success: function(data) {
         var results = data.success;
    console.log(results);

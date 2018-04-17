@@ -51,22 +51,33 @@
   </style>
  
  <body>
-   <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
     <a class="navbar-brand" href="/">PointLift</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-cont
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
+      <div id="navbarNavDropdown" class="navbar-collapse collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
             <a class="nav-link" href="http://www.pointparkshuttle.com/" target="_blank">Track Me!</a>
           </li>
-          <li class"nav-item">
-            <a class="nav-link" href="/about">About Us</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="my_graph" target="_blank">Graph</a>
+          </li>
+          <li class"nav-item active">
+            <a class="nav-link" href="/about">About</a>
           </li>
         </ul>
-      </div>    
-   </nav>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="register_page">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="login">Log In</a>
+          </li>
+        </ul>
+      </div>
+  </nav>
 
    <div class="container-fluid">
    <div class="row">

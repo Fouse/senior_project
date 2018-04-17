@@ -1,0 +1,90 @@
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+<script src='calendar/lib/moment.min.js'></script>
+<script src='calendar/lib/jquery.min.js'></script>
+<script src='calendar/fullcalendar.min.js'></script>
+<style></style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+          <a class="navbar-brand" href="#">Welcome, {{first_name}}</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="navbarNavDropdown" class="navbar-collapse collapse">
+              <!-- <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                      <a href="#my_schedule" class="nav-link my_req_bgc" data-toggle="modal" data-target=".my_request">My Requests</a>
+                  </li>
+                  <li class="nav-item active">
+                      <a href="#my_profile" class="nav-link" data-toggle="modal" data-target=".my_profile">My Info</a>
+                  </li>
+              </ul> -->
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="logout">Log Out</a>
+                </li>
+              </ul>
+          </div>
+      </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class='calendar'></div>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function(){
+        $('.calendar').fullCalendar({
+          showNonCurrentDates: false,
+          timezone: 'local',
+          timeFormat: 'h(:mm)t',
+          displayEventTime: true,
+          displayEventEnd: true,
+          nowIndicator:true,
+          header: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'month,basicWeek,basicDay'
+            },
+          // defaultDate: '2018-02-18',
+          // editable: true,
+          eventLimit: true, // allow "more" link when too many events
+          eventTextColor: "orange",
+          events: function(start, end, timezone, callback) {
+              jQuery.ajax({
+                  // url: '/get_events',
+                  url: 'get_events',
+                  type: 'POST',
+                  // dataType: 'json',
+                  success: function(doc) {
+                    var results= doc.success;
+                    console.log(results);
+                      var events = [];
+                      for (var i=0;i<results.length;i++){
+                        events.push(results[i]);
+                        // console.log(results[i]);
+                      }
+                      console.log("events");
+                      console.log(events);
+                       callback(events);
+                  }
+              });
+          },
+          eventClick:  function(event, jsEvent, view) {
+            console.log(event);
+                  $('#modalTitle').html("Title: "+event.title);
+                  $('#modalBody').html("<p>Start: "+event.start.format('MMM Do h:mm A')+"</p><p>End: "
+                  +event.end.format('MMM Do h:mm A')
+                  +"<p>Requester Name: "+event.auth_name+"</p>"
+                  +"<p>Requester email: "+event.email+"</p>"
+                  +"<p>Destination: "+event.destination+"</p>"
+                  +"<p>Driver: "+event.driver_fname+" "+event.driver_lname+"</p>"
+                  +"<p>Shuttle Number: "+event.vehicle_number+"</p>"
+                  +"</p>");
+                  $('#fullCalModal').modal();
+              }
+            });
+      });
+    </script>
+</body>

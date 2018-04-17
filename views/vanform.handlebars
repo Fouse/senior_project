@@ -23,11 +23,21 @@ crossorigin="anonymous">
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 <style>
+html, body {
+	background: rgba(142, 142, 142, 1);
+}
 #form_container{
 	box-shadow: 0px 10px 50px black;
-	background: rgba(0, 0, 0, 0.45);
+	background: white;
 	border-radius: 5px;
 }
+
+
+input:not([type=file]) {
+	border: 2px solid #28a745;
+	border-radius: 5px;
+}
+
 </style>
 </head>
 
@@ -65,19 +75,27 @@ hesitate to contact the Physical Plant Department.</p>
 <p>This is only a request. Final Confirmation will be sent as a reply.
 If you do not receive a confirmation, please contact the Physcial Plant
 department at (412) 392-3490.</p>
+<form id="populate_form" method="POST">
+	<div style="float: right">
+		<label for="mod_form">Request ID</label>
+		<input type="number" class="form-control" name="mod_form" id="mod_form">
+		<button type="submit" class="btn btn-success">Retrieve Form<span class="fa fa-arrow-right"></span></button>
+	</div>
+</form>
+<br><br><br>
 
 <form id="vanform" action="/submit_request" method="POST">
 
-
+<br><br>
       <!-- Start and End Times of Trip: -->
 <div class="row">
 	<div class="col">
-		<label for="trip_start">Date and Time of Trip:</label>
-		<input type="datetime-local" class="form-control" name="trip_start"id="trip_start">
+		<label for="start">Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="start" id="start" required>
 	</div>
 	<div class="col">
-		<label for="trip_end">End Date and Time of Trip:</label>
-		<input type="datetime-local" class="form-control" name="trip_end"id="trip_end">
+		<label for="end">End Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="end" id="end" required>
 	</div>
 </div>
 
@@ -87,11 +105,11 @@ department at (412) 392-3490.</p>
 <div class="row">
 	<div class="col">
 		<label for="numPassengers">Number of Expected Passengers:</label>
-		<input type="number" class="form-control" name="num_passengers" id="num_passengers">
+		<input type="number" class="form-control" name="num_passengers" id="num_passengers" required>
 	</div>
 	<div class="col">
 		<label for="destination">Destination:</label>
-		<input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+		<input type="text" class="form-control" name="destination" id="destination" placeholder="Destination" required>
 	</div>
 </div>
 
@@ -101,11 +119,11 @@ department at (412) 392-3490.</p>
 <div class="row">
 	<div class="col">
 		<label for="departure_location">Departure Location:</label>
-		<input type="text" class="form-control" name="departure_location" id="departure_location" placeholder="Departure Location">
+		<input type="text" class="form-control" name="departure_location" id="departure_location" placeholder="Departure Location" required>
 	</div>
 	<div class="col">
 		<label for="arrival_location">Arrival Location:</label>
-		<input type="text" class="form-control" name ="arrival_location" id="arrival_location" placeholder="Arrival Location">
+		<input type="text" class="form-control" name ="arrival_location" id="arrival_location" placeholder="Arrival Location" required>
 	</div>
 </div>
 
@@ -115,11 +133,11 @@ department at (412) 392-3490.</p>
 <div class="row">
 	<div class="col">
 		<label for="estimate_arrival">Estimated Time of Arrival:</label>
-		<input type="time" class="form-control" name="estimate_arrival" id="estimate_arrival" placeholder="Arrival Time">
+		<input type="time" class="form-control" name="estimate_arrival" id="estimate_arrival" placeholder="Arrival Time" required>
 	</div>
 	<div class="col">
 		<label for="return_time">Time of Return:</label>
-		<input type="time" class="form-control" name="return_time" id="return_time">
+		<input type="time" class="form-control" name="return_time" id="return_time" required>
 	</div>
 </div>
 
@@ -128,21 +146,12 @@ department at (412) 392-3490.</p>
 <!-- Drivers and loop service: -->
 <div class="row">
 	<div class="col">
-		<label class="mr-sm-2" for="driver">Driver:</label>
-		<select class="custom-select mr-sm-2" name="driver" id="driver">
-			<option selected>Choose...</option>
-			<option value="1">One</option>
-			<option value="2">Two</option>
-			<option value="3">Three</option>
-		</select>
-	</div>
-	<div class="col">
 		<label for="loop_service">Is looping service required?</label>
-		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="false" aria-controls="loop_service" /> Yes
-		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#loop_service" aria-expanded="true" aria-controls="loop_service" checked/> No
-		<div class="collapse" id="loop_service">
-			<div class="form-group" id="loop_service">
-				<textarea class="form-control" rows="1" name="loop_service" id="loop_service"></textarea>
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="false" aria-controls="looplapse" /> Yes
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="true" aria-controls="looplapse" checked/> No
+		<div class="collapse" id="looplapse">
+			<div class="form-group" id="looplapse">
+				<textarea class="form-control" rows="1" name="loop_service" id="loop_service" style="	border: 2px solid #28a745"></textarea>
 			</div>
 		</div>
 	</div>
@@ -154,11 +163,11 @@ department at (412) 392-3490.</p>
 <div class="row">
 	<div class="col">
 		<label for="request_department">Department Name:</label>
-		<input type="text" class="form-control" name ="request_department" id="request_department" placeholder="Department Name">
+		<input type="text" class="form-control" name ="request_department" id="request_department" placeholder="Department Name" required>
 	</div>
 	<div class="col">
 		<label for="budget_num">Department Budget to Charge:</label>
-		<input type="text" class="form-control" name="budget_num" id="budget_num" placeholder="Department Budget Number">
+		<input type="text" class="form-control" name="budget_num" id="budget_num" placeholder="Department Budget Number" required>
 	</div>
 </div>
 
@@ -168,11 +177,11 @@ department at (412) 392-3490.</p>
 <div class="row">
 	<div class="col">
 		<label for="auth_name">Authorized by:</label>
-		<input type="text" class="form-control" name="auth_name" id="auth_name" placeholder="Name">
+		<input type="text" class="form-control" name="auth_name" id="auth_name" placeholder="Name" required>
 	</div>
 	<div class="col">
 		<label for="request_email">Requester's Email Address:</label>
-		<input type="email" class="form-control" name="request_email" id="request_email" placeholder="name@example.com">
+		<input type="email" class="form-control" name="request_email" id="request_email" placeholder="name@example.com" required>
 	</div>
 </div>
 
@@ -181,7 +190,7 @@ department at (412) 392-3490.</p>
 <!--Additional Comments-->
 <div class="form-group">
 	<label for="comment">Additional Comments or Concerns:</label>
-	<textarea class="form-control" rows="1" name="comment" id="comment"></textarea>
+	<textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
 </div>
 
 <br>
@@ -208,15 +217,14 @@ $(document).ready(function() {
 
 	$("vanform").submit(function() {
 		var formData = {
-			'trip_start'         	: $('input[name=trip_start]').val(),
-      'trip_end'      			: $('input[name=trip_end]').val(),
+			'start'            	  : $('input[name=start]').val(),
+      'end'      			      : $('input[name=end]').val(),
       'num_passengers'    	: $('input[name=num_passengers]').val(),
       'destination'      		: $('input[name=destination]').val(),
 			'departure_location'  : $('input[name=departure_location]').val(),
 			'arrival_location'    : $('input[name=arrival_location]').val(),
 			'estimate_arrival'    : $('input[name=estimate_arrival]').val(),
 			'return_time'         : $('input[name=return_time]').val(),
-			'driver'              : $('input[name=driver]').val(),
 			'loop_service'        : $('input[name=loop_service]').val(),
 			'request_department'  : $('input[name=request_department]').val(),
 			'budget_num'          : $('input[name=budget_num]').val(),
@@ -233,6 +241,59 @@ $(document).ready(function() {
 	})
 })
 
+$(document).ready(function() {
+	$("#populate_form").submit(function(event) {
+		console.log("submitform");
+
+		$.ajax({
+			type        : 'POST',
+			url         : 'get_form_fields?mod_form='+$("#mod_form").val(),
+			contentType: "application/json; charset=utf-8",
+		}).done(function(data){
+			console.log(JSON.stringify(data));
+			//$("#start").val(data.success[0].start);
+		  $("#start").val(adjustDateFormat(data.success[0].start));
+			$("#end").val(adjustDateFormat(data.success[0].end));
+			$("#num_passengers").val(data.success[0].num_passengers);
+			$("#destination").val(data.success[0].destination);
+			$("#departure_location").val(data.success[0].departure_location);
+			$("#arrival_location").val(data.success[0].arrival_location);
+			$("#estimate_arrival").val(adjustTimeFormat(data.success[0].estimate_arrival));
+			$("#return_time").val(adjustTimeFormat(data.success[0].return_time));
+			$("#loop_service").val(data.success[0].loop_service);
+			$("#request_department").val(data.success[0].request_department);
+			$("#budget_num").val(data.success[0].budget_num);
+			$("#auth_name").val(data.success[0].auth_name);
+			$("#request_email").val(data.success[0].request_email);
+			$("#comment").val(data.success[0].comment);
+		}).fail(function(){
+			console.log("fail");
+		})
+		return false;
+	})
+})
+
+function adjustDateFormat(date_string){
+  var date = new Date(date_string);
+  var y = date.getFullYear();
+  var m = date.getMonth();
+  var day = date.getDate();
+  var h = date.getHours();
+  var min = date.getMinutes();
+  var str = y+"-"+
+  ((m+1)<10?"0"+(m+1):(m+1))
+  +"-"+
+  (day<10?"0"+day:day)+
+  "T"+
+  (h<10?"0"+h:h)+
+  ":"+
+  (min<10?"0"+min:min);
+  return str;
+}
+function adjustTimeFormat(time_string) {
+	console.log(time_string);
+	return time_string.split(".")[0];
+}
 </script>
 </body>
 </html>
