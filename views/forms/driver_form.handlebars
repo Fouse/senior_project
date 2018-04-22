@@ -1,0 +1,181 @@
+<style>
+html, body {
+	background: rgba(142, 142, 142, 1);
+}
+#form_container{
+	box-shadow: 0px 10px 50px black;
+	background: white;
+	border-radius: 5px;
+}
+input:not([type=file]) {
+	border: 2px solid #28a745;
+	border-radius: 5px;
+}
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <a class="navbar-brand" href="home">PointLift</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/about">About</a>
+                        </li>
+                </ul>
+</div>
+</nav>
+  <br><br>
+
+<div class="container" id="form_container">
+<h2>Shuttle Driver Request Form</h2>
+
+<body>
+
+
+<p>Please complete the online request form below, or download and print the
+form and return to the Physical Plant Office via interoffice mail. The
+Point Park University Vehicles are not equipped with car sear anchors, car
+seats or booster seats. If a passenger requires a car seat and/or booster
+seat (under 4 foot and 9 inches) please notify the Physical Plant Department
+at (412) 392-3490. If you have any questions or concerns, please do not
+hesitate to contact the Physical Plant Department.</p>
+
+<h5>Disclaimer:</h5>
+
+<p>This is only a request. Final Confirmation will be sent as a reply.
+If you do not receive a confirmation, please contact the Physcial Plant
+department at (412) 392-3490.</p>
+
+<form id="driverform" action="submit_request2" method="POST">
+
+
+<!-- Start and End Times of Trip: -->
+<div class="row">
+	<div class="col">
+		<label for="start">Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="start"id="start">
+	</div>
+	<div class="col">
+		<label for="end">End Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="end"id="end">
+	</div>
+</div>
+
+<br>
+
+<!-- Number of Expected Passengers and the Destination: -->
+<div class="row">
+	<div class="col">
+		<label for="num_passengers">Number of Expected Passengers:</label>
+		<input type="number" class="form-control" name="num_passengers" id="num_passengers">
+	</div>
+	<div class="col">
+		<label for="destination">Destination:</label>
+		<input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+	</div>
+</div>
+
+<br>
+
+<!-- Departure Location/Arrival Location -->
+<div class="row">
+	<div class="col">
+		<label for="departure_location">Departure Location:</label>
+		<input type="text" class="form-control" name="departure_location" id="departure_location" placeholder="Departure Location">
+	</div>
+	<div class="col">
+		<label for="arrival_location">Arrival Location:</label>
+		<input type="text" class="form-control" name ="arrival_location" id="arrival_location" placeholder="Street, City, State, Zip">
+	</div>
+</div>
+
+<br>
+
+<!-- Estimated Arrival and Time of Return -->
+<div class="row">
+	<div class="col">
+		<label for="estimate_arrival">Estimated Time of Arrival:</label>
+		<input type="time" class="form-control" name="estimate_arrival" id="estimate_arrival" placeholder="Arrival Time">
+	</div>
+	<div class="col">
+		<label for="return_time">Time of Return:</label>
+		<input type="time" class="form-control" name="return_time" id="return_time">
+	</div>
+</div>
+
+<br>
+
+<!-- loop service  & directions-->
+<div class="row">
+	<div class="col">
+		<label for="looplapse">Is looping service required?</label>
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="false" aria-controls="looplapse" /> Yes
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="true" aria-controls="looplapse" checked/> No
+		<div class="collapse" id="looplapse">
+			<div class="form-group" id="looplapse">
+				<textarea class="form-control" rows="1" name="loop_service" id="loop_service" style="	border: 2px solid #28a745"></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<label for="directions">Directions:</label>
+		<textarea class="form-control" rows="1" name="directions" id="directions" style="	border: 2px solid #28a745"></textarea>
+	</div>
+</div>
+
+<br>
+
+<!-- Authorized by & Department Budget to Charge: -->
+<div class="row">
+	<div class="col">
+		<label for="auth_name">Authorized by:</label>
+		<input type="text" class="form-control" name="auth_name" id="auth_name" placeholder="Name">
+	</div>
+	<div class="col">
+		<label for="budget_num">Department Budget to Charge:</label>
+		<input type="text" class="form-control" name="budget_num" id="budget_num" placeholder="Budget Number">
+	</div>
+	<div class="col">
+		<label for="request_email">Requester's Email Address:</label>
+		<input type="email" class="form-control" name="request_email" id="request_email" placeholder="name@example.com">
+	</div>
+</div>
+
+<br>
+
+<!--Additional Comments-->
+<div class="row">
+	<div class="col">
+		<label for="auth_name">Trip Purpose</label>
+		<input type="text" class="form-control" name="title" id="title" placeholder="Trip Purpose" required>
+	</div>
+	<div class="col">
+    <label for="comment">Additional Comments or Concerns:</label>
+    <textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
+	</div>
+</div>
+
+<br>
+
+<button type="submit" class="btn btn-success">Submit<span class="fa fa-arrow-right"></span></button>
+
+</form>
+
+<br>
+
+<p>Note: This form must be received by the Physical Plant Department
+at least 5 business days prior to the date of the service is needed.
+Cancellations must be sent via email to Jan Pekar, Director of
+Transportation and Adminstrative services (jpekar@pointpark.edu)
+within 48 hours prior to the requested service otherwise the
+department may be billed accordingly. </p>
+
+<br>
+</div>
+<br><br>
+</body>
