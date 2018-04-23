@@ -289,9 +289,14 @@ body{
             $(".users_request").append(my_request_list);
             var details = $("<div class='more_details' id='dtl"+i+"' style='display:none'><table class='table'><tbody><tr class='table-secondary'><td>Destination: "
             +(results[i].destination=== null?' ':results[i].destination)+"</td></tr>"
-            +"<tr class='table-secondary'><td>Start Date: "+(results[i].start_date=== null?' ':start_date)+"</td></tr>"
-            +"<tr class='table-secondary'><td>End Date: "+(results[i].end_date=== null?' ':end_date)+"</td></tr>"
-            +"<tr class='table-secondary'><td>Number of Passenger: "+(results[i].num_passengers=== null?' ':results[i].num_passengers)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Start: "+(results[i].start=== null?' ':start)+"</td></tr>"
+            +"<tr class='table-secondary'><td>End: "+(results[i].end=== null?' ':end)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Departure Location: "+(results[i].departure_location=== null?' ':results[i].departure_location)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Arrival Location: "+(results[i].arrival_location=== null?' ':results[i].arrival_location)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Estimated Time of Arrival: "+(results[i].estimate_arrival=== null?' ':results[i].estimate_arrival)+"</td></tr>"
+            +"<tr class='table-secondary'><td>loop_service: "+(results[i].loop_service=== null?' ':results[i].loop_service)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Return Time: "+(results[i].return_time=== null?' ':results[i].return_time)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Return Location: "+(results[i].return_location=== null?' ':results[i].return_location)+"</td></tr>"
             +"</tbody></table>");
             $(".users_request_detail").append(details);
             my_request_list.click({target:details},function(e){
@@ -309,4 +314,3 @@ body{
     //get_user_info();
   }
 </script>
-
