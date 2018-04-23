@@ -1079,6 +1079,6 @@ app.post("/update_driver_infos", (req, res) =>{
 //
 // The route to open the webpage and the link call
 app.listen(app.get('port'), function() {
-        console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.' );
+        console.log('Express started on https://localhost:' + app.get('port') + '; press Ctrl-C to terminate.' );
 
 });
