@@ -31,57 +31,103 @@ app.set('port', process.env.PORT || 3000);
 
 var con = mysql.createConnection(credentials.connection);
 
+//
+// Link to the home page
+//
 app.get("/", function(req, res) {
 	res.render("home");
 });
 
+//
+// Link to the admin page
+//
 app.get("/admin", function(req, res) {
         res.render("admin");
 });
 
+//
+// Link to the contacts page
+//
 app.get("/contact", function(req, res) {
         res.render("contact");
 });
 
+//
+// Link to get the about page
+//
 app.get("/about", function(req, res) {
         res.render("about");
 });
 
+//
 //link driverform to homepage
 //link to driverform
+//
 app.get("/driverform", function(req, res) {
         res.render("driverform");
 });
 
+//
 //link to vanform
+//
 app.get("/vanform", function(req, res) {
         res.render("vanform");
 });
 
+//
+// Link to get the admin page so admin can edit, change/approve the requests
+//
 app.get("/admin", function(req, res) {
   if(req.session.role){res.render("admin");}
   else {res.render("user");}
 });
+
+//
+// Get the registration page to have a user create an account so they can log in
+//
 app.get("/register_page", function(req, res) {
 	res.render("register_page");
 });
+
+//
+// Get the login page so the user can log in with their credentials
+//
 app.get("/login", function(req, res) {
 	res.render("login");
 });
+
+//
+// Get the graph of peak times of students  throughout the day compared to the time of day
+//
 app.get("/my_graph", function(req, res) {
 	res.render("my_graph");
 });
+
+//
+// When a user creates an account, they get a screen that welcomes them to PointLift
+//
 app.get("/welcome_new_user", function(req, res) {
   if(req.session.role){res.render("welcome_new_user");}
   else{res.render("home");}
 });
+
+//
+// Get the schedule to view
+//
 app.get("/view_schedule", function(req, res) {
 	res.render("view_schedule");
 });
 
+//
+// Get the bus form 
+//
 app.get("/bus_rental_form", function(req, res) {
 	res.render("bus_rental_form");
 });
+
+//
+// Get the bus form request from database
+//
 app.get("/bus_rental_request", function(req, res) {
   var link = req.query.link;
   var details
@@ -112,6 +158,9 @@ app.get("/bus_rental_request", function(req, res) {
 
 });
 
+//
+// Link to get the bus form
+//
 app.get("/busform", function(req, res) {
         res.render("busform");
 });
@@ -133,6 +182,10 @@ app.get("/busform", function(req, res) {
  //   });
  // });
 
+
+//
+// Create user account of drivers
+//
  app.post("/create_user", (req, res)=>{
    req.checkBody('first_name', 'first name cannot be empty.').notEmpty();
    req.checkBody('last_name', 'last name cannot be empty.').notEmpty();
@@ -186,7 +239,9 @@ app.get("/busform", function(req, res) {
    }
  });
 
-
+//
+//Log into PointLift with account created. Must have an email and password.
+//
  app.post('/login', function(req, res){
    req.check('email','the email you entered is invalid, please try again.').isEmail();
    var errors = req.validationErrors();
@@ -248,6 +303,10 @@ app.get("/busform", function(req, res) {
  //     });
  //   //}
  // });
+
+//
+// Link to get the user page to direct from database to complete and send/receive the functions
+//
 app.get("/user", (req, res)=>{
   if(req.session.user_id){
     var sql = "SELECT first_name, last_name, role, dob, email FROM users WHERE user_id=?;";
@@ -288,12 +347,18 @@ app.get("/user", (req, res)=>{
 }
 });
 
+//
+// Link to the logout of an account
+//
 app.get("/logout", function(req, res){
   delete req.session.user_id;
   delete req.session.is_admin;
   res.render("home");
 });
+
+//
 //get bus company_contact info
+//
 app.post("/get_bus_company_contact", (req, res)=>{
   if(req.session.user_id){
     console.log(req.session.user_id);
@@ -304,6 +369,10 @@ app.post("/get_bus_company_contact", (req, res)=>{
     });
   }
 });
+
+//
+// Post the bus requests into the database when the fields have been filled out.
+//
 app.post("/bus_request", function(req, res){
 //console.log(req.body);
 var sql = "INSERT INTO requests (destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
@@ -366,7 +435,9 @@ var values = [req.body.destination,req.body.start,req.body.end,
   });
 });
 
-
+//
+// Post the request approved from the bus company to the database when the fields have been filled out.
+//
 app.post("/request_approve_by_bcompany", (req, res)=>{
     var sql = "UPDATE requests SET bus_company = ?, ref_num = ?, bus_driver=?, bus_num=?, bus_driver_phone=?, bus_phone=?, emergency_contact=? WHERE request_id=?;";
     var values =[req.body.bus_company, req.body.ref_num, req.body.bus_driver, req.body.bus_num, req.body.bus_driver_phone, req.body.bus_phone, req.body.emergency_contact,];
@@ -376,7 +447,10 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
     });
 });
 
-
+//
+// Post the users who have had an account to correlate from the database to the current fields being filled out
+// proving the account is valid. Only when the users already have an account.
+//
  app.post("/get_users", (req, res)=>{
      console.log(req.session.user_id);
      var sql = "SELECT drivers.*, users.* FROM users LEFT OUTER JOIN drivers ON drivers.driver_id = users.user_id WHERE user_id=?";
@@ -385,7 +459,10 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
        res.send({success:results});
      });
  });
- //get new users
+
+//
+// Get new users and post the the database of a new account that has been created.
+//
  app.post("/get_new_users", (req, res)=>{
    if(req.session.user_id){
      console.log(req.session.user_id);
@@ -397,7 +474,9 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
    }
  });
 
- //approve new users
+//
+// Post new users that have been approved by the admin 
+//
  app.post("/approve_new_user", (req, res)=>{
    // if(req.session.user_id){
    console.log(req.session.user_id);
@@ -412,38 +491,44 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
    //}
  });
 
- //post van form data to database
+//
+// Post the van form data to database when the fields have been filled out.
+//
  app.post("/submit_request", function(req, res){
  	var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
  	var values = [req.body.start,req.body.end,req.body.num_passengers,
- 		            req.body.destination,req.body.departure_location,req.body.arrival_location,
- 								req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
-								req.body.request_department,req.body.budget_num,req.body.auth_name,
-								req.body.request_email,req.body.comment];
- 								con.query(sql, values, function(err, results) {
- 									if (err) throw err;
- 									res.redirect("/");
- 								});
- 							});
+ 		      req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 		      req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+		      req.body.request_department,req.body.budget_num,req.body.auth_name,
+		      req.body.request_email,req.body.comment];
+ 		      con.query(sql, values, function(err, results) {
+ 		        if (err) throw err;
+ 			res.redirect("/");
+ 		      });
+ });
 
- //post driver form data to database
+//
+// Post the driver form data to database when the form has been submitted after the fields have been filled out.
+//
  app.post("/submit_request2", function(req, res){
  //console.log(req.body);
  var sql = "INSERT INTO requests (start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
  var values = [req.body.start,req.body.end,req.body.num_passengers,
- 	            req.body.destination,req.body.departure_location,req.body.arrival_location,
- 							req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
- 							req.body.directions,req.body.trip_purpose,req.body.auth_name,
- 							req.body.budget_num,req.body.request_email,req.body.comment];
-        con.query(sql, values, function(err, results) {
-          if (err) throw err;
- 	 //console.log(results);
-            res.redirect("/");
- 					 //con.end();
- 					    });
- 					 });
+ 	       req.body.destination,req.body.departure_location,req.body.arrival_location,
+ 	       req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+ 	       req.body.directions,req.body.trip_purpose,req.body.auth_name,
+ 	       req.body.budget_num,req.body.request_email,req.body.comment];
+               con.query(sql, values, function(err, results) {
+                 if (err) throw err;
+ 	         //console.log(results);
+                 res.redirect("/");
+ 		 //con.end();
+ 	       });
+ });
 
-//post bus form data to database
+//
+// Post the bus form data to database when the fields have been filled out and submitted.
+//
 app.post("/submit_request3", function(req, res){
 //console.log(req.body);
   var sql = "INSERT INTO requests (destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment, bus_company, ref_num, bus_driver, bus_num, bus_driver_phone, bus_phone, emergency_contact) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
@@ -464,7 +549,9 @@ app.post("/submit_request3", function(req, res){
       });
 });
 
-
+//
+// Post the form fields after filled out by user and direct them to the database.
+//
 app.post("/get_form_fields", function(req, res){
 	let sql="SELECT * FROM requests where request_id=" + parseInt(req.query.mod_form);
 	con.query(sql, function(err, results){
@@ -476,6 +563,7 @@ app.post("/get_form_fields", function(req, res){
 		res.send({success: results});}
 	});
 });
+
  /*app.post("/get_form_fields", (req, res)=> {
 		var sql="SELECT * FROM requests WHERE request_id =" + Number(req.body.mod_form);
 		con.query(sql, (err, results)=> {
@@ -486,7 +574,9 @@ app.post("/get_form_fields", function(req, res){
     });
  });*/
 
-
+//
+// Post the drivers that have accounts already and correlate them that they have accounts in the database.
+//
 app.post("/get_drivers", (req, res) => {
   var sql="SELECT users.*, drivers.* FROM users LEFT OUTER JOIN drivers ON drivers.driver_id = users.user_id WHERE (users.role='driver' OR users.role='maintenance') AND drivers.availability=1;";
         con.query(sql, (err, results) => {
@@ -496,7 +586,9 @@ app.post("/get_drivers", (req, res) => {
 });
 
 
-//remove driver
+//
+// Post to remove drivers from the admin perspective
+//
 app.post("/remove_driver", (req, res) => {
   console.log(req.body.driver_id);
    var sql="UPDATE drivers SET availability = 2 WHERE driver_id = ?";
@@ -506,7 +598,9 @@ app.post("/remove_driver", (req, res) => {
 });
 
 
-//add driver back to availlable driver
+//
+// Post to add driver back to available drivers 
+//
 app.post("/add_driver_back_to_available_drivers", (req, res) => {
   console.log(req.body.driver_id);
     var sql="UPDATE drivers SET availability = 1 WHERE driver_id = ?";
@@ -516,7 +610,9 @@ app.post("/add_driver_back_to_available_drivers", (req, res) => {
 });
 
 
-//get all the desabled shuttles
+//
+// Post to get all the disabled shuttles so they are not selected
+//
 app.post("/get_unavailable_drivers", (req, res) => {
    var sql="SELECT users.*, drivers.* FROM users LEFT OUTER JOIN drivers ON drivers.driver_id = users.user_id WHERE users.is_admin=0 AND drivers.availability = 2";
         con.query(sql,(err, results) => {
@@ -525,6 +621,10 @@ app.post("/get_unavailable_drivers", (req, res) => {
 });
 
 
+//
+// Post to get the total requests so that the red box on the admin page so the
+// admin can see the total number of requests available.
+//
 app.post("/get_req_count", (req, res)=> {
   var sql="SELECT COUNT(*) AS count FROM requests WHERE isapproved=0";
         con.query(sql,(err, results)=> {
@@ -532,7 +632,9 @@ app.post("/get_req_count", (req, res)=> {
    });
 });
 
-
+// 
+// Post to get the new user accounts that have been created that need approved
+//
 app.post("/get_new_user_count", (req, res)=> {
   var sql="SELECT COUNT(*) AS count FROM users WHERE role='new'";
         con.query(sql,(err, results)=> {
@@ -541,7 +643,9 @@ app.post("/get_new_user_count", (req, res)=> {
 });
 
 
-//change reuest isapprove to 1 when approved
+//
+//Post to change reuest isapprove to 1 when approved
+//
 app.post("/update_req_status", (req, res) => {
 	  var sql="UPDATE requests SET isapproved = 1 WHERE request_id=?";
         con.query(sql, req.body.request_id, (err, results) => {
@@ -550,6 +654,9 @@ app.post("/update_req_status", (req, res) => {
 });
 
 
+//
+// Post to get the requests so that the admin can view and make a decision
+//
 app.post("/get_reqs", (req, res) => {
   // var sql="SELECT * FROM requests WHERE isapproved='0'";
 	  var sql="SELECT * FROM requests WHERE isapproved=0";
@@ -559,6 +666,9 @@ app.post("/get_reqs", (req, res) => {
 });
 
 
+// 
+// Post to get all the vehicles 
+//
 app.post("/get_vehicles", (req, res) => {
   var sql="SELECT * FROM vehicles WHERE availability=1";
   con.query(sql,(err, results)=> {
@@ -567,7 +677,9 @@ app.post("/get_vehicles", (req, res) => {
 });
 
 
-//get requests status
+//
+// Post to get requests status so see if requests have been approved or denied
+//
 app.post("/get_reqs_status", (req, res) => {
   var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1";
         con.query(sql, (err, results) => {
@@ -578,7 +690,9 @@ app.post("/get_reqs_status", (req, res) => {
 });
 
 
-//get requests ongoing
+//
+// Post to get requests ongoing
+//
 app.post("/get_reqs_ongoing", (req, res) => {
   var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1 AND now() BETWEEN start AND end";
         con.query(sql, (err, results) => {
@@ -587,7 +701,9 @@ app.post("/get_reqs_ongoing", (req, res) => {
 });
 
 
-//get req Completed
+//
+// Post to get req Completed
+//
 app.post("/get_reqs_completed", (req, res) => {
   var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1 AND now() >= end";
         con.query(sql, (err, results) => {
@@ -597,7 +713,9 @@ app.post("/get_reqs_completed", (req, res) => {
 });
 
 
-//mark requests as Completed
+//
+// Post to mark requests as Completed
+//
 app.post("/mark_completed_reqs", (req, res) => {
 		var sql="UPDATE requests SET is_completed= 1 WHERE isapproved=1 AND now() >= end;";
         con.query(sql, (err, results) => {
@@ -607,7 +725,9 @@ app.post("/mark_completed_reqs", (req, res) => {
 });
 
 
-//get availlable drivers when selecting driver after an approved request
+//
+//Post to get available drivers when selecting driver after an approved request
+//
 app.post("/get_availlable_drivers", (req, res)=> {
     var sql = "SELECT drivers.* FROM drivers WHERE (drivers.position='driver' OR drivers.position='maintenance') AND (drivers.position='driver' OR drivers.position='maintenance') AND drivers.driver_id NOT IN ( SELECT drivers_has_requests.drivers_driver_id FROM requests LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (? >= start));"
     var values = [req.body.event_end, req.body.event_start];
@@ -617,8 +737,9 @@ app.post("/get_availlable_drivers", (req, res)=> {
    });
 });
 
-
-//look for driver to reasign a requests
+//
+// Post to look for driver to reasign a requests
+//
 app.post("/look_for_driver_at_reasign", (req, res)=> {
     var sql = "SELECT drivers.* FROM drivers WHERE (drivers.position='driver' OR drivers.position='maintenance') AND (drivers.position='driver' OR drivers.position='maintenance') AND drivers.driver_id NOT IN ( SELECT drivers_has_requests.drivers_driver_id FROM requests LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (? >= start));"
     var values = [req.body.event_end,req.body.event_start];
@@ -629,7 +750,9 @@ app.post("/look_for_driver_at_reasign", (req, res)=> {
 });
 
 
-//select driver at reasign.
+//
+// Post to select drivers when in need to reasign.
+//
 app.post("/select_driver_at_reasign", (req, res)=> {
     var sql = "UPDATE drivers_has_requests SET drivers_has_requests.drivers_driver_id =? WHERE drivers_has_requests.drivers_driver_id=?"
     var values = [req.body.new_driver_id, req.body.old_driver_id];
@@ -640,7 +763,9 @@ app.post("/select_driver_at_reasign", (req, res)=> {
 });
 
 
-//get availlable shuttle when selecting shuttles after an approved request
+//
+// Post to get availlable shuttle when selecting shuttles after an approved request
+//
 app.post("/get_availlable_shuttles", (req, res) => {
     var sql = "SELECT vehicles.* FROM vehicles WHERE vehicles.availability= 1 AND vehicles.vehicle_id NOT IN ( SELECT vehicles_has_requests.vehicles_vehicle_id FROM requests LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (?>= start));"
     var values = [req.body.event_end, req.body.event_start];
@@ -656,8 +781,10 @@ app.post("/get_availlable_shuttles", (req, res) => {
 });
 
 
-// free vehicles once an assigned request is done
- app.post("/free_vehicles", (req, res) => {
+//
+// Post to display and check for free vehicles once an assigned request is done
+// 
+app.post("/free_vehicles", (req, res) => {
   var sql="UPDATE vehicles SET availability='1' WHERE vehicle_id IN (SELECT vehicle_id FROM tmp_requests  WHERE now() >= end);";
         con.query(sql, (err, results) => {
 	//console.log(sql);
@@ -665,8 +792,9 @@ app.post("/get_availlable_shuttles", (req, res) => {
    });
  });
 
-
- //remove shuttle out of the Available fleet
+//
+// Post to remove a shuttle out of the Available fleet
+//
  app.post("/remove_shuttle", (req, res) => {
    console.log(req.body.vehicle_id);
  		var sql="UPDATE vehicles SET availability = 0 WHERE vehicle_id = ?";
@@ -675,8 +803,9 @@ app.post("/get_availlable_shuttles", (req, res) => {
     });
  });
 
-
- //get all the desabled shuttles
+//
+// Post to get all the disabled shuttles
+//
  app.post("/get_unavailable_shuttle", (req, res) => {
  		var sql="SELECT * FROM vehicles WHERE availability = 0";
          con.query(sql,(err, results) => {
@@ -685,7 +814,9 @@ app.post("/get_availlable_shuttles", (req, res) => {
  });
 
 
-//add shuttle back fleet
+//
+// Post to add a shuttle back into the available fleet
+//
  app.post("/add_shuttle_back_fleet", (req, res) => {
    console.log(req.body.vehicle_id);
      var sql="UPDATE vehicles SET availability = 1 WHERE vehicle_id = ?";
@@ -695,6 +826,9 @@ app.post("/get_availlable_shuttles", (req, res) => {
  });
 
 
+//
+// Post to receive events requested
+//
 app.post("/get_events", (req, res) => {
   var sql="SELECT  requests.*, drivers_has_requests.drivers_driver_id, vehicles_has_requests.vehicles_vehicle_id, drivers.*, vehicles.* FROM drivers_has_requests LEFT OUTER JOIN drivers ON drivers.driver_id = drivers_has_requests.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = drivers_has_requests.requests_request_id LEFT OUTER JOIN requests ON requests.request_id = drivers_has_requests.requests_request_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = drivers_has_requests.drivers_driver_id WHERE requests.isapproved=1;";
   // var sql="SELECT * FROM tmp_requests WHERE isapproved='1'";
@@ -710,7 +844,9 @@ app.post("/get_events", (req, res) => {
 });
 
 
-//weekly_schedule
+//
+// Post to display the weekly schedule of fleets and drivers on the days of the week.
+//
 app.post("/myweekly_schedule", (req, res) =>{
 //console.log(req.body);
 // var sql = "INSERT INTO weekly_schedule (sunday) VALUES (?);";
@@ -737,6 +873,9 @@ app.post("/myweekly_schedule", (req, res) =>{
 });
 
 
+//
+// Post to get the link of the weekly schedule
+//
 app.post("/get_weekly_schedule", (req, res)=> {
   var sql="SELECT * FROM weekly_schedule";
         con.query(sql, (err, results)=> {
@@ -746,6 +885,9 @@ app.post("/get_weekly_schedule", (req, res)=> {
 });
 
 
+//
+// Post to add a driver to a fleet or a request
+//
 app.post("/add_driver", (req, res)=>{
 //console.log(req.body);
   var sql = "INSERT INTO drivers (driver_fname, driver_lname) VALUES (?,?);";
@@ -757,6 +899,9 @@ app.post("/add_driver", (req, res)=>{
 });
 
 
+//
+// Post to add a vehicle to a fleet or assigning to a driver
+//
 app.post("/add_vehicle", (req, res)=>{
   //console.log(req.body);
   var sql = "INSERT INTO vehicles (vehicle_number, seat_number) VALUES (?,?);";
@@ -768,6 +913,10 @@ app.post("/add_vehicle", (req, res)=>{
 });
 
 
+//
+// Post to receive the requests submitted by a user and the process of approving/dening, and 
+// assigning them to a driver.
+//
 app.post("/lift_request", (req, res)=>{
 //console.log(req.body);
   var sql = "INSERT INTO requests (start, end, title, arrival_destination_dateTime, destination_dep_dateTime, arrival_PPU_dateTime, email, department, destination, num_passengers, loop_service, auth_name, hotel_name, hotel_address, direction, budget_num) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -807,6 +956,9 @@ app.post("/lift_request", (req, res)=>{
 //assign request to driver
 
 
+//
+// Post to assign the requests to a driver when advised
+//
 app.post("/assign_request_to_driver", (req, res) =>{
   // var sql = "INSERT INTO drivers_has_requests (drivers_has_requests.drivers_driver_id, drivers_has_requests.requests_request_id) VALUES("+req.body.driver+","+req.body.request_id+");";
   var sql = "INSERT INTO drivers_has_requests (drivers_has_requests.drivers_driver_id, drivers_has_requests.requests_request_id) VALUES";
@@ -830,7 +982,10 @@ app.post("/assign_request_to_driver", (req, res) =>{
 				// console.log("reqid "+req.body.request_id);
 		});
 });
-//assign request to vehicles
+
+//
+// Post to assign request to vehicles
+//
 app.post("/assign_request_to_vehicle", (req, res) =>{
   //  var sql = "INSERT INTO vehicles_has_requests (vehicles_has_requests.vehicles_vehicle_id, vehicles_has_requests.requests_request_id) VALUES("+req.body.vehicle+","+req.body.request_id+");";
   var sql = "INSERT INTO vehicles_has_requests (vehicles_has_requests.vehicles_vehicle_id, vehicles_has_requests.requests_request_id) VALUES";
@@ -856,7 +1011,9 @@ app.post("/assign_request_to_vehicle", (req, res) =>{
 });
 
 
-//get driver info when signed
+//
+// Post to get driver info when signed
+//
 app.post("/get_driver_info", (req, res)=> {
   console.log(req.session.user_id);
   var sql="SELECT * FROM drivers WHERE driver_id=?";
@@ -867,7 +1024,9 @@ app.post("/get_driver_info", (req, res)=> {
 });
 
 
-//get driver request if any when signed
+//
+// Post to get driver requests if any when signed
+//
 app.post("/get_driver_request", (req, res)=> {
   console.log(req.session.user_id);
   var sql="SELECT  requests.* FROM drivers_has_requests LEFT OUTER JOIN requests ON requests.request_id = drivers_has_requests.requests_request_id WHERE drivers_has_requests.drivers_driver_id =?";
@@ -877,6 +1036,9 @@ app.post("/get_driver_request", (req, res)=> {
 });
 
 
+//
+// Post to update driver info when edited
+//
 app.post("/update_driver_infos", (req, res) =>{
   console.log(req.session.user_id);
     var sql="UPDATE drivers SET ";
@@ -914,6 +1076,8 @@ app.post("/update_driver_infos", (req, res) =>{
 // });
 
 
+//
+// The route to open the webpage and the link call
 app.listen(app.get('port'), function() {
         console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.' );
 
