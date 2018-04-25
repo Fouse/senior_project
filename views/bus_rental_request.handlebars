@@ -18,11 +18,11 @@ span {color: red;}
           <tbody>
             <tr>
               <th scope="row">Event Start Date</th>
-              <td>{{start}}</td>
+              <td id="start"></td>
             </tr>
             <tr>
               <th scope="row">Event End Date</th>
-              <td>{{end}}</td>
+              <td id="end"></td>
             </tr>
             <tr>
               <th scope="row">Destination</th>
@@ -76,9 +76,15 @@ span {color: red;}
               <th scope="row">Additional Comment</th>
               <td>{{comment}}</td>
             </tr>
+            <tr>
+              <th scope="row">Requester Email</th>
+              <td>{{requester_email}}</td>
+            </tr>
           </tbody>
         </table>
-        <!-- <p>Request ID: <span id="id">{{id}}</span></p> -->
+        <p><input type="hidden" id="id" value="{{id}}"></input></p>
+        <p><input type="hidden" id="requester_email" value="{{requester_email}}"></input></p>
+        <p><input type="hidden" id="requester_name" value="{{requester_name}}"></input></p>
         <!-- <p>Start Date: <span id="start">{{start}}</span></p>
         <p>End Date: <span id="end"></span>{{end}}</p>
         <p>Destination: <span id="destination">{{destination}}</span></p> -->
@@ -89,27 +95,55 @@ span {color: red;}
     </div>
   </div>
   <script>
+  var request_id, requester_email, requester_name;
     $(document).ready(function(){
-      var id ={{id}};
-      console.log(id);
+      var start = moment('{{start}}').format("LLL");
+      var end = moment('{{end}}').format("LLL");
+      console.log(start);
+      $("#start").text(start);
+      $("#end").text(end);
+      request_id =$("#id").val();
+      requester_email =$("#requester_email").val();
+     requester_name =$("#requester_name").val();
+     console.log(request_id);
+     console.log(requester_email);
+      console.log(requester_name);
       //getBusRentalRequest();
     });
     $(".getForm").click(function(){
       createForm();
     });
-    // $("#populate_form").submit(function(){
-    //   $.ajax({
-    //     type:"POST",
-    //     url:"request_approve_by_bcompany",
-    //     data:{request_id:id}
-    //   });
+
+    // $(document).on('submit', '#request_approve_by_bcompany', function(e) {
+    //      $.ajax({
+    //         url: $(this).attr('action'),
+    //         type: $(this).attr('method'),
+    //         data: $(this).serialize(),
+    //         success: function(html) {
+    //         location.reload();
+    //         }
+    //     });
+    //     e.preventDefault();
     // });
+
+    $("#request_approve_by_bcompany").submit(function(){
+      $.ajax({
+        type:"POST",
+        url:"request_approve_by_bcompany",
+        // data:{request_id:request_id}
+        // success: function(){
+        //   window.assign("loggout");
+        // }
+      });
+    });
     function createForm(){
       var form = $("<form id='request_approve_by_bcompany' action='request_approve_by_bcompany' method='post'><div class='form-row'><div class='form-group col-md-6'><label>Bus Company Name</label><input class='form-control' name='bus_company' value='' required></div><div class='form-group col-md-6'><label>Reference Number</label><input class='form-control'  name='ref_num' value=''required></div></div><div class='form-row'><div class='form-group col-md-6'><label>Name of Bus Driver</label><input class='form-control' name='bus_driver' value='' required></div>"+"<div class='form-group col-md-6'><label>Bus Number</label><input class='form-control'  name='bus_num' value='' required></div>"+
       "</div><div class='form-row'><div class='form-group col-md-6'><label>Bus Driver's Phone Number</label><input class='form-control' name='bus_driver_phone' value='' required></div><div class='form-group col-md-6'><label>Bus Phone Number</label><input class='form-control'  name='bus_phone' value='' required></div></div>"+"<div class='form-row'><div class='form-group col-md-6'>"
-      +"<label>Emergency Contact Number</label><input class='form-control' name='emergency_contact' value='' required></div></div><button id='approve_request' class='btn btn-success'>Submit</button></form>");
+      +"<label>Emergency Contact Number</label><input class='form-control' name='emergency_contact' value='' required><input type='hidden' name='requester_name' value='"+requester_name+"'><input type='hidden' name='request_id' value='"+request_id+"'><input type='hidden' name='requester_email' value='"+requester_email+"'></div></div><button id='approve_request' class='btn btn-success'>Submit</button></form>");
       $("#busCompany_form").append(form);
-
     }
+    $("#approve_request").click(function(){
+      $("#request_approve_by_bcompany").submit();
+    });
   </script>
 </body>

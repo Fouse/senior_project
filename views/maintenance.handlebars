@@ -1,0 +1,517 @@
+<style>
+body {
+  background: url("img/ppu1.jpg");
+  background-position: center;
+  background-repeat:no-repeat;
+  background-size: cover;
+  /* border: 2px solid red; */
+}
+.bloc{
+  height: 100vh;
+}
+h3{
+        border-radius: 25px;
+        /* background-color: #07b048; */
+        background-color: #fff;
+        padding: 0.1em;
+        color: #07b048;
+        border:1px solid white;
+        margin-top:10px;
+}
+.glass{
+  border: 1px solid black;
+  background: rgba(0,0,0,.7);
+  box-shadow: 0px 10px 50px black;
+  /* border-radius: 10px; */
+  margin-bottom: 30px;
+  color: #07b048;
+}
+.car_box{
+  float: left;
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  margin-top: 10px;
+  padding: 5px;
+  box-shadow: 5px 10px 18px #888888;
+  cursor: pointer;
+}
+.car_box:hover{
+  background-color: green;
+  color: white;
+}
+.vehicle_number{
+  text-align: center;
+  font-size: 2.5em;
+}
+.available_vehicle, .unavailable_vehicle{
+  height: 340px;
+  overflow: scroll;
+}
+@media screen and (max-width: 700px) {
+  .fleet {display: none;}
+}
+</style>
+<body>
+  {{#if login}}
+<div class="bloc">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+          <a class="navbar-brand" href="#">Welcome, {{first_name}}</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div id="navbarNavDropdown" class="navbar-collapse collapse">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                      <a href="#my_schedule" class="nav-link my_req_bgc" data-toggle="modal" data-target=".my_request">My Requests</a>
+                  </li>
+                  <li class="nav-item active">
+                      <a href="#my_profile" class="nav-link" data-toggle="modal" data-target=".my_profile">My Info</a>
+                  </li>
+              </ul>
+              <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="logout">Log Out</a>
+                </li>
+              </ul>
+          </div>
+      </nav>
+      <!-- profile infos -->
+      <div class="modal fade my_profile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content justify-content-center">
+          <div class="modal-header" style="background-color:#56ab2f">
+            <h5 class="modal-title" id="exampleModalLabel">My Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body req_status_heigh info_body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="reqs_status_options">
+                    <div class="btn-group float-right btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-secondary edit_user_profile" data-toggle="modal" data-target=".edit_my_profile">Edit Profile</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="profile_box justify-content-start">
+                    <div class="text-center">
+                      <img src="img/driver4.png" class="rounded" width="304" height="236">
+                    </div>
+                    <div class="picture"></div>
+                    <p class="ctn"></p>
+                    <hr>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                    <table class="table table-sm table-striped table-dark">
+                      <thead>
+                        <tr>
+                        </tr>
+                      </thead>
+                      <tbody class="users_table_content"></tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+
+      <!-- edit user profile -->
+      <div class="modal fade edit_my_profile" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content justify-content-center">
+          <div class="modal-header" style="background-color:#56ab2f">
+            <h5 class="modal-title" id="exampleModalLabel">My Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body req_status_heigh info_body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="reqs_status_options">
+                    <div class="btn-group float-right btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-secondary edit_user_profile">Edit Profile</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="profile_box justify-content-start">
+                    <div class="text-center">
+                      <img src="img/driver4.png" class="rounded" width="304" height="236">
+                    </div>
+                    <div class="picture"></div>
+                    <p class="ctn"></p>
+                    <hr>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <form id="edit_user_profile"  action="update_driver_infos" method="POST">
+                    <div class="form-group">
+                      <label>License Expiration Date</label>
+                      <input type="date" data-format="dd/MM/yyyy" class="form-control is-valid" id="license_expiration_date" name="license_expiration_date">
+                    </div>
+                    <div class="form-group">
+                      <label>License Type</label>
+                      <input type="text" class="form-control is-valid" id="type_of_license" name="type_of_license">
+                    </div>
+                    <div class="form-group">
+                      <label>Pin</label>
+                      <input type="text" class="form-control is-valid" id="pin" name="pin_number">
+                    </div>
+                    <div class="form-group">
+                      <label>Physical</label>
+                      <input type="text" class="form-control is-valid" id="physical" name="physical">
+                    </div>
+                    <div class="form-group">
+                      <label>Contact</label>
+                      <input type="text" class="form-control is-valid" id="contact" name="contact">
+                    </div>
+                    <div class="form-group">
+                      <label>Address</label>
+                      <input type="text" class="form-control is-valid" id="address" name="address">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+      <!-- my request -->
+      <div class="modal fade my_request" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" style="max-width: 100%;">
+        <div class="modal-content justify-content-center">
+          <div class="modal-header" style="background-color:#56ab2f">
+            <h5 class="modal-title" id="exampleModalLabel">My Schedule</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body req_box_height">
+              <div class="row req_body">
+                <div class="col-lg-4">
+                  <center><h1 style="color:#000">REQUESTS</h1></center>
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                      </tr>
+                    </thead>
+                    <tbody class="users_request"></tbody>
+                  </table>
+                </div>
+                <div class="col-lg-8">
+                  <center><h1 style="color:#000">DETAIL</h1></center>
+                  <div class="users_request_detail"></div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      </div>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="glass">
+                <form>
+                  <div class="form-group col-md-4">
+                    <label >Destination</label>
+                    <input type="text" class="form-control"  placeholder="destination" name="destination" required >
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label >Number of Passengers</label>
+                    <input type="number" class="form-control"  placeholder="Number of Passengers" name="number_of_passengers" required >
+                  </div>
+                  <div class="form-group col-md-4">
+                    <button type="submit" class="btn btn-success btn-block">submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-6 fleet">
+              <div class="glass">
+                <center><h3>Available Shuttle(s)</h3></center>
+                <div class="available_vehicle">
+                  <!-- <center><h3>Available Shuttle(s)</h3></center> -->
+                </div>
+                <center><h3>Unavailable Shuttle(s)</h3></center>
+                <div class="unavailable_vehicle">
+                  <!-- <center><h3>Unavailable Shuttle(s)</h3></center> -->
+                </div>
+                <div class="add_new_shuttle_box">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".add_new_shuttle_modal">Add New Shuttle</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade shuttle_infos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color:#56ab2f;color:#fff">
+                <h5 class="modal-title" id="exampleModalLabel">Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="shuttle_info"></div>
+                    <!-- <p>Driver Firstname: <span id="driver_fname_at_driver_info"></span></p>
+                    <p>Driver Lastname: <span id="driver_lname_at_driver_info"></span></p> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- add new shuttle -->
+        <div class="modal fade add_new_shuttle_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color:#56ab2f;color:#fff">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Shuttle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-12">
+                    <form id="add_new_shuttle" action="add_new_shuttle" method="post">
+                      <div class="form-group">
+                        <label >Vehicle Number</label>
+                        <input type="text" class="form-control"  placeholder="vehicle_number" name="vehicle_number" required >
+                      </div>
+                      <div class="form-group">
+                        <label>Number of Passengers</label>
+                        <input type="number" class="form-control"  placeholder="Number of Passengers" name="seat_number" required >
+                      </div>
+                      <div class="form-group">
+                        <label>Last Inspection Date</label>
+                        <input type="date" class="form-control"  placeholder="inspection_date" name="inspect_date" required >
+                      </div>
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-success btn-block">submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+      <script>
+        $(document).ready(function(){
+          get_user_info();
+          my_request();
+          get_unavailable_shuttle()
+          get_available_shuttle();
+        });
+        function get_available_shuttle(){
+          $.ajax({
+            type: "POST",
+            url: "get_vehicles",
+            success: function(data) {
+              var results = data.success;
+               console.log(results);
+              for (var i = results.length-1; i >=0; i--) {
+                var shuttle_details = $("<div class='car_box'><p class='vehicle_number'>#" + results[i].vehicle_number + "</p><p class='seats_number'>Seats: "+ results[i].seat_number+"</p></div>");
+                $(".available_vehicle").append(shuttle_details);
+                shuttle_details.click({inspect_date: results[i].inspect_date, shuttle_num:results[i].vehicle_number, seat:results[i].seat_number, id:results[i].vehicle_id}, function(e){
+                  var data = e.data;
+                  $(".shuttle_info").empty();
+                  $(".shuttle_info").append("<table class='table'><tbody><tr><td>Shuttle Number</td><td>"+(data.shuttle_num===null?"":data.shuttle_num)+"</td></tr>"
+                  +"<tr><td>Number of Seat</td><td>"+(data.seat===null?"":data.seat)+"</td></tr>"
+                  +"<tr><td>Last Maintenance Date</td><td>"+(data.inspect_date===null?"":moment(data.inspect_date).format("L"))+"</td></tr>"
+                  +"</tbody></table>");
+                  var remove_shuttle = $("<form id='remove_shuttle' action='remove_shuttle' method='post'><input type='hidden' value='"+data.id+"'name='vehicle_id'><button class='btn btn btn-danger remove_shuttle_fleet'>take #"+data.shuttle_num+" out of the fleet</button></form>");
+                  $(".shuttle_info").append(remove_shuttle);
+                  $(".shuttle_infos").modal();
+                });
+              }
+            },
+            error: function (textStatus, errorThrown) {
+              alert("Request failed!");
+            }
+          });
+        }
+        function get_unavailable_shuttle(){
+          $.ajax({
+            type: "POST",
+            url: "get_unavailable_shuttle",
+            success: function(data) {
+              var results = data.success;
+               console.log(results);
+              for (var i = results.length-1; i >=0; i--) {
+                var shuttle_details = $("<div class='car_box'><p class='vehicle_number'>#" + results[i].vehicle_number + "</p><p class='seats_number'>Seats: "+ results[i].seat_number+"</p></div>");
+                $(".unavailable_vehicle").append(shuttle_details);
+                shuttle_details.click({inspect_date: results[i].inspect_date, shuttle_num:results[i].vehicle_number, seat:results[i].seat_number, id:results[i].vehicle_id}, function(e){
+                  var data = e.data;
+                  $(".shuttle_info").empty();
+                  $(".shuttle_info").append("<table class='table'><tbody><tr><td>Shuttle Number</td><td>"+(data.shuttle_num===null?"":data.shuttle_num)+"</td></tr>"
+                  +"<tr><td>Number of Seat</td><td>"+(data.seat===null?"":data.seat)+"</td></tr>"
+                  +"<tr><td>Last Maintenance Date</td><td>"+(data.inspect_date===null?"":moment(data.inspect_date).format("L"))+"</td></tr>"
+                  +"</tbody></table>");
+                  var add_shuttle = $("<form id='add_shuttle_back_fleet' action='add_shuttle_back_fleet' method='post'><input type='hidden' value='"+data.id+"'name='vehicle_id'><button class='btn btn btn-success add_shuttle_back'>add #"+data.shuttle_num+" to availlable fleet</button></form>");
+                  $(".shuttle_info").append(add_shuttle);
+                  $(".shuttle_infos").modal();
+                });
+              }
+            },
+            error: function (textStatus, errorThrown) {
+              alert("Request failed!");
+            }
+          });
+        }
+        function get_user_info(){
+          $.ajax({
+            url: 'get_users',
+            type: 'POST',
+            success: function(data){
+              var results = data.success;
+              console.log(JSON.stringify(results));
+              console.log('nulls');
+              var dob = moment(results[0].dob).format("L");
+              var license_expiration_date = moment(results[0].license_expiration_date).format("MMM Do YY");
+                $(".ctn").append("<span>"+results[0].last_name+", "+results[0].first_name+"</span>");
+                var user_info = $("<tbody><tr><td>Name: "+(results[0].first_name=== null?" ":results[0].first_name)+" "+results[0].last_name+"</td></tr>"
+                +"<tr><td>D.O.B: "+(results[0].dob === null ? " ":dob)+"</td></tr>"
+                +"<tr><td>Licence Expiration Date: "+(results[0].license_expiration_date=== null?" ":license_expiration_date)+"</td></tr>"
+                +"<tr><td>Licenece Type: "+(results[0].type_of_license === null ? " ":results[0].type_of_license)+"</td></tr>"
+                +"<tr><td>Physical: "+(results[0].physical===null?" ":results[0].physical)+"</td></tr>"
+                +"<tr><td>PIN: "+(results[0].pin_number===null?" ":results[0].pin_number)+"</td></tr>"
+                +"<tr><td>Telephone: "+(results[0].contact===null?" ":results[0].contact)+"</td></tr>"
+                +"<tr><td>Address: "+(results[0].address===null?" ":results[0].address)+"</td></tr>"
+                +"</tbody>");
+                $(".users_table_content").append(user_info);
+            }
+          });
+        }
+        $(".edit_user_profile").click(function(){
+          $.ajax({
+            url: "get_driver_info",
+            type: "POST",
+            success: function(data) {
+              var results = data.success;
+              console.log("user");
+              console.log(results);
+              var license_expiration_date = moment(results[0].license_expiration_date).format("MMM Do YY");
+              $("#license_expiration_date").val(license_expiration_date);
+              $("#type_of_license").val(results[0].type_of_license);
+              $("#contact").val(results[0].contact);
+              $("#address").val(results[0].address);
+              $("#pin").val(results[0].pin_number);
+              $("#physical").val(results[0].physical);
+            },
+            error: function (textStatus, errorThrown) {
+              alert("Request failed!");
+            }
+          });
+          //get_user_info();
+        });
+        //get driver request
+        function my_request(){
+          $.ajax({
+            url: "get_driver_request",
+            type: "POST",
+            success: function(data) {
+              var results = data.success;
+              console.log("requests");
+              console.log(results);
+              if(results.length<1){
+                $(".req_box_height").empty();
+                $(".req_box_height").append("<center><h1>You have no request</h1></center>");
+              } else{
+                for(var i=0;i<results.length;i++){
+                  var start_date = moment(results[i].start).format('MMM Do h:mm A');
+                  var end_date = moment(results[i].end).format('MMM Do h:mm A');
+                  var my_request_list = $("<tbody><tr class='table-secondary'><td><p>Destination: "+(results[i].destination=== null?" ":results[i].destination)+"</p>"+"<p>Start: "+(results[i].start=== null?" ":start_date)+" End: "+(results[i].end=== null?" ":end_date)+"</p></td></tr></tbody>");
+                  $(".users_request").append(my_request_list);
+                  var details = $("<div class='more_details' id='dtl"+i+"' style='display:none'><table class='table'><tbody><tr class='table-secondary'><td>Destination: "
+                  +(results[i].destination=== null?' ':results[i].destination)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Start: "+(start_date=== null?' ':start_date)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>End: "+(end_date === null?' ':end_date)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Departure Location: "+(results[i].departure_location=== null?' ':results[i].departure_location)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Arrival Location: "+(results[i].arrival_location=== null?' ':results[i].arrival_location)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Estimated Time of Arrival: "+(results[i].estimate_arrival=== null?' ':results[i].estimate_arrival)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>loop_service: "+(results[i].loop_service=== null?' ':results[i].loop_service)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Return Time: "+(results[i].return_time=== null?' ':results[i].return_time)+"</td></tr>"
+                  +"<tr class='table-secondary'><td>Return Location: "+(results[i].return_location=== null?' ':results[i].return_location)+"</td></tr>"
+                  +"</tbody></table>");
+                  $(".users_request_detail").append(details);
+                  my_request_list.click({target:details},function(e){
+                     $(".more_details").hide();
+                      $(e.data.target).show();
+                  });
+                }
+                $(".my_req_bgc").css('backgroundColor', 'red');
+              }
+            },
+            error: function (textStatus, errorThrown) {
+              alert("Request failed!");
+            }
+          });
+          //get_user_info();
+        }
+        $(document).on('submit', '#add_new_shuttle', function(e) {
+             $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(html) {
+                location.reload();
+                }
+            });
+            e.preventDefault();
+        });
+
+        $(document).on('submit', '#add_shuttle_back_fleet', function(e) {
+             $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(html) {
+                location.reload();
+                }
+            });
+            e.preventDefault();
+        });
+        $(".add_shuttle_back").click(function(){
+          $("#add_shuttle_back_fleet").submit();
+        });
+        $(document).on('submit', '#remove_shuttle', function(e) {
+             $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: $(this).serialize(),
+                success: function(html) {
+                location.reload();
+                }
+            });
+            e.preventDefault();
+        });
+        $(".remove_shuttle_fleet").click(function(){
+          $("#remove_shuttle").submit();
+        });
+
+      </script>
+
+</body>

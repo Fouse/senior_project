@@ -9,6 +9,7 @@ var credentials = require("./credentials");
 var handlebars = require('express-handlebars').create({defaultLayout:"main"});
 var expressValidator = require('express-validator');
 var bcrypt = require('bcryptjs');
+var randomstring = require("randomstring");
 const saltRounds = 10;
 var passport = require("passport");
 
@@ -52,6 +53,10 @@ app.get("/week_schedule", function(req, res) {
 	res.render("week_schedule");
 });
 
+app.get("/about", function(req, res) {
+	res.render("about");
+});
+
 app.get("/admin", function(req, res) {
   if(req.session.role){res.render("admin");}
   else {res.render("user");}
@@ -63,80 +68,95 @@ app.get("/login", function(req, res) {
 	res.render("login");
 });
 app.get("/my_graph", function(req, res) {
-	res.render("my_graph");
+  res.render("my_graph");
+});
+app.get("/driver_form", function(req, res) {
+	res.render("driver_form");
+});
+app.get("/van_form", function(req, res) {
+	res.render("van_form");
 });
 app.get("/welcome_new_user", function(req, res) {
   if(req.session.role){res.render("welcome_new_user");}
   else{res.render("home");}
 });
 app.get("/view_schedule", function(req, res) {
-	res.render("view_schedule");
+	if(req.session.role){res.render("view_schedule");}
+  else{res.render("home");}
 });
 
 app.get("/bus_rental_form", function(req, res) {
 	res.render("bus_rental_form");
 });
-app.get("/bus_rental_request", function(req, res) {
-  var link = req.query.link;
-  var details
-  var sql = "SELECT * FROM requests WHERE request_id = "+link;
-  console.log(sql);
-  con.query(sql, (err, results)=>{
-    if(err) throw err;
-    res.render("bus_rental_request",{
-      id:results[0].request_id,
-      start: results[0].start,
-      end: results[0].end,
-      destination: results[0].destination,
-      num_passengers: results[0].num_passengers,
-      departure_location: results[0].departure_location,
-      arrival_location: results[0].arrival_location,
-      estimate_arrival:results[0].estimate_arrival,
-      return_time:results[0].return_time,
-      hotel_name:results[0].hotel_name,
-      hotel_address:results[0].hotel_address,
-      hotel_num:results[0].hotel_num,
-      hotel_directions:results[0].hotel_directions,
-      return_location:results[0].return_location,
-      event_person:results[0].event_person,
-      comment:results[0].comment
-    });
-  });
+
+app.get("/maintenance", function(req, res) {
+  if(req.session.role){res.render("maintenance");}
+  else {res.render("login");}
 });
 
-// app.post("/get_drivers", function(req, res) {
-//   var sql="SELECT * FROM drivers WHERE driver_id NOT IN ( SELECT driver_id FROM tmp_requests WHERE now() BETWEEN start AND end);";
-//         con.query(sql, function(err, results) {
-//          if (err) throw err;
-//            res.send({success: results});
-// //con.end();
-//    });
-// });
-// free drivers once an assigned request is done
- // app.post("/free_drivers", (req, res) => {
- //  var sql="UPDATE drivers SET availability='1' WHERE driver_id IN (SELECT driver_id FROM tmp_requests  WHERE now() >= end);";
- //        con.query(sql, (err, results) => {
-	// 				//console.log(sql);
- //         if (err){res.send({success: false});}
-	// 			 else{res.send({success: true});}
- //   });
- // });
+app.get("/forgot_password", function(req, res) {
+	res.render("forgot_password");
+});
+app.get("/bus_rental_request", function(req, res) {
+  // if(req.session.request_id ){
+  // console.log(req.session.request_id);
+    var link = req.query.link;
+    var pwdLink = req.query.pwd;
+    var details
+    var sql = "SELECT * FROM requests WHERE request_id = "+link;
+    console.log(sql);
+    con.query(sql, (err, results)=>{
+      if(err) throw err;
+      if(pwdLink === results[0].link){
+        res.render("bus_rental_request",{
+          id:results[0].request_id,
+          start: results[0].start,
+          end: results[0].end,
+          destination: results[0].destination,
+          num_passengers: results[0].num_passengers,
+          departure_location: results[0].departure_location,
+          arrival_location: results[0].arrival_location,
+          estimate_arrival:results[0].estimate_arrival,
+          return_time:results[0].return_time,
+          hotel_name:results[0].hotel_name,
+          hotel_address:results[0].hotel_address,
+          hotel_num:results[0].hotel_num,
+          hotel_directions:results[0].hotel_directions,
+          return_location:results[0].return_location,
+          event_person:results[0].event_person,
+          comment:results[0].comment,
+          requester_email:results[0].request_email,
+          requester_name:results[0].auth_name
+
+        });
+      }else {
+        //show error
+        res.render("bus_rental_request");
+      }
+    });
+  // } else{
+  //   res.redirect("/pointlift");
+  // }
+});
 
  app.post("/create_user", (req, res)=>{
-   req.checkBody('first_name', 'first name cannot be empty.').notEmpty();
-   req.checkBody('last_name', 'last name cannot be empty.').notEmpty();
+   req.checkBody('first_name', 'First name cannot be empty.').notEmpty();
+   req.checkBody('last_name', 'Last name cannot be empty.').notEmpty();
    req.checkBody('email', 'The email you have entered is invalid, please try again.').isEmail();
-   req.checkBody('password', 'password must be between 4-100 characters long, please try again.').len(4, 100);
-   req.checkBody('password', 'password cannot be empty.').notEmpty();
+   req.checkBody('password', 'Password must be between 4-100 characters long, please try again.').len(4, 100);
+   req.checkBody('password', 'Password cannot be empty.').notEmpty();
+   req.checkBody('reEnterPassword', 'Re-Enter Password must be between 4-100 characters long, please try again.').len(4, 100);
+   req.checkBody('reEnterPassword', 'Re-Enter Password cannot be empty.').notEmpty();
+   req.checkBody('reEnterPassword', 'Passwords do not match.').equals(req.body.password);
    var errors = req.validationErrors();
    if(errors){
-     // console.log(`errors: ${JSON.stringify(errors)}`);
      res.render('register_page', {errors: errors});
    }else {
      var first_name = req.body.first_name;
      var last_name = req.body.last_name;
      var email = req.body.email;
      var password = req.body.password;
+     var reEnterPassword = req.body.reEnterPassword;
      var dob = req.body.dob;
      var position = req.body.position;
      bcrypt.genSalt(10, function(err, salt) {
@@ -211,7 +231,8 @@ app.get("/bus_rental_request", function(req, res) {
              req.session.user_id = results[0].user_id;
              req.session.role = results[0].role;
              // req.session.is_new_user = results[0].is_new_user;
-             req.session.cookie.maxAge = 9000000;
+             //req.session.cookie.maxAge = 9000000;
+             req.session.cookie.maxAge = (5 * 86400000);
              res.redirect(303,"user");
            }
          });
@@ -220,23 +241,6 @@ app.get("/bus_rental_request", function(req, res) {
     }
  });
 
- // app.get("/user", (req, res) => {
- //   console.log(req.user);
- //   console.log(req.isAuthenticated());
- //   //if(req.session.user_id){
- //     var sql = "SELECT first_name, last_name FROM users WHERE user_id=?";
- //     con.query(sql, [req.session.user_id], function(err, results){
- //       if(err){
- //         throw err;
- //       }
- //       if(results[0]){
- //         console.log(JSON.stringify(results));
- //         var user_info = {fname:results[0].first_name, lname:results[0].last_name}
- //         res.render("user", user_info);
- //       }
- //     });
- //   //}
- // });
 app.get("/user", (req, res)=>{
   if(req.session.user_id){
     var sql = "SELECT first_name, last_name, role, dob, email FROM users WHERE user_id=?;";
@@ -261,6 +265,9 @@ app.get("/user", (req, res)=>{
           else if(result[0].role === 'driver'){
             res.render("user",info);
           }
+          else if(result[0].role === 'maintenance'){
+            res.render("maintenance",info);
+          }
           else if(result[0].role === 'viewer'){
             res.render("view_schedule" ,info);
           }
@@ -279,9 +286,78 @@ app.get("/user", (req, res)=>{
 
 app.get("/logout", function(req, res){
   delete req.session.user_id;
-  delete req.session.is_admin;
-  res.render("home");
+  delete req.session.is_admin
+  delete req.session.request_id;
+  res.redirect("/pointlift");
 });
+//find user email at reset password
+app.post("/find_user_email", (req, res)=>{
+  var email = req.body.email;
+    var sql = "SELECT first_name, user_id FROM users WHERE email=?";
+    console.log(sql);
+    console.log(email);
+    con.query(sql, [email] ,(err, results)=>{
+      if (err){
+        res.send({success:false});
+      }else{
+        res.send({success:results});
+      }
+
+    });
+});
+app.post("/reset_password", (req, res)=>{
+  req.checkBody('password', 'Password must be between 4-100 characters long, please try again.').len(4, 100);
+  req.checkBody('password', 'Password cannot be empty.').notEmpty();
+  req.checkBody('reEnterPassword', 'Re-Enter Password must be between 4-100 characters long, please try again.').len(4, 100);
+  req.checkBody('reEnterPassword', 'Re-Enter Password cannot be empty.').notEmpty();
+  req.checkBody('reEnterPassword', 'Passwords do not match.').equals(req.body.password);
+  var errors = req.validationErrors();
+  if(errors){
+    console.log(errors)
+    res.render('reset_password', {errors: errors});
+  }else{
+    var password = req.body.password;
+    var user_id = req.body.user_id;
+    console.log(user_id);
+    console.log(password);
+    bcrypt.genSalt(10, function(err, salt) {
+      bcrypt.hash(password, salt, function(err, hash) {
+        console.log(salt);
+         var sql = "UPDATE users SET password=?, salt=? WHERE user_id=?"
+         var values = [hash, salt, user_id];
+         con.query(sql, values, (err, results)=>{
+           if(err){
+             throw err;
+           } else{
+             console.log("passwor updated with success!");
+             res.render("login");
+           }
+         });
+      });
+    });
+  }
+});
+
+//print requests of the date
+app.post("/print_request_of_aDay", (req, res)=>{
+  var from = req.body.from;
+  var to = req.body.to;
+  console.log("from: "+from);
+  console.log("to: "+to);
+  sql="select r.request_id, r.start, r.end, r.request_department, vhd.drivers_driver_id, vhd.vehicles_vehicle_id, d.driver_fname, d.driver_lname, v.vehicle_number from requests r join vehicles_has_drivers vhd on r.request_id = vhd.requests_request_id join drivers d on vhd.drivers_driver_id = d.driver_id join vehicles v on vhd.vehicles_vehicle_id = v.vehicle_id and r.isapproved = 1 and r.start between ? and ?";
+  console.log(sql);
+  con.query(sql, [req.body.from, req.body.to], (err, results)=>{
+    if(err){
+      throw err;
+    }
+    else{
+      res.send({success:results});
+    }
+  });
+
+});
+
+
 //get bus company_contact info
 app.post("/get_bus_company_contact", (req, res)=>{
   if(req.session.user_id){
@@ -293,10 +369,35 @@ app.post("/get_bus_company_contact", (req, res)=>{
     });
   }
 });
+
+//update bus company_contact info
+app.post("/update_bus_company_contact", (req, res)=>{
+  if(req.session.user_id){
+    console.log(req.session.user_id);
+    var sql = "UPDATE bus_company_contact SET ";
+    var firstcondition= true;
+    for (var property in req.body) {
+      var value = req.body[property];
+      if (value !== "") {
+        if (firstcondition) {
+          firstcondition = false;
+        } else {sql += ", "}
+//q +=  property+ " = " + '"'+value+'"';
+      sql +=  property+ " = " + mysql.escape(value);
+      }
+    }
+      sql += " WHERE id = 1;";
+      console.log(sql);
+    con.query(sql ,(err, results)=>{
+      if(err) res.send({success: false});
+      res.send({success:true});
+    });
+  }
+});
 app.post("/bus_request", function(req, res){
 //console.log(req.body);
-var sql = "INSERT INTO requests (destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
-var values = [req.body.destination,req.body.start,req.body.end,
+var sql = "INSERT INTO requests (title,destination, start, end, num_passengers, departure_location, arrival_location, estimate_arrival, return_time, hotel_name, hotel_address, hotel_num, hotel_directions, return_location, event_person, event_person_num, request_department, request_email, auth_name, budget_num, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.title,req.body.destination,req.body.start,req.body.end,
               req.body.num_passengers,req.body.departure_location, req.body.arrival_location,
               req.body.estimate_arrival,req.body.return_time,req.body.hotel_name,
               req.body.hotel_address,req.body.hotel_num,req.body.hotel_directions,
@@ -313,55 +414,142 @@ var values = [req.body.destination,req.body.start,req.body.end,
         var to = req.body.request_email;
         var auth_name = req.body.auth_name;
         var id =results.insertId;
-        console.log("last request id inserted: "+results.insertId);
-        function send_mail(email_option){
-          smtpTransport.sendMail(email_option, (error, response)=>{
-            if(error){
-                console.log("msg err"+error);
-             }else{
-                console.log("Message sent");
+        var random_link = randomstring.generate(30);
+          console.log(random_link);
+          var sql3 = "UPDATE requests SET link = ? WHERE request_id=?";
+          var values = [random_link, id];
+          console.log(sql3);
+          con.query(sql3, values, (err, results)=>{
+            if (err){
+              throw err;
+            } else{
+              var sql4 = "SELECT * from bus_company_contact WHERE id =1"
+              con.query(sql4, (err, results)=>{
+                if(err){
+                  throw err;
+                } else{
+                  console.log("request id: ", id);
+                  req.session.request_id = id;
+                  req.session.cookie.maxAge = (5 * 86400000);
+                  console.log(req.session.request_id);
+                  var b_company_email = results[0].email;
+                  var b_company_fname = results[0].fname;
+                  var b_company_lname = results[0].lname;
+                  console.log(b_company_email + b_company_fname + b_company_lname);
+                  console.log("last request id inserted: "+id);
+                  function send_mail(email_option){
+                    smtpTransport.sendMail(email_option, (error, response)=>{
+                      if(error){
+                          console.log("msg err"+error);
+                       }else{
+                          console.log("Message sent");
+                      }
+                     smtpTransport.close();
+                   });
+                  }
+                  let bus_company_email = {
+                    from: 'fousseini.test@gmail.com',
+                    to: b_company_email,
+                    subject: 'Pointlift',
+                    text: "blala",
+                    html: "<p>Hello "+b_company_fname+",</p><p>You have a new bus request from Point Park University <a href='https://fkonat.it.pointpark.edu/pointlift/bus_rental_request?link="+id+"&pwd="+random_link+"'>Please click here for more detail.</a></p>"
+                   };
+                   send_mail(bus_company_email);
+                   let requester_email = {
+                     from: 'fousseini.test@gmail.com',
+                     to: to,
+                     subject: 'Pointlift',
+                     text: "balal",
+                     // html: "<p>your request has been sent with success</p>"
+                     html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Thank you '+auth_name+',</td></tr><tr><td style="padding: 20px 0 30px 0;">Your request has been sent with success!</td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
+                    };
+                    send_mail(requester_email);
+                }
+              });
             }
-           smtpTransport.close();
-         });
-        }
-        let bus_company_email = {
-          from: 'fousseini.test@gmail.com',
-          to: "konatef06@gmail.com",
-          subject: 'Pointlift',
-          text: "blala",
-          html: "<p>You have a new bus request from Point Park University.<a href='https://fkonat.it.pointpark.edu/pointlift/bus_rental_request?link="+id+"'>Please click here for more detail</a></p>"
-         };
-         send_mail(bus_company_email);
-         let requester_email = {
-           from: 'fousseini.test@gmail.com',
-           to: to,
-           subject: 'Pointlift',
-           text: "balal",
-           // html: "<p>your request has been sent with success</p>"
-           html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Thank you '+auth_name+',</td></tr><tr><td style="padding: 20px 0 30px 0;">Your request has been sent with success!</td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
-          };
-          send_mail(requester_email);
-        //  smtpTransport.sendMail(bus_company_email,requester_email, (error, response)=>{
-        //    if(error){
-        //        console.log("msg err"+error);
-        //     }else{
-        //        console.log("Message sent");
-        //    }
-        //   smtpTransport.close();
-        // });
+          });
       }
     }
-        res.redirect("home");
+         res.redirect("/pointlift");
   });
 });
 
+//post van form data to database
+app.post("/submit_request", function(req, res){
+ var sql = "INSERT INTO requests (title, start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, request_department, budget_num, auth_name, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+ var values = [req.body.title,req.body.start,req.body.end,req.body.num_passengers,
+               req.body.destination,req.body.departure_location,req.body.arrival_location,
+               req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+               req.body.request_department,req.body.budget_num,req.body.auth_name,
+               req.body.request_email,req.body.comment];
+               con.query(sql, values, function(err, results) {
+                 if (err) throw err;
+                 res.redirect("/pointlift");
+               });
+             });
+
+//post driver form data to database
+app.post("/submit_request2", function(req, res){
+//console.log(req.body);
+var sql = "INSERT INTO requests (title,start, end, num_passengers, destination, departure_location, arrival_location, estimate_arrival, return_time, loop_service, directions, trip_purpose, auth_name, budget_num, request_email, comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+var values = [req.body.title,req.body.start,req.body.end,req.body.num_passengers,
+             req.body.destination,req.body.departure_location,req.body.arrival_location,
+             req.body.estimate_arrival,req.body.return_time,req.body.loop_service,
+             req.body.directions,req.body.trip_purpose,req.body.auth_name,
+             req.body.budget_num,req.body.request_email,req.body.comment];
+       con.query(sql, values, function(err, results) {
+         if (err) throw err;
+  //console.log(results);
+           res.redirect("/pointlift");
+          //con.end();
+             });
+          });
+
 
 app.post("/request_approve_by_bcompany", (req, res)=>{
+  console.log("req id: "+req.body.request_id);
+  console.log("requester email: "+req.body.requester_email);
+  console.log("requester name: "+req.body.requester_name);
+  var requester_name = req.body.requester_name;
+  var requester_email = req.body.requester_email;
     var sql = "UPDATE requests SET bus_company = ?, ref_num = ?, bus_driver=?, bus_num=?, bus_driver_phone=?, bus_phone=?, emergency_contact=? WHERE request_id=?;";
-    var values =[req.body.bus_company, req.body.ref_num, req.body.bus_driver, req.body.bus_num, req.body.bus_driver_phone, req.body.bus_phone, req.body.emergency_contact,];
+    var values =[req.body.bus_company, req.body.ref_num, req.body.bus_driver, req.body.bus_num, req.body.bus_driver_phone, req.body.bus_phone, req.body.emergency_contact,req.body.request_id];
+    console.log(values);
+    console.log(sql);
     con.query(sql, values ,(err, results)=>{
-      if(err) res.send({success: false});
-      res.send({success:results});
+      if(err){
+        throw err;
+        res.send({success: false});
+      }else{
+        var sql2 = "UPDATE requests SET approved_by_bCompany = 1 WHERE request_id= "+req.body.request_id;
+        console.log(sql2);
+        con.query(sql2, (err, results)=>{
+          if(err){
+            throw err;
+          } else{
+            function send_mail(email_option){
+              smtpTransport.sendMail(email_option, (error, response)=>{
+                if(error){
+                    console.log("msg err"+error);
+                 }else{
+                    console.log("Message sent");
+                }
+               smtpTransport.close();
+             });
+            }
+            let approved_request_by_bCompany = {
+              from: 'fousseini.test@gmail.com',
+              to: requester_email,
+              subject: 'Pointlift',
+              text: "Dear "+requester_name,
+              html: '<div><table cellpadding="0" cellspacing="0" width="100%"><tr><td><table align="center" cellpadding="0" cellspacing="0" width="600"><tr><td align="center" style="padding: 40px 0 30px 0;"><img src="http://www.pointpark.edu/About/AdminDepts/PhysicalPlantFacilities/media/About/AdminDeptPhysPlant/Transportation/transportationbanner.jpg" alt="Pointlift" width="600" height="250px" style="display: block;" /></td></tr><tr><td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td>Dear '+requester_name+',</td></tr><tr><td style="padding: 20px 0 30px 0;">Your request has been approved by the bus company. </td></tr><tr></tr></table></td></tr><tr><td bgcolor="green" style="padding: 30px 30px 30px 30px;"><table cellpadding="0" cellspacing="0" width="100%"><tr><td><a href="http://fkonat.it.pointpark.edu:3000/">&reg; Pointlift<br/></a></td></tr></table></td></tr></table></td></tr></table></div>'
+             };
+             send_mail(approved_request_by_bCompany);
+            console.log("successfully approved by the company");
+          }
+        });
+      }
+      res.redirect("/pointlift");
     });
 });
 
@@ -391,11 +579,34 @@ app.post("/request_approve_by_bcompany", (req, res)=>{
    // if(req.session.user_id){
    console.log(req.session.user_id);
    console.log("user: "+ req.body.user_id);
-     console.log("position: "+ req.body.position);
+   console.log("position: "+ req.body.position);
+   console.log("email: "+ req.body.email);
+   console.log("first_name: "+ req.body.first_name);
      var sql = "UPDATE users set role='"+req.body.position+"' where user_id="+req.body.user_id;
      console.log(sql);
      con.query(sql, (err, results)=>{
-       if(err) res.send({success: false});
+       if(err) {
+         res.send({success: false});
+       }else{
+         function send_mail(email_option){
+           smtpTransport.sendMail(email_option, (error, response)=>{
+             if(error){
+                 console.log("msg err"+error);
+              }else{
+                 console.log("Message sent");
+             }
+            smtpTransport.close();
+          });
+         }
+         let approve_new_user = {
+           from: 'fousseini.test@gmail.com',
+           to: req.body.email,
+           subject: 'Pointlift',
+           text: "Dear "+req.body.first_name,
+           html: "<p>Dear "+req.body.first_name+",</p><p>Your account has been approved!!, <a href='https://fkonat.it.pointpark.edu/pointlift/login'>Please click here to login.</a></p>"
+          };
+          send_mail(approve_new_user);
+       }
        res.send({success: true});
      });
    //}
@@ -471,7 +682,7 @@ app.post("/get_vehicles", (req, res) => {
 });
 //get requests status
 app.post("/get_reqs_status", (req, res) => {
-		var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1";
+		var sql="SELECT drivers.*, vehicles.*, requests.* FROM vehicles_has_drivers LEFT OUTER JOIN requests ON requests.request_id = vehicles_has_drivers.requests_request_id LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.isapproved=1;"
         con.query(sql, (err, results) => {
           if (err){res.send({success: false});} else {res.send({success: results});}
 					 //console.log(JSON.stringify(results));
@@ -481,14 +692,14 @@ app.post("/get_reqs_status", (req, res) => {
 
 //get requests ongoing
 app.post("/get_reqs_ongoing", (req, res) => {
-		var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1 AND now() BETWEEN start AND end";
+		var sql="SELECT drivers.*, vehicles.*, requests.* FROM vehicles_has_drivers LEFT OUTER JOIN requests ON requests.request_id = vehicles_has_drivers.requests_request_id LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.isapproved=1 AND now() BETWEEN start AND end";
         con.query(sql, (err, results) => {
           if (err){res.send({success: false});} else {res.send({success: results});}
    });
 });
 //get req Completed
 app.post("/get_reqs_completed", (req, res) => {
-		var sql="SELECT requests.*, vehicles_has_requests.*, drivers_has_requests.*, drivers.*, vehicles.* FROM requests  LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN drivers ON drivers_has_requests.drivers_driver_id = drivers.driver_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id LEFT OUTER JOIN vehicles ON vehicles_has_requests.vehicles_vehicle_id = vehicles.vehicle_id WHERE isapproved=1 AND now() >= end";
+		var sql="SELECT drivers.*, vehicles.*, requests.* FROM vehicles_has_drivers LEFT OUTER JOIN requests ON requests.request_id = vehicles_has_drivers.requests_request_id LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.isapproved=1 AND now() >= end";
         con.query(sql, (err, results) => {
          if (err){res.send({success: false});} else {res.send({success: results});}
 					 //console.log(JSON.stringify(results));
@@ -504,18 +715,31 @@ app.post("/mark_completed_reqs", (req, res) => {
 });
 //get availlable drivers when selecting driver after an approved request
 app.post("/get_availlable_drivers", (req, res)=> {
-    var sql = "SELECT drivers.* FROM drivers WHERE (drivers.position='driver' OR drivers.position='maintenance') AND (drivers.position='driver' OR drivers.position='maintenance') AND drivers.driver_id NOT IN ( SELECT drivers_has_requests.drivers_driver_id FROM requests LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (? >= start));"
+    var sql = "SELECT drivers.* FROM drivers WHERE drivers.availability=1 AND drivers.driver_id  NOT IN (SELECT vehicles_has_drivers.drivers_driver_id FROM vehicles_has_drivers  LEFT OUTER JOIN  requests ON  requests.request_id = vehicles_has_drivers.requests_request_id  LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id WHERE (drivers.position='driver '  OR drivers.position='maintenance') AND requests.request_id is not null and  (? <= end) AND (? >= start));"
     var values = [req.body.event_end, req.body.event_start];
         con.query(sql, values, (err, results)=> {
           console.log("availlable driver: "+req.body.event_start, req.body.event_end);
          if (err){throw err; res.send({success: false});} else {res.send({success: results});}
    });
 });
+
+//look for vehicle to reasign a requests
+app.post("/look_for_vehicle_at_reasign", (req, res)=> {
+    var sql = "SELECT vehicles.* FROM vehicles WHERE vehicles.vehicle_id  NOT IN (SELECT vehicles_has_drivers.vehicles_vehicle_id FROM vehicles_has_drivers  LEFT OUTER JOIN  requests ON  requests.request_id = vehicles_has_drivers.requests_request_id  LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.request_id is not null and  (? <= Start or  ? >= End));"
+    var values = [req.body.event_end,req.body.event_start];
+    console.log(sql);
+        con.query(sql, values, (err, results)=> {
+          console.log(sql);
+          console.log(req.body.event_start, req.body.event_end);
+         if (err){throw err; res.send({success: false});} else {res.send({success: results});}
+   });
+});
 //look for driver to reasign a requests
 app.post("/look_for_driver_at_reasign", (req, res)=> {
-    var sql = "SELECT drivers.* FROM drivers WHERE (drivers.position='driver' OR drivers.position='maintenance') AND (drivers.position='driver' OR drivers.position='maintenance') AND drivers.driver_id NOT IN ( SELECT drivers_has_requests.drivers_driver_id FROM requests LEFT OUTER JOIN drivers_has_requests ON drivers_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (? >= start));"
+    var sql = "SELECT drivers.* FROM drivers WHERE drivers.availability=1 AND drivers.driver_id  NOT IN (SELECT vehicles_has_drivers.drivers_driver_id FROM vehicles_has_drivers  LEFT OUTER JOIN  requests ON  requests.request_id = vehicles_has_drivers.requests_request_id  LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id WHERE (drivers.position='driver '  OR drivers.position='maintenance') AND requests.request_id is not null and  (? <= Start or  ? >= End));"
     var values = [req.body.event_end,req.body.event_start];
         con.query(sql, values, (err, results)=> {
+          console.log(sql);
           console.log(req.body.event_start, req.body.event_end);
          if (err){throw err; res.send({success: false});} else {res.send({success: results});}
    });
@@ -523,17 +747,32 @@ app.post("/look_for_driver_at_reasign", (req, res)=> {
 
 //select driver at reasign.
 app.post("/select_driver_at_reasign", (req, res)=> {
-    var sql = "UPDATE drivers_has_requests SET drivers_has_requests.drivers_driver_id =? WHERE drivers_has_requests.drivers_driver_id=?"
-    var values = [req.body.new_driver_id, req.body.old_driver_id];
-    console.log(values);
-        con.query(sql, values, (err, results)=> {
+  var sql="UPDATE vehicles_has_drivers SET drivers_driver_id = "+req.body.new_driver_id+" WHERE drivers_driver_id= "+req.body.old_driver_id;
+  //var values = [req.body.drivers_driver_id, req.body.drivers_driver_id];
+  console.log("reselect driver: "+sql);
+  //console.log(values);
+        con.query(sql, (err, results)=> {
+         if (err){
+           throw err; res.send({success: false});
+         } else {
+           res.send({success: true});
+         }
+   });
+});
+
+app.post("/select_vehicle_at_reasign", (req, res)=> {
+  var sql="UPDATE vehicles_has_drivers SET vehicles_vehicle_id = "+req.body.new_vehicle_id+" WHERE vehicles_vehicle_id= "+req.body.old_vehicle_id;
+  //var values = [req.body.drivers_driver_id, req.body.drivers_driver_id];
+  console.log("reselect vehicle: "+sql);
+  //console.log(values);
+        con.query(sql, (err, results)=> {
          if (err){throw err; res.send({success: false});} else {res.send({success: true});}
    });
 });
 
 //get availlable shuttle when selecting shuttles after an approved request
 app.post("/get_availlable_shuttles", (req, res) => {
-    var sql = "SELECT vehicles.* FROM vehicles WHERE vehicles.availability= 1 AND vehicles.vehicle_id NOT IN ( SELECT vehicles_has_requests.vehicles_vehicle_id FROM requests LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = requests.request_id WHERE requests.request_id is not null and  (? <= end) AND (?>= start));"
+  var sql = "SELECT vehicles.* FROM vehicles WHERE vehicles.vehicle_id  NOT IN (SELECT vehicles_has_drivers.vehicles_vehicle_id FROM vehicles_has_drivers  LEFT OUTER JOIN  requests ON  requests.request_id = vehicles_has_drivers.requests_request_id  LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.request_id is not null and  (? <= end) AND (? >= start));"
     var values = [req.body.event_end, req.body.event_start];
         con.query(sql, values, (err, results) => {
           console.log(req.body.event_start, req.body.event_end)
@@ -583,7 +822,7 @@ app.post("/get_availlable_shuttles", (req, res) => {
 
 
 app.post("/get_events", (req, res) => {
-  var sql="SELECT  requests.*, drivers_has_requests.drivers_driver_id, vehicles_has_requests.vehicles_vehicle_id, drivers.*, vehicles.* FROM drivers_has_requests LEFT OUTER JOIN drivers ON drivers.driver_id = drivers_has_requests.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = drivers_has_requests.requests_request_id LEFT OUTER JOIN requests ON requests.request_id = drivers_has_requests.requests_request_id LEFT OUTER JOIN vehicles_has_requests ON vehicles_has_requests.requests_request_id = drivers_has_requests.drivers_driver_id WHERE requests.isapproved=1;";
+  var sql="SELECT drivers.*, vehicles.*, requests.* FROM vehicles_has_drivers LEFT OUTER JOIN requests ON requests.request_id = vehicles_has_drivers.requests_request_id LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE requests.isapproved=1";
   // var sql="SELECT * FROM tmp_requests WHERE isapproved='1'";
         con.query(sql, (err, results) => {
          if (err){
@@ -595,6 +834,27 @@ app.post("/get_events", (req, res) => {
 //con.end();
    });
 });
+//edit requests
+app.post("/edit_request", (req, res) =>{
+    var sql="UPDATE requests SET ";
+    var firstcondition= true;
+    for (var property in req.body) {
+      var value = req.body[property];
+      if (value !== ""&& value!==req.body.request_id) {
+	      if (firstcondition) {
+		      firstcondition = false;
+	      } else {sql += ", "}
+      if(value!==req.body.request_id){sql +=  property+ " = " + mysql.escape(value);}
+      }
+    }
+    sql += " WHERE request_id = "+req.body.request_id;
+    console.log(sql);
+       con.query(sql, (err, results)=> {
+         if (err){throw err;}
+         else{res.send({success: true});}
+   });
+});
+
 //weekly_schedule
 app.post("/myweekly_schedule", (req, res) =>{
 //console.log(req.body);
@@ -617,7 +877,7 @@ app.post("/myweekly_schedule", (req, res) =>{
 // var values = [req.body.sunday];
        con.query(sql, (err, results)=> {
          if (err){res.send({success: false});}
-         else{res.redirect("/");}
+         else{res.redirect("home");}
    });
 });
 app.post("/get_weekly_schedule", (req, res)=> {
@@ -634,17 +894,21 @@ app.post("/add_driver", (req, res)=>{
 var sql = "INSERT INTO drivers (driver_fname, driver_lname) VALUES (?,?);";
 var values = [req.body.driver_fname,req.body.driver_lname];
        con.query(sql, values, function(err, results) {
-         if (err){res.send({success: false});} else {res.redirect("admin");}
+         if (err){
+           res.send({success: false});
+         } else {
+           res.redirect("admin");
+         }
 //con.end();
    });
 });
 
-app.post("/add_vehicle", (req, res)=>{
+app.post("/add_new_shuttle", (req, res)=>{
 //console.log(req.body);
-var sql = "INSERT INTO vehicles (vehicle_number, seat_number) VALUES (?,?);";
-var values = [req.body.vehicle_number,req.body.seat_number];
+var sql = "INSERT INTO vehicles (vehicle_number, seat_number, inspect_date) VALUES (?,?,?);";
+var values = [req.body.vehicle_number,req.body.seat_number, req.body.inspect_date];
        con.query(sql, values, (err, results)=> {
-         if (err){res.send({success: false});} else {res.redirect("admin");}
+         if (err){res.send({success: false});} else {res.send({success: true});}
 //con.end();
    });
 });
@@ -676,7 +940,7 @@ var values = [req.body.start,req.body.end,req.body.title,req.body.arrival_destin
 							smtpTransport.close();
 						});
 
-           res.redirect("home");
+           res.redirect("/pointlift");
 //con.end();
    });
 });
@@ -688,49 +952,25 @@ var values = [req.body.start,req.body.end,req.body.title,req.body.arrival_destin
 //assign request to driver
 app.post("/assign_request_to_driver", (req, res) =>{
   // var sql = "INSERT INTO drivers_has_requests (drivers_has_requests.drivers_driver_id, drivers_has_requests.requests_request_id) VALUES("+req.body.driver+","+req.body.request_id+");";
-  var sql = "INSERT INTO drivers_has_requests (drivers_has_requests.drivers_driver_id, drivers_has_requests.requests_request_id) VALUES";
-  var firstcondition = true;
-  for (var property in req.body) {
-    var value = req.body[property];
-    if (value !== "") {
-      if (firstcondition) {
-        firstcondition = false;
-      } else {sql += ", "}
-      if(value!==req.body.request_id){sql +=  " (" +value+","+ req.body.request_id+ ") " ;}
+  var sql = "INSERT INTO vehicles_has_drivers (drivers_driver_id, vehicles_vehicle_id, requests_request_id) VALUES";
+  // var firstcondition = true;
+  var value = req.body;
+  console.log(value,"value");
+  console.log("length: ",value.number_of_driver);
+  if(value.number_of_driver === "1"){
+    sql += "(" +value.drivers_driver_id+","+value.vehicles_vehicle_id+","+value.request_id+")";
+  }
+  else {
+    for( var i =0; i<value.number_of_driver; i++){
+       sql += (i===0?"":",")+ "(" +value.drivers_driver_id[i]+","+value.vehicles_vehicle_id[i]+","+value.request_id+")";
     }
   }
-  sql +=";"
-  var sql1 = sql.split(",");
-  sql1.splice(-1, 1);
-  sql1+=";";
-	console.log(sql1);
-	con.query(sql1, (err, results)=> {
-		if (err){throw err;} else {res.send({success: true});}
-				// console.log("reqid "+req.body.request_id);
-		});
-});
-//assign request to vehicles
-app.post("/assign_request_to_vehicle", (req, res) =>{
-//  var sql = "INSERT INTO vehicles_has_requests (vehicles_has_requests.vehicles_vehicle_id, vehicles_has_requests.requests_request_id) VALUES("+req.body.vehicle+","+req.body.request_id+");";
-var sql = "INSERT INTO vehicles_has_requests (vehicles_has_requests.vehicles_vehicle_id, vehicles_has_requests.requests_request_id) VALUES";
-var firstcondition = true;
-for (var property in req.body) {
-  var value = req.body[property];
-  if (value !== "") {
-    if (firstcondition) {
-      firstcondition = false;
-    } else {sql += ", "}
-    if(value!==req.body.request_id){sql +=  " (" +value+","+ req.body.request_id+ ") " ;}
-  }
-}
-sql +=";"
-var sql1 = sql.split(",");
-sql1.splice(-1, 1);
-sql1+=";";
+
+
+   sql+=";";
 	console.log(sql);
-	con.query(sql1, (err, results)=> {
-		if (err){throw err; res.send({success: false});} else {res.send({success: true});}
-				// console.log("reqid "+req.body.request_id);
+	con.query(sql, (err, results)=> {
+		if (err){throw err;} else {res.send({success: true});}
 		});
 });
 //get driver info when signed
@@ -744,7 +984,7 @@ app.post("/get_driver_info", (req, res)=> {
 //get driver request if any when signed
 app.post("/get_driver_request", (req, res)=> {
   console.log(req.session.user_id);
-  var sql="SELECT  requests.* FROM drivers_has_requests LEFT OUTER JOIN requests ON requests.request_id = drivers_has_requests.requests_request_id WHERE drivers_has_requests.drivers_driver_id =?";
+  var sql="SELECT drivers.*, vehicles.*, requests.* FROM vehicles_has_drivers LEFT OUTER JOIN requests ON requests.request_id = vehicles_has_drivers.requests_request_id LEFT OUTER JOIN drivers ON drivers.driver_id = vehicles_has_drivers.drivers_driver_id LEFT OUTER JOIN vehicles ON vehicles.vehicle_id = vehicles_has_drivers.vehicles_vehicle_id WHERE drivers.driver_id=?";
         con.query(sql,[req.session.user_id], (err, results)=> {
           if (err){res.send({success: false});} else {res.send({success: results});}
    });
