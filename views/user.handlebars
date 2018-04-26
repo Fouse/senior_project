@@ -21,7 +21,13 @@ body{
   color: #fff;
 }
 .req_box_height{
-  height: 50vh;
+  height: 55vh;
+  /* overflow: scroll; */
+}
+.users_request_detail, .req_list{
+  height: 400px;
+  /* border: 1px solid red; */
+  overflow: scroll;
 }
 </style>
 <body>
@@ -176,13 +182,15 @@ body{
             <div class="row req_body">
               <div class="col-lg-4">
                 <center><h1 style="color:#000">REQUESTS</h1></center>
-                <table class="table table-sm">
-                  <thead>
-                    <tr>
-                    </tr>
-                  </thead>
-                  <tbody class="users_request"></tbody>
-                </table>
+                <div class="req_list">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                      </tr>
+                    </thead>
+                    <tbody class="users_request"></tbody>
+                  </table>
+                </div>
               </div>
               <div class="col-lg-8">
                 <center><h1 style="color:#000">DETAIL</h1></center>
@@ -283,17 +291,20 @@ body{
           $(".req_box_height").append("<center><h1>You have no request</h1></center>");
         } else{
           for(var i=0;i<results.length;i++){
-            var start_date = moment(results[i].trip_start).format('MMM Do h:mm A');
-            var end_date = moment(results[i].trip_end).format('MMM Do h:mm A');
-            var my_request_list = $("<tbody><tr class='table-secondary'><td><p>Destination: "+(results[i].destination=== null?" ":results[i].destination)+"</p>"+"<p>Start: "+(results[i].trip_start=== null?" ":start_date)+" End: "+(results[i].trip_end=== null?" ":end_date)+"</p></td></tr></tbody>");
+            var start_date = moment(results[i].start).format('MMM Do h:mm A');
+            var end_date = moment(results[i].end).format('MMM Do h:mm A');
+            var estimate_arrival= results[i].estimate_arrival;
+            var my_request_list = $("<tbody><tr class='table-secondary'><td><p>Destination: "+(results[i].destination=== null?" ":results[i].destination)+"</p>"+"<p>Start: "+(results[i].start=== null?" ":start_date)+" End: "+(results[i].end=== null?" ":end_date)+"</p></td></tr></tbody>");
             $(".users_request").append(my_request_list);
             var details = $("<div class='more_details' id='dtl"+i+"' style='display:none'><table class='table'><tbody><tr class='table-secondary'><td>Destination: "
             +(results[i].destination=== null?' ':results[i].destination)+"</td></tr>"
-            +"<tr class='table-secondary'><td>Start: "+(results[i].start=== null?' ':start)+"</td></tr>"
-            +"<tr class='table-secondary'><td>End: "+(results[i].end=== null?' ':end)+"</td></tr>"
+
+            +"<tr class='table-secondary'><td>Start: "+(start_date=== null?' ':start_date)+"</td></tr>"
+            +"<tr class='table-secondary'><td>End: "+(end_date === null?' ':end_date)+"</td></tr>"
             +"<tr class='table-secondary'><td>Departure Location: "+(results[i].departure_location=== null?' ':results[i].departure_location)+"</td></tr>"
             +"<tr class='table-secondary'><td>Arrival Location: "+(results[i].arrival_location=== null?' ':results[i].arrival_location)+"</td></tr>"
-            +"<tr class='table-secondary'><td>Estimated Time of Arrival: "+(results[i].estimate_arrival=== null?' ':results[i].estimate_arrival)+"</td></tr>"
+            +"<tr class='table-secondary'><td>Estimated Time of Arrival: "+(results[i].estimate_arrival=== null?' ': estimate_arrival)+"</td></tr>"
+
             +"<tr class='table-secondary'><td>loop_service: "+(results[i].loop_service=== null?' ':results[i].loop_service)+"</td></tr>"
             +"<tr class='table-secondary'><td>Return Time: "+(results[i].return_time=== null?' ':results[i].return_time)+"</td></tr>"
             +"<tr class='table-secondary'><td>Return Location: "+(results[i].return_location=== null?' ':results[i].return_location)+"</td></tr>"

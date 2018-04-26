@@ -36,9 +36,13 @@ body {
   display: inline-block;
    vertical-align: top;
 } */
+.ctn{
+  height: 100vh;
+}
 </style>
 <body>
   {{#if login}}
+  <div class="ctn">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <h1 class="display-2">WELCOME <i>{{first_name}}!</i></h1>
@@ -52,5 +56,6 @@ body {
     <h1>sorry, you are not allowed to view this page.</h1>
     <p>Please click <a href="https://fkonat.it.pointpark.edu/pointlift/">here</a></p>
   </center>
+</div>
 </div>
 {{/if}}

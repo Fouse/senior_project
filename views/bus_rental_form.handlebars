@@ -1,5 +1,4 @@
 <style>
-
 html, body {
 	background: rgba(142, 142, 142, 1);
 }
@@ -16,12 +15,19 @@ input:not([type=file]) {
 </style>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-      <a class="navbar-brand" href="/">PointLift</a>
+
+      <a class="navbar-brand" href="./">PointLift</a>
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
+
+                      <li class="nav-item active">
+                              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                      </li>
+
                       <li class="nav-item">
                               <a class="nav-link" href="about">About</a>
                       </li>
@@ -196,10 +202,17 @@ department at (412) 392-3490.</p>
 <br>
 
 <!-- Additional Comments: -->
-<div class="form-group">
-	<label for="comment">Additional Comments or Concerns:</label>
-	<textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
+<div class="row">
+	<div class="col">
+		<label for="request_department">Trip Purpose</label>
+		<input type="text" class="form-control" name ="title" id="title" placeholder="Trip Purpose">
+	</div>
+	<div class="col">
+		<label for="comment">Additional Comments or Concerns:</label>
+		<textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
+	</div>
 </div>
+
 
 <br>
 

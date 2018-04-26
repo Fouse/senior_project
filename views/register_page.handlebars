@@ -16,6 +16,16 @@ body {
   color: #fff;
   margin-top: 20%;
 }
+h3{
+        border-radius: 25px;
+        background-color: #07b048;
+        /* background-color: #fff; */
+        padding: 0.1em;
+        /* color: #07b048; */
+        color: #fff;
+        border:1px solid #07b048;
+        margin-top:10px;
+}
 
 </style>
 <body>
@@ -40,7 +50,7 @@ body {
               </ul>
           </div>
       </nav>
-  <div class="container">
+  <div class="container-fluid">
     {{#if errors}}
     {{#each errors}}
       <div class="alert alert-danger">
@@ -51,7 +61,7 @@ body {
     <div class="row justify-content-center">
       <div class="col-lg-4">
         <div class="glass">
-        <center><h5>Sign Up</h5></center>
+        <center><h3>Sign Up</h3></center>
           <form id="create_user" method="POST" action="create_user">
 
             <div class="form-group">
@@ -107,6 +117,14 @@ body {
               <div class="cols-sm-10">
                 <div class="input-group">
                   <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="cols-sm-2 control-label">Re-Enter Password</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <input type="password" class="form-control" name="reEnterPassword"   placeholder="Re-Enter your Password"/>
                 </div>
               </div>
             </div>

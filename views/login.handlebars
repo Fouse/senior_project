@@ -16,12 +16,26 @@ body {
   margin-top: 20%;
   height: 30vh;
 }
-.ctn{
+/* .ctn{
   height: 90vh;
+} */
+.bloc{
+  height: 100vh;
+}
+h3{
+        border-radius: 25px;
+        background-color: #07b048;
+        /* background-color: #fff; */
+        padding: 0.1em;
+        /* color: #07b048; */
+        color: #fff;
+        border:1px solid #07b048;
+        margin-top:10px;
 }
 
 </style>
 <body>
+  <div class="bloc">
   <nav class="navbar navbar-expand-lg navbar-dark bg-success">
           <a class="navbar-brand" href="https://fkonat.it.pointpark.edu/pointlift/">Pointlift</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +57,7 @@ body {
               </ul>
           </div>
       </nav>
-  <div class="container">
+  <div class="container-fluid">
     {{#if errors}}
     <div class="alert alert-danger">
       <center>
@@ -61,7 +75,7 @@ body {
     <div class="row justify-content-center ctn">
       <div class="col-lg-4">
         <div class="glass">
-        <center><h5>Login</h5></center>
+        <center><h3>Login</h3></center>
           <form id="login" method="POST" action="login">
 
             <div class="form-group">
@@ -84,7 +98,7 @@ body {
 
             <div class="form-group ">
               <button type="submit" class="btn btn-success btn-lg login-button">Login</button>
-              <a href="#" class="btn btn-link">Forgot Password?</a>
+              <a href="forgot_password" class="btn btn-link">Forgot Password?</a>
             </div>
 
           </form>
@@ -92,4 +106,6 @@ body {
       </div>
     </div>
   </div>
+</div>
+
 </body>
