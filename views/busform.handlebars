@@ -22,10 +22,29 @@ crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+<style>
+
+html, body {
+	background: rgba(142, 142, 142, 1);
+}
+#form_container{
+	box-shadow: 0px 10px 50px black;
+	background: white;
+	border-radius: 5px;
+}
+
+
+input:not([type=file]) {
+	border: 2px solid #28a745;
+	border-radius: 5px;
+}
+
+</style>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <a class="navbar-brand" href="#">PointLift</a>
+        <a class="navbar-brand" href="/">PointLift</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -33,187 +52,196 @@ crossorigin="anonymous">
         <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                         <li class="nav-item">
-                                <a class="nav-link" href="#">About</a>
+                                <a class="nav-link" href="about">About</a>
                         </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="contact">Contact Us</a>
+                      </li>
                 </ul>
 </div>
 </nav>
 
-<br>
+<br><br>
 
-<div class="container">
+<div class="container" id="form_container">
+
 <h2>Bus Rental Request Form</h2>
 
 <body>
-  <p>Please complete the online request form below, or download and print the
-    form and return to the Physical Plant Office via interoffice mail. The
-    Point Park University Vehicles are not equipped with car sear anchors, car
-    seats or booster seats. If a passenger requires a car seat and/or booster
-    seat (under 4 foot and 9 inches) please notify the Physical Plant Department
-    at (412) 392-3490. If you have any questions or concerns, please do not
-    hesitate to contact the Physical Plant Department.</p>
+<p>Please complete the online request form below, or download and print the
+form and return to the Physical Plant Office via interoffice mail. The
+Point Park University Vehicles are not equipped with car sear anchors, car
+seats or booster seats. If a passenger requires a car seat and/or booster
+seat (under 4 foot and 9 inches) please notify the Physical Plant Department
+at (412) 392-3490. If you have any questions or concerns, please do not
+hesitate to contact the Physical Plant Department.</p>
 
-    <h3>Disclaimer</h3>
+<h4>Disclaimer:</h4>
 
-    <p>This is only a request. Final Confirmation will be sent as a reply.
-      If you do not receive a confirmation> please contact the Physcial Plant
-      department at (412) 392-3490.</p>
+<p>This is only a request. Final Confirmation will be sent as a reply.
+If you do not receive a confirmation> please contact the Physcial Plant
+department at (412) 392-3490.</p>
 
-  <form id="busform" action="submit_request3" method="POST">
+<form id="populate_form" method="POST">
+	<div style="float: right">
+		<label for="mod_form">Request ID</label>
+		<input type="number" class="form-control" name="mod_form" id="mod_form">
+		<button type="submit" class="btn btn-success">Retrieve Form<span class="fa fa-arrow-right"></span></button>
+	</div>
+</form>
+<br><br><br><br><br>
 
-   <!-- Date of Trip and Destination: -->
-      <div class="row">
-        <div class="col">
-          <label for="dateTrip">Date of Trip</label>
-          <input type="date" class="form-control" name="dateTrip" id="dateTrip">
-        </div>
-        <div class="col">
-          <label for="destination">Destination</label>
-          <input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
-        </div>
-      </div>
+<form id="busform" action="submit_request3" method="POST">
 
-      <br>
+		<!-- Start and End Times of Trip: -->
+<div class="row">
+	<div class="col">
+		<label for="start">Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="start"id="start">
+	</div>
+	<div class="col">
+		<label for="end">End Date and Time of Trip:</label>
+		<input type="datetime-local" class="form-control" name="end"id="end">
+	</div>
+</div>
+
+<br>
+
+<!-- Number of Expected Passengers and the Destination: -->
+<div class="row">
+	<div class="col">
+		<label for="numPassengers">Number of Expected Passengers:</label>
+		<input type="number" class="form-control" name="num_passengers" id="num_passengers">
+	</div>
+	<div class="col">
+		<label for="destination">Destination:</label>
+		<input type="text" class="form-control" name="destination" id="destination" placeholder="Destination">
+	</div>
+</div>
+
+<br>
 
 <!-- Departure Location/Arrival Location -->
-
-     <div class="row">
-      <div class="col">
-        <label for="depLocation">Departure Location</label>
-        <input type="text" class="form-control" name="depLocation" id="depLocation" placeholder="Departure Location">
-      </div>
-      <div class="col">
-        <label for="arrLocation">Arrival Location</label>
-        <input type="text" class="form-control" name="arrLocation" id="arrLocation" placeholder="Arrival Location">
-      </div>
-    </div>
-
-    <!-- Time of Departure/Time of Arrival: -->
-
-        <div class="row">
-          <div class="col">
-            <label for="depTime">Departure Time</label>
-            <input type="time" class="form-control" name="depTime" id="depTime" placeholder="Departure Time">
-          </div>
-          <div class="col">
-            <label for="arrTime">Arrival Time</label>
-            <input type="time" class="form-control" name="arrTime" id="arrTime" placeholder="Arrival Time">
-          </div>
-        </div>
-
-<br>
-
-    Will you be going to a hotel?:
-    Hotel Name:
-    Hotel Address:
-    Hotel Phone Number
-    Directions:
-
-    <!-- Date of Return Trip/Return Location: -->
-     <div class="row">
-        <div class="col">
-          <label for="dateReturnTrip">Date of Return Trip</label>
-          <input type="date" class="form-control" name="dateReturnTrip" id="dateReturnTrip">
-        </div>
-        <div class="col">
-          <label for="returnLocation">Return Location</label>
-          <input type="text" class="form-control" name="returnLocation" id="returnLocation" placeholder="Return Location">
-        </div>
-      </div>
-
-
-    <!-- Final Return Destination: -->
-<br>
-    Is looping Service Required?:
-    <div class="custom-control custom-radio custom-control-inline">
-<input type="radio" name="loopYes" id="loopYes" name="customRadioInline1" class="custom-control-input">
-<label class="custom-control-label" for="loopYes">Yes</label>
-</div>
-<div class="custom-control custom-radio custom-control-inline">
-<input type="radio" name="loopNo" id="loopNo" name="customRadioInline1" class="custom-control-input">
-<label class="custom-control-label" for="loopNo">No</label>
-</div>
-
-
-<br><br>
-    <!-- Special Instructions: -->
-
-
-    <div class="form-group">
-<label for="addInstruct">Special Instructions:</label>
-<textarea class="form-control" rows="2" name="addInstruct" id="addInstruct"></textarea>
-</div>
-
-<br>
-
-    <!-- Number of Expected Passengers: -->
-
-    <div class="form-group">
-      <label for="numPassengers">Number of Expected Passengers</label>
-      <input type="number" class="form-control" name="numPassengers" id="numPassengers">
-    </div>
-
-<br>
-
-    <!-- Event Contact Person Name/Event Contact Person Phone Number -->
-    <div class="row">
-      <div class="col">
-        <label for="eventName">Event Contact Person Name</label>
-        <input type="text" class="form-control" name="eventName" id="eventName">
-      </div>
-      <div class="col">
-        <label for="eventNum">Event Contact Person Phone Number</label>
-        <input type="tel" class="form-control" name="eventNum" id="eventNum" placeholder="(123)456-7890">
-      </div>
-    </div>
-
-<br>
-
-    <!-- Requester's Email -->
-
-    <div class="form-group">
-    <label for="reqEmail">Requester's Email Address</label>
-    <input type="email" class="form-control" name="reqEmail" id="reqEmail" placeholder="name@example.com">
-    </div>
-
-<br>
-
-    <!-- Department and Division to be Charged: -->
-    <div class="row">
-      <div class="col">
-        <label class="mr-sm-2" for="department">Department</label>
-        <select class="custom-select mr-sm-2" name="department" id="department">
-          <option selected>Choose...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </select>
-        </div>
-        <div class="col">
-          <label for="depBudget">Department Budget to Charge</label>
-          <input type="text" class="form-control" name="depBudget" id="depBudget" placeholder="Department">
-
-      </div>
-    </div>
-
-<br>
-
-<!--Authorized by-->
-
 <div class="row">
-  <div class="col">
-    <label for="authName">Authorized by:</label>
-    <input type="text" class="form-control" name="authName" id="authName" placeholder="Name">
-  </div>
+	<div class="col">
+		<label for="departure_location">Departure Location:</label>
+		<input type="text" class="form-control" name="departure_location" id="departure_location" placeholder="Departure Location">
+	</div>
+	<div class="col">
+		<label for="arrival_location">Arrival Location:</label>
+		<input type="text" class="form-control" name ="arrival_location" id="arrival_location" placeholder="Arrival Location">
+	</div>
+	<div class="col">
+		<label for="estimate_arrival">Estimated Time of Arrival:</label>
+		<input type="time" class="form-control" name="estimate_arrival" id="estimate_arrival">
+	</div>
 </div>
 
 <br>
 
-    <!-- Additional Comments: -->
-
+<!-- Hotel service? -->
 <div class="form-group">
-  <label for="addComment">Additional Comments:</label>
-  <textarea class="form-control" rows="2" name="addComment" id="addComment"></textarea>
+	<label for="hotel_service"> Will you be staying at a hotel? </label>
+	<input name="collapseGroup" type="radio" data-toggle="collapse" data-target="#hotel_service" aria-expanded="false" aria-controls="hotel_service" /> Yes
+	<input name="collapseGroup" type="radio" data-toggle="collapse" data-target="#hotel_service" aria-expanded="true" aria-controls="hotel_service"checked/> No
+</div>
+<div class="collapse" id="hotel_service">
+	<div class="row">
+		<div class="col">
+			<label for="hotel_name">Hotel Name:</label>
+			<input type="text" class="form-control" name="hotel_name" id="hotel_name" style="	border: 2px solid #28a745">
+		</div>
+		<div class="col">
+			<label for="hotel_address">Hotel Address:</label>
+			<input type="text" class="form-control" name="hotel_address" id="hotel_address" style="	border: 2px solid #28a745" placeholder="Address, City, State, ZIP">
+		</div>
+		<div class="col">
+			<label for="hotel_num">Hotel Number:</label>
+			<input type="text" class="form-control" name="hotel_num" id="hotel_num" style="	border: 2px solid #28a745">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="hotel_directions">Hotel Directions:</label>
+		<textarea class="form-control" rows="2" name="hotel_directions" id="hotel_directions" style="	border: 2px solid #28a745"></textarea>
+	</div>
+</div>
+
+<br>
+
+<!--looping service-->
+<div class="row">
+	<div class="col">
+		<label for="looplapse">Is looping service required?</label>
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="false" aria-controls="looplapse" /> Yes
+		<input name="collapseGroup2" type="radio" data-toggle="collapse" data-target="#looplapse" aria-expanded="true" aria-controls="looplapse" checked/> No
+		<div class="collapse" id="looplapse">
+			<div class="form-group" id="looplapse">
+				<textarea class="form-control" rows="1" name="loop_service" id="loop_service" style="	border: 2px solid #28a745"></textarea>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Date of Return Trip/Return Location: -->
+<div class="row">
+	<div class="col">
+		<label for="return_time">Time of Return:</label>
+		<input type="time" class="form-control" name="return_time" id="return_time">
+	</div>
+	<div class="col">
+		<label for="return_location">Return Location:</label>
+		<input type="text" class="form-control" name="return_location" id="return_location" placeholder="Return Location">
+	</div>
+</div>
+
+<br>
+
+<!-- Event Contact Person Name/Event Contact Person Phone Number -->
+<div class="row">
+	<div class="col">
+		<label for="event_person">Event Contact Person's Name:</label>
+		<input type="text" class="form-control" name="event_person" id="event_person" placeholder="Name">
+	</div>
+	<div class="col">
+		<label for="event_person_num">Event Contact Person's Phone Number:</label>
+		<input type="tel" class="form-control" name="event_person_num" id="event_person_num" placeholder="(123)456-7891">
+	</div>
+</div>
+
+<br>
+
+<!-- Authorized by and Requester's Email -->
+<div class="row">
+	<div class="col">
+		<label for="auth_name">Authorized by:</label>
+		<input type="text" class="form-control" name="auth_name" id="auth_name" placeholder="Name">
+	</div>
+	<div class="col">
+		<label for="request_email">Requester's Email Address:</label>
+		<input type="email" class="form-control" name="request_email" id="request_email" placeholder="name@example.com">
+	</div>
+</div>
+
+<br>
+
+<!-- Department and Division to be Charged: -->
+<div class="row">
+	<div class="col">
+		<label for="request_department">Department Name:</label>
+		<input type="text" class="form-control" name ="request_department" id="request_department" placeholder="Department Name">
+	</div>
+	<div class="col">
+		<label for="budget_num">Department Budget to Charge:</label>
+		<input type="text" class="form-control" name="budget_num" id="budget_num" placeholder="Department Budget Number">
+	</div>
+</div>
+
+<br>
+
+<!-- Additional Comments: -->
+<div class="form-group">
+	<label for="comment">Additional Comments or Concerns:</label>
+	<textarea class="form-control" rows="1" name="comment" id="comment" style="	border: 2px solid #28a745"></textarea>
 </div>
 
 <br>
@@ -222,59 +250,179 @@ crossorigin="anonymous">
 
 <br>
 
-</form>
-  <p>Note: This form must be received by the Physical Plant Department
-    at least 48 hours prior to the date of the service is needed.
-    Cancellations must be sent via email to Jan Pekar, Director of
-    Transportation and Adminstrative services (jpekar@pointpark.edu)
-    within 48 hours prior to the requested service otherwise the
-    department may be billed accordingly.
 
 
+<p>Note: This form must be received by the Physical Plant Department
+at least 10 business days prior to the date of the service is needed.
+Cancellations must be sent via email to Jan Pekar, Director of
+Transportation and Adminstrative services (jpekar@pointpark.edu)
+within 48 hours prior to the requested service otherwise the
+department may be billed accordingly.</p>
 
+<br>
+</div>
+<br><br>
+
+<div class="container" id="form_container">
+
+<br>
+
+<p style="color:red;">This Portion is only to be completed by the bus company</p>
+
+<br>
+
+<div class="row">
+	<div class="col">
+		<label for="bus_company">Bus Company Name:</label>
+		<input type="text" class="form-control" name="bus_company" id="bus_company" placeholder="Company Name">
+	</div>
+	<div class="col">
+		<label for="ref_num">Reference Number:</label>
+		<input type="text" class="form-control" name="ref_num" id="ref_num" placeholder="Reference Number">
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col">
+		<label for="bus_driver">Name of Bus Driver:</label>
+		<input type="text" class="form-control" name="bus_driver" id="bus_driver" placeholder="First Last">
+	</div>
+	<div class="col">
+		<label for="bus_num">Bus Number:</label>
+		<input type="text" class="form-control" name="bus_num" id="bus_num" placeholder="">
+	</div>
+	<div class="col">
+		<label for="bus_driver_phone">Bus Driver's Phone Number:</label>
+		<input type="tel" class="form-control" name="bus_driver_phone" id="bus_driver_phone" placeholder="(123)456-7891">
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col">
+		<label for="bus_phone">Bus Phone Number:</label>
+		<input type="tel" class="form-control" name="bus_phone" id="bus_phone" placeholder="(123)456-7891">
+	</div>
+	<div class="col">
+		<label for="emergency_contact">Emergency Contact Number:</label>
+		<input type="tel" class="form-control" name="emergency_contact" id="emergency_contact" placeholder="(123)456-7891">
+	</div>
 </div>
 
+<br>
+
+<button type="submit" class="btn btn-success">Submit<span class="fa fa-arrow-right"></span></button>
+</form>
+<br><br>
+</div>
+<br><br>
 <script>
 $(document).ready(function() {
 
-    // process the form
-    $("busform").submit(function() {
+	$("busform").submit(function() {
+		var formData = {
+			'destination'             : $('input[name=destination]').val(),
+      'start'                   : $('input[name=start]').val(),
+      'end'                     : $('input[name=end]').val(),
+			'num_passengers'          : $('input[name=num_passengers]').val(),
+			'departure_location'      : $('input[name=departure_location]').val(),
+			'arrival_location'        : $('input[name=arrival_location]').val(),
+			'estimate_arrival'        : $('input[name=estimate_arrival]').val(),
+			'return_time'             : $('input[name=return_time]').val(),
+			'hotel_name'              : $('input[name=hotel_name]').val(),
+			'hotel_address'           : $('input[name=hotel_address]').val(),
+			'hotel_num'               : $('input[name=hotel_num]').val(),
+			'hotel_directions'        : $('input[name=hotel_directions]').val(),
+			'loop_service'            : $('input[name=loop_service]').val(),
+			'return_location'         : $('input[name=return_location]').val(),
+			'event_person'            : $('input[name=event_person]').val(),
+			'event_person_num'        : $('input[name=event_person_num]').val(),
+			'request_department'      : $('input[name=request_department]').val(),
+			'request_email '          : $('input[name=request_email]').val(),
+			'auth_name'               : $('input[name=auth_name]').val(),
+			'budget_num'              : $('input[name=budget_num]').val(),
+			'comment'                 : $('input[name=comment]').val(),
+			// BUS COMPANY FROM HERE
+			'bus_company'             : $('input[name=bus_company]').val(),
+			'ref_num'                 : $('input[name=ref_num]').val(),
+			'bus_driver'              : $('input[name=bus_driver]').val(),
+			'bus_num'                 : $('input[name=bus_num]').val(),
+			'bus_driver_phone'        : $('input[name=bus_driver_phone]').val(),
+			'bus_phone'               : $('input[name=bus_phone]').val(),
+			'emergency_contact'       : $('input[name=emergency_contact]').val(),
 
-        // get the form data
-        // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = {
-            'dateTrip'         : $('input[name=dateTrip]').val(),
-            'destination'      : $('input[name=destination]').val(),
-            'depLocation'      : $('input[name=depLocation]').val(),
-						'arrLocation'      : $('input[name=arrLocation]').val(),
-						'depTime'          : $('input[name=depTime]').val(),
-						'arrTime'          : $('input[name=arrTime]').val(),
-						'dateReturnTrip'   : $('input[name=dateReturnTrip]').val(),
-						'returnLocation'   : $('input[name=returnLocation]').val(),
-						'addInstruct'      : $('input[name=addInstruct]').val(),
-						'numPassengers'    : $('input[name=numPassengers]').val(),
-						//'loop'             : $('input[name=loop]').val(),
-						'eventName'        : $('input[name=eventName]').val(),
-						'eventNum'         : $('input[name=eventNum]').val(),
-						'reqEmail'         : $('input[name=reqEmail]').val(),
-						'department'       : $('input[name=department]').val(),
-						'depBudget'        : $('input[name=depBudget]').val(),
-						'authName'         : $('input[name=authName]').val(),
-						'addComment'       : $('input[name=addComment]').val(),
-        };
-        console.log(JSON.stringify(formData));
-				$.ajax({
-					 type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-					 url         : '/submit_request3', // the url where we want to POST
-					 data        : formData, // our data object
-					 dataType    : 'JSON', // what type of data do we expect back from the server
-			 })
-     })
-   })
+		};
+		$.ajax({
+			type        : 'POST',
+		  url         : '/submit_request3',
+		  data        : formData,
+		  dataType    : 'JSON',
+		})
+	})
+})
+
+$(document).ready(function() {
+	$("#populate_form").submit(function(event) {
+		console.log("submitform");
+
+		$.ajax({
+			type        : 'POST',
+			url         : 'get_form_fields?mod_form='+$("#mod_form").val(),
+			contentType: "application/json; charset=utf-8",
+		}).done(function(data){
+			console.log(JSON.stringify(data));
+			//$("#start").val(data.success[0].start);
+			$("#destination").val(data.success[0].destination);
+		  $("#start").val(adjustDateFormat(data.success[0].start));
+			$("#end").val(adjustDateFormat(data.success[0].end));
+			$("#num_passengers").val(data.success[0].num_passengers);
+			$("#departure_location").val(data.success[0].departure_location);
+			$("#arrival_location").val(data.success[0].arrival_location);
+			$("#estimate_arrival").val(adjustTimeFormat(data.success[0].estimate_arrival));
+			$("#return_time").val(adjustTimeFormat(data.success[0].return_time));
+			$("#hotel_name").val(data.success[0].hotel_name);
+			$("#hotel_address").val(data.success[0].hotel_address);
+			$("#hotel_num").val(data.success[0].hotel_num);
+			$("#hotel_directions").val(data.success[0].hotel_directions);
+			$("#loop_service").val(data.success[0].loop_service);
+			$("#return_location").val(data.success[0].return_location);
+			$("#event_person").val(data.success[0].event_person);
+			$("#event_person_num").val(data.success[0].event_person_num);
+			$("#request_department").val(data.success[0].request_department);
+			$("#request_email").val(data.success[0].request_email);
+			$("#auth_name").val(data.success[0].auth_name);
+			$("#budget_num").val(data.success[0].budget_num);
+			$("#comment").val(data.success[0].comment);
+		}).fail(function(){
+			console.log("fail");
+		})
+		return false;
+	})
+})
+
+function adjustDateFormat(date_string){
+  var date = new Date(date_string);
+  var y = date.getFullYear();
+  var m = date.getMonth();
+  var day = date.getDate();
+  var h = date.getHours();
+  var min = date.getMinutes();
+  var str = y+"-"+
+  ((m+1)<10?"0"+(m+1):(m+1))
+  +"-"+
+  (day<10?"0"+day:day)+
+  "T"+
+  (h<10?"0"+h:h)+
+  ":"+
+  (min<10?"0"+min:min);
+  return str;
+}
+
+function adjustTimeFormat(time_string) {
+	console.log(time_string);
+	return time_string.split(".")[0];
+}
+
+
 </script>
-
-
-
-
 </body>
 </html>
